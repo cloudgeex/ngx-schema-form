@@ -1,25 +1,26 @@
 import {
-  ChangeDetectorRef,
   Component,
   OnChanges,
-  EventEmitter,
   Input,
-  Output,
   SimpleChanges
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ValidatorFn
+} from '@angular/forms';
 
-import {Action} from './model/action';
-import {ActionRegistry} from './model/actionregistry';
-import {FormProperty} from './model/formproperty';
-import {FormPropertyFactory} from './model/formpropertyfactory';
-import {SchemaPreprocessor} from './model/schemapreprocessor';
-import {ValidatorRegistry} from './model/validatorregistry';
-import {Validator} from './model/validator';
+import { Action } from './model/action';
+import { ActionRegistry } from './model/actionregistry';
+import { SchemaPreprocessor } from './model/schemapreprocessor';
+import { ValidatorRegistry } from './model/validatorregistry';
+import { SchemaPropertyType } from './schema';
 
-import {SchemaValidatorFactory} from './schemavalidatorfactory';
-import {WidgetFactory} from './widgetfactory';
-import {TerminatorService} from './terminator.service';
+import { SchemaValidatorFactory } from './schemavalidatorfactory';
+import { WidgetFactory } from './widgetfactory';
+import { TerminatorService } from './terminator.service';
+import { FormPropertyFactory } from './model/form-property-factory';
+import { FormProperty } from './model/form-property';
 
 export function useFactory(schemaValidatorFactory, validatorRegistry) {
   return new FormPropertyFactory(schemaValidatorFactory, validatorRegistry);
@@ -30,7 +31,9 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
   template: `
     <form>
       <sf-form-element
-        *ngIf="rootProperty" [formProperty]="rootProperty"></sf-form-element>
+        *ngIf="rootFormProperty"
+        [formProperty]="rootFormProperty">
+      </sf-form-element>
     </form>`,
   providers: [
     ActionRegistry,
@@ -52,25 +55,16 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
 })
 export class FormComponent implements OnChanges, ControlValueAccessor {
 
-  @Input() schema: any = null;
+  @Input()
+  schema: any = null;
 
-  @Input() model: any;
+  @Input()
+  actions: { [actionId: string]: Action } = {};
 
-  @Input() actions: { [actionId: string]: Action } = {};
+  @Input()
+  validators: { [path: string]: ValidatorFn | ValidatorFn[] } = {};
 
-  @Input() validators: { [path: string]: Validator } = {};
-
-  @Output() onChange = new EventEmitter<{ value: any }>();
-
-  @Output() modelChange = new EventEmitter<any>();
-
-  @Output() isValid = new EventEmitter<boolean>();
-
-  @Output() onErrorChange = new EventEmitter<{ value: any[] }>();
-
-  @Output() onErrorsChange = new EventEmitter<{value: any}>();
-
-  rootProperty: FormProperty = null;
+  rootFormProperty: FormProperty = null;
 
   private onChangeCallback: any;
 
@@ -78,121 +72,100 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
     private formPropertyFactory: FormPropertyFactory,
     private actionRegistry: ActionRegistry,
     private validatorRegistry: ValidatorRegistry,
-    private cdr: ChangeDetectorRef,
     private terminator: TerminatorService
-  ) { }
+  ) {}
 
-  writeValue(obj: any) {
-    if (this.rootProperty) {
-      this.rootProperty.reset(obj, false);
+  writeValue(value: any) {
+    if (this.rootFormProperty && value) {
+      this.rootFormProperty.patchValue(value);
     }
   }
 
   registerOnChange(fn: any) {
     this.onChangeCallback = fn;
-    if (this.rootProperty) {
-      this.rootProperty.valueChanges.subscribe(
-        this.onValueChanges.bind(this)
-      );
+    if (this.rootFormProperty) {
+      this.rootFormProperty.nonEmptyValueChanges.subscribe(fn);
     }
   }
 
   // TODO implement
-  registerOnTouched(fn: any) {
-  }
+  registerOnTouched(fn: any) {}
 
-  // TODO implement
-  // setDisabledState(isDisabled: boolean)?: void
+  setDisabledState(isDisabled: boolean) {
+    if (!this.rootFormProperty) {
+      return;
+    }
+
+    if (isDisabled) {
+      this.rootFormProperty.disable();
+    } else {
+      this.rootFormProperty.enable();
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.validators) {
-      this.setValidators();
+      this.registerValidators();
     }
 
     if (changes.actions) {
-      this.setActions();
+      this.registerActions();
     }
 
     if (this.schema && !this.schema.type) {
-      this.schema.type = 'object';
+      this.schema.type = SchemaPropertyType.Object;
     }
 
     if (this.schema && changes.schema) {
-      if (!changes.schema.firstChange) {
+      let value: any;
+      if (this.rootFormProperty) {
+        value = this.rootFormProperty.value;
         this.terminator.destroy();
       }
 
       SchemaPreprocessor.preprocess(this.schema);
-      this.rootProperty = this.formPropertyFactory.createProperty(this.schema);
-      if (this.model) {
-        // this.rootProperty.reset(this.model, false);
-      }
-
-      this.rootProperty.valueChanges.subscribe(
-        this.onValueChanges.bind(this)
+      this.rootFormProperty = this.formPropertyFactory.createProperty(
+        this.schema
       );
 
-      this.rootProperty.errorsChanges.subscribe(value => {
-        this.onErrorChange.emit({value: value});
-        this.isValid.emit(!(value && value.length));
-      });
-
+      // registerOnChange for changes after init
+      if (this.onChangeCallback) {
+        this.rootFormProperty.nonEmptyValueChanges.subscribe(
+          this.onChangeCallback
+        );
+        if (value) {
+          this.rootFormProperty.patchValue(value);
+        }
+      }
     }
-
-    if (this.schema && (changes.model || changes.schema )) {
-      this.rootProperty.reset(this.model, false);
-      this.cdr.detectChanges();
-    }
-
   }
 
-  private setValidators() {
+  private registerValidators() {
     this.validatorRegistry.clear();
-    if (this.validators) {
-      for (const validatorId in this.validators) {
-        if (this.validators.hasOwnProperty(validatorId)) {
-          this.validatorRegistry.register(validatorId, this.validators[validatorId]);
-        }
+    if (!this.validators) {
+      return;
+    }
+
+    for (const propertyPath in this.validators) {
+      if (this.validators.hasOwnProperty(propertyPath)) {
+        this.validatorRegistry.register(
+          propertyPath,
+          this.validators[propertyPath]
+        );
       }
     }
   }
 
-  private setActions() {
+  private registerActions() {
     this.actionRegistry.clear();
-    if (this.actions) {
-      for (const actionId in this.actions) {
-        if (this.actions.hasOwnProperty(actionId)) {
-          this.actionRegistry.register(actionId, this.actions[actionId]);
-        }
+    if (!this.actions) {
+      return;
+    }
+
+    for (const actionId in this.actions) {
+      if (this.actions.hasOwnProperty(actionId)) {
+        this.actionRegistry.register(actionId, this.actions[actionId]);
       }
     }
-  }
-
-  public reset() {
-    this.rootProperty.reset(null, true);
-  }
-
-  private setModel(value: any) {
-    if (this.model) {
-      Object.assign(this.model, value);
-    } else {
-      this.model = value;
-    }
-  }
-
-  private onValueChanges(value) {
-    if (this.onChangeCallback) {
-      this.setModel(value);
-      this.onChangeCallback(value);
-    }
-
-    // two way binding is used
-    if (this.modelChange.observers.length > 0) {
-      if (!this.onChangeCallback) {
-        this.setModel(value);
-      }
-      this.modelChange.emit(value);
-    }
-    this.onChange.emit({value: value});
   }
 }

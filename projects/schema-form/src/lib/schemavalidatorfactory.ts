@@ -1,9 +1,16 @@
-let ZSchema = require('z-schema');
+import { ValidationErrors } from '@angular/forms';
+import * as ZSchema from 'z-schema';
+
+import {
+  Schema,
+  SchemaErrors,
+  SchemaValidatorFn
+} from './schema';
 
 export abstract class SchemaValidatorFactory {
-  abstract createValidatorFn(schema): (value: any) => any;
+  abstract createValidatorFn(schema: Schema): SchemaValidatorFn;
 
-  abstract getSchema(schema, ref): any;
+  abstract getSchema(schema, ref): Schema;
 }
 
 export class ZSchemaValidatorFactory extends SchemaValidatorFactory {
@@ -17,19 +24,28 @@ export class ZSchemaValidatorFactory extends SchemaValidatorFactory {
     });
   }
 
-  createValidatorFn(schema: any) {
-    return (value): { [key: string]: boolean } => {
+  createValidatorFn(schema: Schema): SchemaValidatorFn {
+    return (value: any): SchemaErrors | null => {
 
       if (schema.type === 'number' || schema.type === 'integer') {
         value = +value;
       }
 
       this.zschema.validate(value, schema);
-      let err = this.zschema.getLastErrors();
+      const errors = this.zschema.getLastErrors();
+      if (!errors) {
+        return null;
+      }
 
-      this.denormalizeRequiredPropertyPaths(err);
+      this.denormalizeRequiredPropertyPaths(errors);
 
-      return err || null;
+      const schemaErrors = errors.reduce((_errors, error) => {
+        error.path = error.path.slice(1);
+        _errors[error.path] = error;
+        return _errors;
+      }, {});
+
+      return schemaErrors || null;
     };
   }
 
@@ -46,7 +62,8 @@ export class ZSchemaValidatorFactory extends SchemaValidatorFactory {
   private denormalizeRequiredPropertyPaths(err: any[]) {
     if (err && err.length) {
       err = err.map(error => {
-        if (error.path === '#/' && error.code === 'OBJECT_MISSING_REQUIRED_PROPERTY') {
+        const code = 'OBJECT_MISSING_REQUIRED_PROPERTY';
+        if (error.path === '#/' && error.code === code) {
           error.path = `${error.path}${error.params[0]}`;
         }
         return error;

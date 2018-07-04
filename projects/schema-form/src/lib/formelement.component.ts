@@ -10,32 +10,29 @@ import {
 
 import { Widget } from './widget';
 
-import {ActionRegistry} from './model/actionregistry';
-import {FormProperty} from './model/formproperty';
+import { ActionRegistry } from './model/actionregistry';
+import { Observable, Subscription, from } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { FormProperty } from './model/form-property';
+
+
 
 @Component({
   selector: 'sf-form-element',
   template: `<div *ngIf="formProperty.visible"
-    [class.has-error]="!control.valid"
-	  [class.has-success]="control.valid">
-	<sf-widget-chooser
-	(widgetInstanciated)="onWidgetInstanciated($event)"
-	[widgetInfo]="formProperty.schema.widget">
-	</sf-widget-chooser>
+    [class.has-error]="!formProperty.controls && !formProperty.valid"
+	  [class.has-success]="!formProperty.controls && formProperty.valid">
+	<ng-template sfWidgetChooser [formProperty]="formProperty"> </ng-template>
 	<sf-form-element-action *ngFor="let button of buttons" [button]="button" [formProperty]="formProperty"></sf-form-element-action>
 </div>`
 })
 export class FormElementComponent implements OnInit {
 
-  private static counter = 0;
 
-  @Input() formProperty: FormProperty;
-  control: FormControl = new FormControl('', () => null);
-
-  widget: Widget<any> = null;
+  @Input()
+  formProperty: FormProperty;
 
   buttons = [];
-
 
   constructor(private actionRegistry: ActionRegistry) {}
 
@@ -47,7 +44,7 @@ export class FormElementComponent implements OnInit {
     if (this.formProperty.schema.buttons !== undefined) {
       this.buttons = this.formProperty.schema.buttons;
 
-      for (let button of this.buttons) {
+      for (const button of this.buttons) {
         this.createButtonCallback(button);
       }
     }
@@ -63,17 +60,6 @@ export class FormElementComponent implements OnInit {
       }
       e.preventDefault();
     };
-  }
-
-  onWidgetInstanciated(widget: Widget<any>) {
-    this.widget = widget;
-    let id = 'field' + (FormElementComponent.counter++);
-
-    this.widget.formProperty = this.formProperty;
-    this.widget.schema = this.formProperty.schema;
-    this.widget.name = id;
-    this.widget.id = id;
-    this.widget.control = this.control;
   }
 
 }

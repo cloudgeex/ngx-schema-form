@@ -13,19 +13,20 @@ import {
   SimpleChange,
   OnChanges
 } from '@angular/core';
+import { ValidatorFn } from '@angular/forms';
 import { Observable, merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { Action } from '../../model/action';
 import { ActionRegistry } from '../../model/actionregistry';
-import { Validator } from '../../model/validator';
+import { SchemaPropertyType } from '../../schema';
 
 import { TemplateSchemaElement } from '../template-schema-element';
 import { TemplateSchemaService } from '../template-schema.service';
 import { ButtonComponent } from '../button/button.component';
 
 import { FieldParent } from './field-parent';
-import { FieldType, Field } from './field';
+import { Field } from './field';
 import { ItemComponent } from './item/item.component';
 
 
@@ -33,8 +34,7 @@ import { ItemComponent } from './item/item.component';
   selector: 'sf-field',
   templateUrl: './field.component.html'
 })
-export class FieldComponent extends FieldParent implements
-Field, OnChanges, AfterContentInit {
+export class FieldComponent extends FieldParent implements Field, OnChanges, AfterContentInit {
 
   @ContentChildren(FieldComponent)
   childFields: QueryList<FieldComponent>;
@@ -49,7 +49,7 @@ Field, OnChanges, AfterContentInit {
   name: string;
 
   @Input()
-  type = FieldType.String;
+  type = SchemaPropertyType.String;
 
   @Input()
   format: string;
@@ -73,7 +73,7 @@ Field, OnChanges, AfterContentInit {
   widget: string | object;
 
   @Input()
-  validator: Validator;
+  validators: ValidatorFn | ValidatorFn[];
 
   @Input()
   schema: any = { };
@@ -149,25 +149,25 @@ Field, OnChanges, AfterContentInit {
 
   }
 
-  getValidators(): { path: string, validator: Validator }[] {
+  getValidators(): { path: string, validators: ValidatorFn | ValidatorFn[] }[] {
 
     // registering validator here is not possible since prop full path is needed
     const childValidators = this.getFieldsValidators(
-      this.childFields.filter(field => field !== this)
+      <Field[]>this.childFields.filter(field => field !== this)
     );
-    const validators = childValidators.map(({ path, validator }) => {
+    const _validators = childValidators.map(({ path, validators }) => {
       return {
         path: this.path + path,
-        validator
+        validators
       };
     });
 
-    if (!this.validator) {
-      return validators;
+    if (!this.validators) {
+      return _validators;
     }
 
-    validators.push({ path: this.path, validator: this.validator });
-    return validators;
+    _validators.push({ path: this.path, validators: this.validators });
+    return _validators;
   }
 
   ngOnChanges(changes: SimpleChanges) {

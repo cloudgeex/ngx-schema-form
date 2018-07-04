@@ -13,10 +13,11 @@ import { FormComponent } from '../form.component';
 import { ActionRegistry } from '../model/actionregistry';
 import { ValidatorRegistry } from '../model/validatorregistry';
 import { TerminatorService } from '../terminator.service';
+import { SchemaPropertyType } from '../schema';
 
 import { TemplateSchemaService } from './template-schema.service';
 import { FieldComponent } from './field/field.component';
-import { FieldType, Field } from './field/field';
+import { Field } from './field/field';
 import { ButtonComponent } from './button/button.component';
 import { FieldParent } from './field/field-parent';
 
@@ -46,38 +47,38 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
   }
 
   setFormDocumentSchema(fields: FieldComponent[]) {
-      this.actionRegistry.clear();
-      this.validatorRegistry.clear();
+    this.actionRegistry.clear();
+    this.validatorRegistry.clear();
 
-      const schema = this.getFieldsSchema(fields);
+    const schema = this.getFieldsSchema(fields);
 
-      const validators = this.getFieldsValidators(fields);
-      validators.forEach(({ path, validator }) => {
-        this.validatorRegistry.register(path, validator);
-      });
+    const _validators = this.getFieldsValidators(fields);
+    _validators.forEach(({ path, validators }) => {
+      this.validatorRegistry.register(path, validators);
+    });
 
-      const previousSchema = this.formComponent.schema;
-      this.formComponent.schema = {
-        type: FieldType.Object,
-        properties: schema.properties
-      };
+    const previousSchema = this.formComponent.schema;
+    this.formComponent.schema = {
+      type: SchemaPropertyType.Object,
+      properties: schema.properties
+    };
 
-      if (schema.required && schema.required.length > 0) {
-        this.formComponent.schema.requred = schema.required;
-      }
+    if (schema.required && schema.required.length > 0) {
+      this.formComponent.schema.requred = schema.required;
+    }
 
-      const buttons = this.getButtons();
-      if (buttons.length > 0) {
-        this.formComponent.schema.buttons = buttons;
-      }
+    const buttons = this.getButtons();
+    if (buttons.length > 0) {
+      this.formComponent.schema.buttons = buttons;
+    }
 
-      this.formComponent.ngOnChanges({
-        schema: new SimpleChange(
-          previousSchema,
-          this.formComponent.schema,
-          Boolean(previousSchema)
-        )
-      });
+    this.formComponent.ngOnChanges({
+      schema: new SimpleChange(
+        previousSchema,
+        this.formComponent.schema,
+        Boolean(previousSchema)
+      )
+    });
 
   }
 

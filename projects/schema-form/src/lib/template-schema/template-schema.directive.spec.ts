@@ -8,6 +8,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 
+import { FormProperty } from '../model/form-property';
 import { FormComponent } from '../form.component';
 import { SchemaFormModule } from '../schema-form.module';
 import { TemplateSchemaModule } from './template-schema.module';
@@ -22,7 +23,7 @@ import { TemplateSchemaDirective } from './template-schema.directive';
           name="username"
           [type]="type"
           [required]="usernameRequired"
-          [validator]="validatorA"
+          [validators]="validatorA"
           description="A username field">
           Username
       </sf-field>
@@ -57,7 +58,7 @@ class TestComponent {
   onClickA(event: any) { }
   onClickB(event: any) { }
 
-  validatorA(value, property, form): any {
+  validatorA(property): any {
     return null;
   }
 
@@ -225,36 +226,33 @@ describe('TemplateSchemaDirective', () => {
     const input = fixture.debugElement.query(By.css('input')).nativeElement;
     expect(input.value).toBeFalsy();
 
-    let property = formComponent.rootProperty.getProperty('username');
+    let property = formComponent.rootFormProperty.get('username');
     property.setValue('pepita');
     fixture.detectChanges();
-    property.errorsChanges.pipe(take(1)).subscribe((errors) => {
-      expect(errors).toBeNull();
-    });
+    expect(property.errors).toBeNull();
 
     const code = 'USERNAME_NOT_MATCHING';
-    component.validatorA = (value, property, form) => {
-      if (form.value && value !== 'pepito') {
-        return [{
+    component.validatorA = (_property: FormProperty) => {
+      if (_property.value !== 'pepito') {
+        return {
           code,
-          path: '#' + property.path,
           message: 'Username should be pepito',
-          params: [value]
-        }];
+        };
       }
 
       return null;
     };
 
     fixture.detectChanges();
-    property = formComponent.rootProperty.getProperty('username');
-    property.errorsChanges.pipe(take(1)).subscribe((errors) => {
-      expect(errors.length).toBe(1);
-      expect(errors[0].code).toEqual(code);
-    })
+
+    property = formComponent.rootFormProperty.get('username');
+    expect(property.errors).toBeTruthy();
+    expect(property.errors.code).toEqual(code);
+
+    const errors = formComponent.rootFormProperty.getErrors().errors;
+    expect(errors[property.path]).toBeTruthy();
+    expect(errors[property.path].code).toEqual(code);
 
   });
-
-
 
 });

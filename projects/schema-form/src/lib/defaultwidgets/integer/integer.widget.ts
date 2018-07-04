@@ -12,7 +12,7 @@ import { ControlWidget } from '../../widget';
 	</label>
   <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
 	<input [attr.readonly]="schema.readOnly?true:null" [name]="name"
-	class="text-widget integer-widget form-control" [formControl]="control"
+	class="text-widget integer-widget form-control" [formControl]="formProperty"
 	[attr.type]="'number'" [attr.min]="schema.minimum" [attr.max]="schema.maximum"
 	[attr.placeholder]="schema.placeholder"
 	[attr.maxLength]="schema.maxLength || null"
