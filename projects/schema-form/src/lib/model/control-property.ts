@@ -70,32 +70,6 @@ export function ControlProperty<T extends Constructor<AbstractControl>>(Base: T)
       this.visibilityChanges.next(this.visible);
     }
 
-    setSchemaValidator(validate: SchemaValidatorFn) {
-
-      // TODO unsubscribe
-      this.valueChanges
-        .subscribe(() => {
-          const value = this.nonEmptyValue;
-          this.nonEmptyValueChanges.emit(value);
-
-          if (this.pristine) {
-            return;
-          }
-
-          const errors = validate(value);
-          if (!errors) {
-            return;
-          }
-
-          Object.keys(errors).forEach((path: string) => {
-            const control = this.get(path);
-            if (control) {
-              control.setErrors(errors[path], { emitEvent: true });
-            }
-          });
-        });
-    }
-
     // visible if AT LEAST ONE of the properties it depends on is visible
     // AND has a value in the list
     bindVisibility() {

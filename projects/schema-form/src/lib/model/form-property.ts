@@ -18,7 +18,6 @@ export interface FormProperty extends AbstractControl {
   nonEmptyValueChanges: EventEmitter<any>;
 
   getErrors(): FormPropertyErrors | null;
-  setSchemaValidator(fn: SchemaValidatorFn);
   setVisible(visible: boolean);
   bindVisibility();
 }

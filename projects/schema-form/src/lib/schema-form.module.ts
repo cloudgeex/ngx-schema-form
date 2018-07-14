@@ -25,8 +25,9 @@ import {
 } from './default.widget';
 
 import {WidgetRegistry} from './widgetregistry';
-import {SchemaValidatorFactory, ZSchemaValidatorFactory} from './schemavalidatorfactory';
+import {SchemaValidatorFactory} from './schemavalidatorfactory';
 import {FormElementComponentAction} from './formelement.action.component';
+import { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 
 const moduleProviders = [
   {
@@ -35,7 +36,7 @@ const moduleProviders = [
   },
   {
     provide: SchemaValidatorFactory,
-    useClass: ZSchemaValidatorFactory
+    useClass: AjvSchemaValidatorFactory
   }
 ];
 

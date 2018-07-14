@@ -39,30 +39,45 @@ export class FormPropertyFactory {
     let property: FormProperty;
     const path = this.generatePath(propertyParent, propertyKey);
 
-    switch (schema.type) {
-      case SchemaPropertyType.Integer:
-      case SchemaPropertyType.Number:
-        property = new NumberProperty(path, schema);
-        break;
-      case SchemaPropertyType.String:
-        property = new StringProperty(path, schema);
-        break;
-      case SchemaPropertyType.Boolean:
-        property = new BooleanProperty(path, schema);
-        break;
-      case SchemaPropertyType.Object:
-        property = new ObjectProperty(path, schema);
-        break;
-      case SchemaPropertyType.Array:
-        if (schema.widget.id === 'array') {
-          property = new ArrayProperty(this, path, schema);
-        } else {
-          schema.default = [];
-          property = new GenericProperty(path, schema);
-        }
-        break;
-      default:
-        throw new TypeError(`Undefined type ${schema.type}`);
+    // TODO test for parsing for reference schema
+    if (schema.$ref) {
+      const refSchema = this.schemaValidatorFactory.getSchema(
+        (<FormProperty>propertyParent.root).schema,
+        schema.$ref
+      );
+
+      property = this.createProperty(
+        refSchema,
+        propertyParent,
+        propertyKey || path
+      );
+
+    } else {
+      switch (schema.type) {
+        case SchemaPropertyType.Integer:
+        case SchemaPropertyType.Number:
+          property = new NumberProperty(path, schema);
+          break;
+        case SchemaPropertyType.String:
+          property = new StringProperty(path, schema);
+          break;
+        case SchemaPropertyType.Boolean:
+          property = new BooleanProperty(path, schema);
+          break;
+        case SchemaPropertyType.Object:
+          property = new ObjectProperty(path, schema);
+          break;
+        case SchemaPropertyType.Array:
+          if (schema.widget.id === 'array') {
+            property = new ArrayProperty(this, path, schema);
+          } else {
+            schema.default = [];
+            property = new GenericProperty(path, schema);
+          }
+          break;
+        default:
+          throw new TypeError(`Undefined type ${schema.type}`);
+      }
     }
 
 
@@ -82,17 +97,12 @@ export class FormPropertyFactory {
     }
 
     if (property.isRoot) {
-      // schema validator should only validate root value
-      const fn = this.schemaValidatorFactory.createValidatorFn(property.schema);
-      property.setSchemaValidator(fn);
+      this.bindSchemaValidator(property);
       // visibleIf
       property.bindVisibility();
     }
 
-    const validators = this.validatorRegistry.get(property.path);
-    if (validators) {
-      property.setValidators(validators);
-    }
+    this.bindCustomValidator(property);
 
     if (property instanceof ObjectProperty) {
       for (const key in property.schema.properties) {
@@ -102,6 +112,43 @@ export class FormPropertyFactory {
           property.addControl(key, _property);
         }
       }
+    }
+  }
+
+  private bindSchemaValidator(property: FormProperty) {
+
+    const validate = this.schemaValidatorFactory.createValidatorFn(
+      property.schema
+    );
+
+    property.valueChanges
+      .subscribe(() => {
+        const value = property.nonEmptyValue;
+        property.nonEmptyValueChanges.emit(value);
+
+        if (property.pristine) {
+          return;
+        }
+
+        const errors = validate(value);
+        if (!errors) {
+          return;
+        }
+
+        Object.keys(errors).forEach((path: string) => {
+          const control = property.get(path);
+          if (control) {
+            // set error to specific control
+            control.setErrors(errors[path], { emitEvent: true });
+          }
+        });
+      });
+  }
+
+  private bindCustomValidator(property: FormProperty) {
+    const validators = this.validatorRegistry.get(property.path);
+    if (validators) {
+      property.setValidators(validators);
     }
   }
 
@@ -128,7 +175,7 @@ export class FormPropertyFactory {
         break;
 
       case SchemaPropertyType.Array:
-        path += '*';
+        path += (<ArrayProperty>propertyParent).controls.length;
         break;
 
       default:

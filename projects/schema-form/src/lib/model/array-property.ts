@@ -33,24 +33,17 @@ export class ArrayProperty extends ControlProperty(FormArray) {
 
   getErrors(): FormPropertyErrors | null {
 
-    const aggregatedErrors = {};
+    const aggregatedErrors = this.controls
+      .reduce((errors, property: FormProperty) => {
 
-    this.controls.forEach((property: FormProperty, index: number) => {
+        const propertyErrors = property.getErrors();
+        if (!propertyErrors) {
+          return errors;
+        }
 
-      const propertyErrors = property.getErrors();
-      if (!propertyErrors) {
-        return;
-      }
+        return Object.assign(errors, propertyErrors.errors);
 
-      const errors = Object.keys(propertyErrors.errors)
-        .reduce((result, key: string) => {
-          result[key.replace('*', String(index))] = propertyErrors[key];
-          return result;
-        }, {});
-
-      Object.assign(aggregatedErrors, errors);
-
-    });
+      }, {});
 
     if (this.errors) {
       aggregatedErrors[this.path] = this.errors;

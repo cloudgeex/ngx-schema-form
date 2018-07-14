@@ -4,14 +4,15 @@ export interface Schema {
   [key: string]: any;
 }
 
-export interface SchemaErrors {
-  [path: string]: {
-    code: string;
-    message: string;
-    params?: any;
-  };
+export interface SchemaError {
+  code: string;
+  message: string;
+  params?: any;
 }
 
+export interface SchemaErrors {
+  [path: string]: SchemaError;
+}
 
 export type SchemaValidatorFn = (value: any) => SchemaErrors | null;
 
