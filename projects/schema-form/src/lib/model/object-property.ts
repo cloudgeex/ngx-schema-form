@@ -1,14 +1,17 @@
 import { FormGroup, ValidationErrors } from '@angular/forms';
 
+import { Schema } from '../schema';
 import { FormProperty } from './form-property';
 import { FormPropertyErrors } from './form-property-errors';
+import { FormPropertyFactory } from './form-property-factory';
 import { ControlProperty } from './control-property';
 
 export class ObjectProperty extends ControlProperty(FormGroup) {
 
-  constructor() {
+  constructor(path: string, schema: Schema) {
     super({});
-
+    this._path = path;
+    this._schema = schema;
   }
 
   _updateValue() {
@@ -61,15 +64,11 @@ export class ObjectProperty extends ControlProperty(FormGroup) {
   bindVisibility() {
     super.bindVisibility();
 
-    this.forEachProperty((property: FormProperty) => {
-      property.bindVisibility();
-    });
-  }
-
-  private forEachProperty(fn: (property: FormProperty) => void) {
-    Object.keys(this.controls).forEach((key: string) => {
-      fn(<FormProperty>this.controls[key]);
-    });
+    for (const key in this.controls) {
+      if (this.schema.properties.hasOwnProperty(key)) {
+        (<FormProperty>this.controls[key]).bindVisibility();
+      }
+    }
   }
 }
 

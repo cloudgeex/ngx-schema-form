@@ -1,5 +1,6 @@
 import { FormArray, ValidationErrors } from '@angular/forms';
 
+import { Schema } from '../schema';
 import { FormProperty } from './form-property';
 import { FormPropertyErrors } from './form-property-errors';
 import { FormPropertyFactory } from './form-property-factory';
@@ -8,8 +9,14 @@ import { ControlProperty } from './control-property';
 
 export class ArrayProperty extends ControlProperty(FormArray) {
 
-  constructor(private formPropertyFactory: FormPropertyFactory) {
+  constructor(
+    private formPropertyFactory: FormPropertyFactory,
+    path: string,
+    schema: Schema
+  ) {
     super([]);
+    this._path = path;
+    this._schema = schema;
   }
 
   _updateValue() {
@@ -97,7 +104,7 @@ export class ArrayProperty extends ControlProperty(FormArray) {
   private getPropertyFromSchemaItems(): FormProperty {
     return this.formPropertyFactory.createProperty(
       this.schema.items,
-      { property: this }
+      this
     );
   }
 

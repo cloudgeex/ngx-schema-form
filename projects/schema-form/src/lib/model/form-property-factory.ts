@@ -32,113 +32,111 @@ export class FormPropertyFactory {
 
   createProperty(
     schema: Schema,
-    parent?: { key?: string; property: PropertyParent }
+    propertyParent?: PropertyParent,
+    propertyKey?: string
   ): FormProperty {
 
     let property: FormProperty;
-    const defaultValue = schema.default;
+    const path = this.generatePath(propertyParent, propertyKey);
 
     switch (schema.type) {
       case SchemaPropertyType.Integer:
       case SchemaPropertyType.Number:
-        property = new NumberProperty(defaultValue);
+        property = new NumberProperty(path, schema);
         break;
       case SchemaPropertyType.String:
-        property = new StringProperty(defaultValue);
+        property = new StringProperty(path, schema);
         break;
       case SchemaPropertyType.Boolean:
-        property = new BooleanProperty(defaultValue);
+        property = new BooleanProperty(path, schema);
         break;
       case SchemaPropertyType.Object:
-        property = new ObjectProperty();
+        property = new ObjectProperty(path, schema);
         break;
       case SchemaPropertyType.Array:
         if (schema.widget.id === 'array') {
-          property = new ArrayProperty(this);
+          property = new ArrayProperty(this, path, schema);
         } else {
-          property = new GenericProperty([]);
+          schema.default = [];
+          property = new GenericProperty(path, schema);
         }
         break;
       default:
         throw new TypeError(`Undefined type ${schema.type}`);
     }
 
-    this.initializeFormProperty(property, schema, parent);
 
-    if (property.isRoot) {
-      property.bindVisibility();
-    }
+    this.initializeFormProperty(property, propertyParent);
+
 
     return property;
   }
 
   private initializeFormProperty(
     property: FormProperty,
-    schema: Schema,
-    parent?: { key?: string; property: PropertyParent }
+    propertyParent?: PropertyParent,
   ) {
 
-    const path = this.generatePath(parent);
-    property.setPath(path);
-    property.setSchema(schema);
-
-    if (parent && parent.property) {
-      property.setParent(parent.property);
+    if (propertyParent) {
+      property.setParent(propertyParent);
     }
 
     if (property.isRoot) {
+      // schema validator should only validate root value
       const fn = this.schemaValidatorFactory.createValidatorFn(property.schema);
       property.setSchemaValidator(fn);
+      // visibleIf
+      property.bindVisibility();
     }
 
-    const validators = this.validatorRegistry.get(path);
+    const validators = this.validatorRegistry.get(property.path);
     if (validators) {
       property.setValidators(validators);
     }
 
     if (property instanceof ObjectProperty) {
-      const group = <ObjectProperty>property;
-      for (const key in group.schema.properties) {
-        if (group.schema.properties.hasOwnProperty(key)) {
-          const propertySchema = group.schema.properties[key];
-          const _property = this.createProperty(
-            propertySchema,
-            { key, property: group }
-          );
-          group.addControl(key, _property);
+      for (const key in property.schema.properties) {
+        if (property.schema.properties.hasOwnProperty(key)) {
+          const _schema = property.schema.properties[key];
+          const _property = this.createProperty(_schema, property, key);
+          property.addControl(key, _property);
         }
       }
     }
-
-
   }
 
   private generatePath(
-    parent?: { key?: string; property: PropertyParent }
+    propertyParent?: PropertyParent,
+    propertyKey?: string
   ): string {
 
-    if (!parent) {
+    if (!propertyParent) {
       return '/';
     }
 
-    const { key, property } = parent;
-
     let path = '';
-    path += property.path;
-    if (property.parent !== undefined) {
+    path += propertyParent.path;
+
+
+    if (propertyParent.parent !== undefined) {
       path += '/';
     }
 
-    if (property.schema.type === SchemaPropertyType.Object) {
-      path += key;
-    } else if (property.schema.type === SchemaPropertyType.Array) {
-      path += '*';
-    } else {
-      // TODO move to class
-      throw new Error(
-        'Instanciation of a GenericProperty with an unknown parent type: ' +
-          property.schema.type
-      );
+    switch (propertyParent.schema.type) {
+      case SchemaPropertyType.Object:
+        path += propertyKey;
+        break;
+
+      case SchemaPropertyType.Array:
+        path += '*';
+        break;
+
+      default:
+        // TODO move to class
+        throw new Error(
+          'Instantiation of a FormProperty with an unknown parent type: ' +
+            propertyParent.schema.type
+        );
     }
 
     return path;

@@ -58,21 +58,14 @@ export function ControlProperty<T extends Constructor<AbstractControl>>(Base: T)
       return new FormPropertyErrors({ [this.path]: errors });
     }
 
-    setPath(path: string) {
-      this._path = path;
-    }
-
-    setSchema(schema: Schema) {
-      this._schema = schema;
-
-    }
-
-    setVisible(visible: boolean) {
+    setVisible(visible: boolean, opts = { disable: false }) {
       this._visible = visible;
-      if (this.visible) {
-        this.enable();
-      } else {
-        this.disable();
+      if (opts.disable) {
+        if (this.visible) {
+          this.enable();
+        } else {
+          this.disable();
+        }
       }
       this.visibilityChanges.next(this.visible);
     }

@@ -17,15 +17,8 @@ export abstract class Widget<T extends FormProperty> {
   schema: Schema = {};
 }
 
-export class ControlWidget extends Widget<GenericProperty> {
+export class ControlWidget extends Widget<GenericProperty> { }
 
+export class ArrayLayoutWidget extends Widget<ArrayProperty> { }
 
-}
-
-export class ArrayLayoutWidget extends Widget<ArrayProperty> {
-
-}
-
-export class ObjectLayoutWidget extends Widget<ObjectProperty> {
-
-}
+export class ObjectLayoutWidget extends Widget<ObjectProperty> { }

@@ -6,18 +6,18 @@ import { Schema, SchemaValidatorFn } from '../schema';
 import { FormPropertyErrors } from './form-property-errors';
 
 export interface FormProperty extends AbstractControl {
-  isRoot: boolean;
-  id: string;
-  path: string;
-  schema: Schema;
-  visible: boolean;
+  readonly isRoot: boolean;
+  readonly id: string;
+  readonly path: string;
+  readonly schema: Schema;
+
+  readonly visible: boolean;
   visibilityChanges: BehaviorSubject<boolean>;
-  nonEmptyValue: any;
+
+  readonly nonEmptyValue: any;
   nonEmptyValueChanges: EventEmitter<any>;
 
   getErrors(): FormPropertyErrors | null;
-  setPath(path: string);
-  setSchema(schema: Schema);
   setSchemaValidator(fn: SchemaValidatorFn);
   setVisible(visible: boolean);
   bindVisibility();
