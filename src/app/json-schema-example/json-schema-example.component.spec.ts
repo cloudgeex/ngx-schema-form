@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {
   SchemaFormModule,
@@ -20,7 +21,8 @@ describe('JsonSchemaExampleComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         SchemaFormModule,
-        HttpClientModule
+        HttpClientModule,
+        FormsModule
       ],
       declarations: [ JsonSchemaExampleComponent ],
       providers: [

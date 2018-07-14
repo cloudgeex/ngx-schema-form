@@ -28,17 +28,6 @@ class BaseTest {
   template: `
     <sf-form
       [schema]="schema"
-      [(model)]="modelA">
-    </sf-form>
-  `
-})
-class TestAComponent extends BaseTest {}
-
-@Component({
-  selector: 'sf-test',
-  template: `
-    <sf-form
-      [schema]="schema"
       [(ngModel)]="modelA">
     </sf-form>
   `
@@ -62,7 +51,7 @@ const schemaB = {
 };
 
 describe('FormComponent', () => {
-  const testCases = [TestAComponent, TestBComponent];
+  const testCases = [TestBComponent];
 
   testCases.forEach((testComponent, index) => {
     let fixture: ComponentFixture<BaseTest>;
@@ -78,7 +67,7 @@ describe('FormComponent', () => {
       })
     );
 
-    describe((!index ? 'Without' : 'With') + ' NgModel', () => {
+    describe('With NgModel', () => {
       beforeEach(
         async(() => {
           TestBed.compileComponents();
@@ -115,29 +104,6 @@ describe('FormComponent', () => {
         expect(inputs.length).toBe(2);
       });
 
-      // synchronous test, works for model @Input only
-      if (component instanceof TestAComponent) {
-        it('should populate respective input on changes to model', () => {
-          component.schema = schemaB;
-          fixture.detectChanges();
-
-          const inputs = fixture.nativeElement.querySelectorAll('input');
-
-          inputs.forEach(input => {
-            expect(input.value).toBeFalsy();
-          });
-
-          component.modelA = {
-            fieldA: 'A',
-            fieldB: 'B'
-          };
-          fixture.detectChanges();
-
-          expect(inputs[0].value).toEqual('B');
-          expect(inputs[1].value).toEqual('A');
-        });
-      }
-
       it('should support 2 way data binding', () => {
         const input = fixture.debugElement.query(By.css('input')).nativeElement;
 
@@ -160,30 +126,6 @@ describe('FormComponent', () => {
         });
       });
 
-      it('should emit modelChange and onChange events on field value change', () => {
-        const predicate = By.directive(FormComponent);
-        const form = fixture.debugElement.query(predicate).componentInstance;
-        spyOn(form.onChange, 'emit');
-        spyOn(form.modelChange, 'emit');
-
-        const input = fixture.debugElement.query(By.css('input')).nativeElement;
-        fixture.detectChanges();
-
-        fixture.whenStable().then(() => {
-          input.value = 'CHANGED';
-          input.dispatchEvent(new Event('input'));
-
-          const value = { fieldA: 'CHANGED' };
-          expect(form.onChange.emit).toHaveBeenCalledWith({ value });
-
-          if (component instanceof TestAComponent) {
-            expect(form.modelChange.emit).toHaveBeenCalledWith(value);
-          } else {
-            // TestBComponent has no observer to model, it should not emit
-            expect(form.modelChange.emit).not.toHaveBeenCalled();
-          }
-        });
-      });
     });
   });
 });

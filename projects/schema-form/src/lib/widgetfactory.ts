@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { WidgetRegistry } from './widgetregistry';
+import { Widget } from './widget';
 
 @Injectable()
 export class WidgetFactory {
@@ -18,10 +19,10 @@ export class WidgetFactory {
     this.resolver = resolver;
   }
 
-  createWidget(container: ViewContainerRef, type: string): ComponentRef<any> {
-    let componentClass = this.registry.getWidgetType(type);
+  createWidget(container: ViewContainerRef, type: string): ComponentRef<Widget<any>> {
+    const componentClass = this.registry.getWidgetType(type);
 
-    let componentFactory = this.resolver.resolveComponentFactory(componentClass);
+    const componentFactory = this.resolver.resolveComponentFactory<Widget<any>>(componentClass);
     return container.createComponent(componentFactory);
   }
 }

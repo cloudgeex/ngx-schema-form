@@ -6,10 +6,10 @@ import { RouterModule, Routes } from '@angular/router';
 import {
   SchemaFormModule,
   SchemaValidatorFactory,
-  ZSchemaValidatorFactory,
   TemplateSchemaModule,
   WidgetRegistry,
-  DefaultWidgetRegistry
+  DefaultWidgetRegistry,
+  AjvSchemaValidatorFactory
 } from 'ngx-schema-form';
 
 import { routes } from './app.routes';
@@ -40,7 +40,7 @@ import {
     {provide: WidgetRegistry, useClass: DefaultWidgetRegistry},
     {
       provide: SchemaValidatorFactory,
-      useClass: ZSchemaValidatorFactory
+      useClass: AjvSchemaValidatorFactory
     }
   ],
   bootstrap: [AppComponent]

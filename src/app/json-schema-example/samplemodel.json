@@ -1,12 +1,34 @@
 {
-	"firstName": "John",
-	"lastName": "Doe",
-	"categories": ["cat", "dog"],
-	"transactionNumber":123456,
-	"favoriteColor": "#aaafff",
-	"transactionDescription": "Payment for your subscription",
-	"password": "admin",
-	"category": ["hightech"],
-	"freeShipping": false,
-	"customEmail": "Nothing here..."
+  "list": [
+    {
+      "firstName": "Juanma",
+      "lastName": "Nuelele",
+      "bornOn": "2018-07-19"
+    },
+    {
+      "firstName": "Jose",
+      "lastName": "Papele",
+      "bornOn": "2019-07-11"
+    }
+  ],
+  "firstName": "1",
+  "categories": [
+    "cat",
+    "dog"
+  ],
+  "survey": {
+    "q2": {}
+  },
+  "favoriteColor": "#aaafff",
+  "transactionNumber": 123456,
+  "transactionDescription": "Payment for your subscription",
+  "category": [
+    "hightech"
+  ],
+  "confirmationMail": "admin@example.com",
+  "password": "admin",
+  "freeShipping": false,
+  "customEmail": "Nothing here...",
+  "userManual": {},
+  "colors": []
 }

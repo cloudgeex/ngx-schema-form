@@ -19,16 +19,18 @@ import { ControlWidget } from '../../widget';
     [attr.minLength]="schema.minLength || null"
     [attr.disabled]="(schema.widget.id=='color' && schema.readOnly)?true:null">
     <input *ngIf="(schema.widget.id==='color' && schema.readOnly)" [attr.name]="name" type="hidden" [formControl]="control">
+    <span class="help-block" *ngFor="let message of errorMessages">{{ message }}</span>
+
 </div>
 </ng-template>`
 })
 export class StringWidget extends ControlWidget {
 
     getInputType() {
-        if (!this.schema.widget.id || this.schema.widget.id === 'string') {
-            return 'text';
-        } else {
-            return this.schema.widget.id;
-        }
+      if (!this.schema.widget.id || this.schema.widget.id === 'string') {
+          return 'text';
+      } else {
+          return this.schema.widget.id;
+      }
     }
 }

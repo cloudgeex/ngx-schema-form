@@ -7,7 +7,7 @@ import {
 
 import {FormElementComponent} from './formelement.component';
 import {FormComponent} from './form.component';
-import {WidgetChooserComponent} from './widgetchooser.component';
+import {WidgetChooserDirective} from './widgetchooser.directive';
 import {ArrayWidget} from './defaultwidgets/array/array.widget';
 import {ButtonWidget} from './defaultwidgets/button/button.widget';
 import {ObjectWidget} from './defaultwidgets/object/object.widget';
@@ -25,8 +25,9 @@ import {
 } from './default.widget';
 
 import {WidgetRegistry} from './widgetregistry';
-import {SchemaValidatorFactory, ZSchemaValidatorFactory} from './schemavalidatorfactory';
+import {SchemaValidatorFactory} from './schemavalidatorfactory';
 import {FormElementComponentAction} from './formelement.action.component';
+import { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 
 const moduleProviders = [
   {
@@ -35,7 +36,7 @@ const moduleProviders = [
   },
   {
     provide: SchemaValidatorFactory,
-    useClass: ZSchemaValidatorFactory
+    useClass: AjvSchemaValidatorFactory
   }
 ];
 
@@ -45,7 +46,7 @@ const moduleProviders = [
     FormElementComponent,
     FormElementComponentAction,
     FormComponent,
-    WidgetChooserComponent,
+    WidgetChooserDirective,
     DefaultWidget,
     ArrayWidget,
     ButtonWidget,
@@ -63,7 +64,6 @@ const moduleProviders = [
     FormElementComponent,
     FormElementComponentAction,
     FormComponent,
-    WidgetChooserComponent,
     ArrayWidget,
     ButtonWidget,
     ObjectWidget,
@@ -80,7 +80,7 @@ const moduleProviders = [
     FormComponent,
     FormElementComponent,
     FormElementComponentAction,
-    WidgetChooserComponent,
+    WidgetChooserDirective,
     ArrayWidget,
     ButtonWidget,
     ObjectWidget,

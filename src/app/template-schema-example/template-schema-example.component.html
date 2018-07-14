@@ -10,6 +10,7 @@
                         [required]="true"
                         description="(First Name)"
                         placeholder="First Name"
+                        [validators]="isPepe"
                         [schema]="{ maxLength: 40, minLength: 2 }">
                         First Name
                     </sf-field>
@@ -47,7 +48,7 @@
                     <sf-field
                         name="favoriteColor"
                         widget="color"
-                        [schema]="{ default: '#aaa111', pattern: '^#[0-9a-fA-F]{6}$', visibleIf: { moreInfo: [true] } }">
+                        [schema]="{ default: '#aaa111', pattern: '^#[0-9a-fA-F]{6}$', visibleIf: { '/recipient/moreInfo': [true] } }">
                         Favorite color
                     </sf-field>
                     <sf-field name="colors" type="array" widget="array">

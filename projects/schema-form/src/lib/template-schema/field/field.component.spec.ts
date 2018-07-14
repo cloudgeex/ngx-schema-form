@@ -272,14 +272,14 @@ describe('FieldComponent', () => {
               name="password"
               widget="password"
               [required]="true"
-              [validator]="validator"
+              [validators]="validator"
               description="A password field">
               Password
           </sf-field>
           <sf-field
               name="passwordConfirm"
               widget="password"
-              [validator]="validator"
+              [validators]="validator"
               [required]="true">
               Confirm Password
           </sf-field>

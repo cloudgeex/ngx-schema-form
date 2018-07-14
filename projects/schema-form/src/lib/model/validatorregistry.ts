@@ -1,17 +1,17 @@
-import { Validator } from './validator';
+import { ValidatorFn } from '@angular/forms';
 
 export class ValidatorRegistry {
-  private validators: Validator[] = [];
+  private validators: { [path: string]: ValidatorFn | ValidatorFn[] } = {};
 
-  register(path: string, validator: Validator) {
+  register(path: string, validator: ValidatorFn | ValidatorFn[]) {
     this.validators[path] = validator;
   }
 
-  get(path: string): Validator {
+  get(path: string): ValidatorFn | ValidatorFn[] {
     return this.validators[path];
   }
 
   clear() {
-    this.validators = [];
+    this.validators = { };
   }
 }

@@ -1,16 +1,17 @@
 import { ElementRef, QueryList } from '@angular/core';
+import { ValidatorFn } from '@angular/forms';
 
-import { Validator } from '../../model/validator';
+import { SchemaPropertyType } from '../../schema';
 import { ActionRegistry } from '../../model/actionregistry';
 import { ButtonComponent } from '../button/button.component';
 import { TemplateSchemaElement } from '../template-schema-element';
 
-import { Field, FieldType } from './field';
+import { Field } from './field';
 
 export abstract class FieldParent extends TemplateSchemaElement {
 
   name = '';
-  type: FieldType;
+  type: SchemaPropertyType;
 
   get path(): string {
     if (!this.name) {
@@ -56,7 +57,7 @@ export abstract class FieldParent extends TemplateSchemaElement {
 
   protected getFieldsValidators(
     fields: Field[]
-  ): { path: string, validator: Validator }[] {
+  ): { path: string, validators: ValidatorFn | ValidatorFn[] }[] {
 
     return fields.reduce((validators, field) => {
       return validators.concat(field.getValidators());
@@ -68,7 +69,7 @@ export abstract class FieldParent extends TemplateSchemaElement {
     return fields.reduce((schema: any, field) => {
 
       switch (this.type) {
-        case FieldType.Array:
+        case SchemaPropertyType.Array:
           schema.items = field.getSchema();
           break;
 

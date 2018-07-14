@@ -14,7 +14,7 @@ import { ControlWidget } from '../../widget';
 		[attr.placeholder]="schema.placeholder"
 		[attr.maxLength]="schema.maxLength || null"
     [attr.minLength]="schema.minLength || null"
-		[formControl]="control"></textarea>
+		[formControl]="formProperty"></textarea>
 </div>`
 })
 export class TextAreaWidget extends ControlWidget {}

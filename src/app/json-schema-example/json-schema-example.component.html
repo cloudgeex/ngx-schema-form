@@ -2,10 +2,9 @@
   <div class="row">
     <div class="col-md-4">
       <h3>Form:</h3>
-      <sf-form (onErrorChange)="logErrors($event.value)"
-        (onChange)="setValue($event.value)"
+      <sf-form 
         [schema]="schema"
-        [model]="model"
+        [(ngModel)]="model"
         [validators]="fieldValidators"
         [actions]="actions">
       </sf-form>
@@ -17,7 +16,7 @@
     </div>
     <div class="col-md-4">
       <h3>Model:</h3>
-      <pre>{{value | json}}</pre>
+      <pre>{{model | json}}</pre>
     </div>
   </div>
 </div>

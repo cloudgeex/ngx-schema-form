@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ArrayLayoutWidget } from '../../widget';
+import { ArrayProperty } from '../../model/array-property';
 
 @Component({
   selector: 'sf-array-widget',
@@ -9,8 +10,8 @@ import { ArrayLayoutWidget } from '../../widget';
 		{{ schema.title }}
 	</label>
 	<span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
-	<div *ngFor="let itemProperty of formProperty.properties; let i=index; trackBy:trackByIndex">
-		<sf-form-element [formProperty]="itemProperty"></sf-form-element>
+	<div *ngFor="let formProperty of formProperty.controls; let i=index">
+		<sf-form-element [formProperty]="formProperty"></sf-form-element>
 		<button (click)="removeItem(i)" class="btn btn-default array-remove-button">
 			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Remove
 		</button>
@@ -22,15 +23,13 @@ import { ArrayLayoutWidget } from '../../widget';
 })
 export class ArrayWidget extends ArrayLayoutWidget {
 
+
   addItem() {
-    this.formProperty.addItem();
+    this.formProperty.addProperty();
   }
 
   removeItem(index: number) {
-    this.formProperty.removeItem(index);
+    this.formProperty.removeAt(index);
   }
 
-  trackByIndex(index: number, item: any) {
-    return index;
-  }
 }

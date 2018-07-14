@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AbstractControl,ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-template-schema-example',
@@ -7,12 +8,45 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TemplateSchemaExampleComponent implements OnInit {
 
-  model: any = {};
+  model: any = {
+    recipient: {
+      firstName: 'Pepe',
+      lastName: 'Canelo',
+      categories: [
+        'dog',
+        'cat'
+      ],
+      colors: []
+    },
+    survey: {
+      q1: 'aSDASd',
+      q2: {
+        number: 10147
+      }
+    },
+    transaction: {
+      category: []
+    },
+    shipping: {},
+    contact: {},
+    confirmation: {
+      confirmationEmail: 'admin@example.com',
+      password: 'admin'
+    }
+  };
 
   constructor() { }
 
   onClick(message: string) {
     alert(message);
+  }
+
+  isPepe(control: AbstractControl): ValidationErrors {
+    if (!control.pristine && control.value !== 'pepe')  {
+      return { message: 'is not pepe' };
+    }
+
+    return null;
   }
 
   ngOnInit() {

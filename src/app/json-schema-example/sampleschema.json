@@ -1,7 +1,39 @@
 {
-	"$schema": "http://json-schema.org/draft-04/hyper-schema#",
 	"type": "object",
 	"properties": {
+		"list": {
+			"type": "array",
+			"description": "List",
+			"items": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "placeholder": "First name",
+            "minLength": 2,
+            "maxLength": 40,
+            "title": "First name",
+            "description": "First name"
+          },
+          "lastName": {
+            "type": "string",
+            "placeholder": "Last name",
+            "minLength": 2,
+            "maxLength": 40,
+            "title": "Last name",
+            "description": "Last name"
+          },
+          "bornOn": {
+            "type": "string",
+            "format": "date",
+            "widget": "date",
+            "default": "1800-12-12",
+            "placeholder": "Ex: 2009-03-11",
+            "description": "Born on"
+          }
+        }
+			}
+		},
 		"firstName": {
 			"type": "string",
 			"placeholder": "First name",
@@ -96,13 +128,16 @@
 			"visibleIf": {
 				"moreInfo": [
 					true
+				],
+				"deliveryService": [
+					"other"
 				]
 			}
 		},
 		"transactionNumber": {
 			"type": "integer",
 			"minimum": 0,
-			"readOnly": "true",
+			"readOnly": true,
 			"description": "Transaction number"
 		},
 		"transactionDescription": {
@@ -365,7 +400,8 @@
 				"transactionDescription",
 				"promotion",
 				"category",
-				"userManual"
+				"userManual",
+        "list"
 			]
 		},
 		{
