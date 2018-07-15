@@ -96,12 +96,6 @@ export class FormPropertyFactory {
       property.setParent(propertyParent);
     }
 
-    if (property.isRoot) {
-      this.bindSchemaValidator(property);
-      // visibleIf
-      property.bindVisibility();
-    }
-
     this.bindCustomValidator(property);
 
     if (property instanceof ObjectProperty) {
@@ -112,6 +106,12 @@ export class FormPropertyFactory {
           property.addControl(key, _property);
         }
       }
+    }
+
+    if (property.isRoot) {
+      this.bindSchemaValidator(property);
+      // needs to run after entire property tree is built
+      property.bindVisibility();
     }
   }
 
