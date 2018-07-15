@@ -22,8 +22,6 @@ import { GenericProperty } from './model/generic-property';
 })
 export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
 
-  static widgetCount = 0;
-
   @Input()
   formProperty: FormProperty;
 
@@ -47,7 +45,6 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges() {
-    WidgetChooserDirective.widgetCount++;
     this.componentRef = this.widgetFactory.createWidget(
       this.viewContainerRef,
       this.formProperty.schema.widget.id
@@ -57,7 +54,7 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
     component.formProperty = this.formProperty;
     component.control = this.formProperty;
     component.schema = this.formProperty.schema;
-    component.id = 'field' + WidgetChooserDirective.widgetCount;
+    component.id = this.formProperty.id;
 
     if (this.formProperty instanceof GenericProperty) {
       this.formProperty.statusChanges
@@ -92,6 +89,5 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
   ngOnDestroy() {
     this.subs.unsubscribe();
     this.destroyComponentRef();
-    WidgetChooserDirective.widgetCount = 0;
   }
 }

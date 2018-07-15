@@ -17,11 +17,7 @@ export function ControlProperty<T extends Constructor<AbstractControl>>(Base: T)
     visibilityChanges = new BehaviorSubject<boolean>(true);
 
     get id(): string {
-      return this.path.toLowerCase()
-        .slice(1)
-        .replace('/*', '')
-        .split('/')
-        .join('.');
+      return this.path.toLowerCase().slice(1).replace(/\//g, '-');
     }
 
     get isRoot(): boolean {
