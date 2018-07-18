@@ -1,5 +1,11 @@
 import { EventEmitter } from '@angular/core';
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  ValidationErrors,
+  FormControl,
+  FormArray,
+  FormGroup
+} from '@angular/forms';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map, startWith  } from 'rxjs/operators';
 
@@ -8,9 +14,13 @@ import { FormPropertyErrors } from './form-property-errors';
 import { Schema, SchemaValidatorFn } from '../schema';
 
 
-type Constructor<T> = new (...args: any[]) => T;
+export type Constructor<T> = new (...args: any[]) => T;
 
-export function ControlProperty<T extends Constructor<AbstractControl>>(Base: T) {
+
+export function ControlProperty<T extends Constructor<AbstractControl>>(
+  Base: T
+): T & Constructor<FormProperty> {
+
   abstract class Property extends Base implements FormProperty {
     nonEmptyValue: any;
     nonEmptyValueChanges = new EventEmitter();
@@ -24,15 +34,8 @@ export function ControlProperty<T extends Constructor<AbstractControl>>(Base: T)
       return this === this.root;
     }
 
-    protected _path: string;
-    get path(): string {
-      return this._path;
-    }
-
-    protected _schema: Schema;
-    get schema(): Schema {
-      return this._schema;
-    }
+    readonly path: string;
+    readonly schema: Schema;
 
     protected _visible = true;
     get visible(): boolean {

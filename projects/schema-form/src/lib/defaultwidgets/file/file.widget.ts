@@ -11,25 +11,22 @@ import { ControlWidget } from '../../widget';
 	</label>
     <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
   <input [name]="name" class="text-widget file-widget" [attr.id]="id"
-    [formControl]="fileControl" type="file" [attr.disabled]="schema.readOnly?true:null"
+    type="file" [attr.disabled]="schema.readOnly?true:null"
     (change)="onFileChange($event)">
-	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="fileName">
 </div>`
 })
 export class FileWidget extends ControlWidget implements AfterViewInit {
 
   protected reader = new FileReader();
   protected filedata: any = {};
-  fileControl = new FormControl();
+  fileName = new FormControl();
 
   constructor() {
     super();
   }
 
   ngAfterViewInit() {
-    // OVERRIDE ControlWidget ngAfterViewInit() as ReactiveForms do not handle
-    // file inputs
-
     this.reader.onloadend = () => {
       this.filedata.data = btoa(this.reader.result);
       this.formProperty.setValue(this.filedata);

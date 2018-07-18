@@ -16,8 +16,8 @@ export class ArrayProperty extends ControlProperty(FormArray) implements GroupPr
     schema: Schema
   ) {
     super([]);
-    this._path = path;
-    this._schema = schema;
+    this.path = path;
+    this.schema = schema;
   }
 
   _updateValue() {

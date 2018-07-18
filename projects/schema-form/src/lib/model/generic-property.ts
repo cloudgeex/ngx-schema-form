@@ -1,5 +1,7 @@
 import { FormControl } from '@angular/forms';
 
+
+import { FormProperty } from './form-property'; // needed because of mixin
 import { ControlProperty } from './control-property';
 import { Schema } from '../schema';
 
@@ -7,8 +9,8 @@ export class GenericProperty extends ControlProperty(FormControl) {
 
   constructor(path: string, schema: Schema) {
     super(schema.default);
-    this._path = path;
-    this._schema = schema;
+    this.path = path;
+    this.schema = schema;
   }
 
   _updateValue() {

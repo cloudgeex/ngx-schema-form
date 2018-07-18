@@ -16,8 +16,8 @@ export abstract class FormElementTemplateRef extends TemplateRef<any> { }
 @Component({
   selector: 'sf-form-element',
   template: `<div *ngIf="formProperty.visible"
-    [class.has-error]="!formProperty.controls && !formProperty.valid"
-	  [class.has-success]="!formProperty.controls && formProperty.valid">
+    [class.has-error]="!formProperty.hasOwnProperty('controls') && !formProperty.valid"
+	  [class.has-success]="!formProperty.hasOwnProperty('controls') && formProperty.valid">
 	<ng-template sfWidgetChooser [formProperty]="formProperty"> </ng-template>
   <sf-form-element-action
     *ngFor="let button of buttons"

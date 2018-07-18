@@ -20,7 +20,7 @@ import { ArrayProperty } from './array-property';
 import { ObjectProperty } from './object-property';
 
 
-type PropertyParent = ObjectProperty | ArrayProperty;
+export type PropertyParent = ObjectProperty | ArrayProperty;
 
 
 export class FormPropertyFactory {

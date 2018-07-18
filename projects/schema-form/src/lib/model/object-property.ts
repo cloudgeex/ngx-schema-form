@@ -11,8 +11,8 @@ export class ObjectProperty extends ControlProperty(FormGroup) implements GroupP
 
   constructor(path: string, schema: Schema) {
     super({});
-    this._path = path;
-    this._schema = schema;
+    this.path = path;
+    this.schema = schema;
   }
 
   _updateValue() {
