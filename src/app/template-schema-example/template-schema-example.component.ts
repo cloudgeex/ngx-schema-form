@@ -35,6 +35,38 @@ export class TemplateSchemaExampleComponent implements OnInit {
     }
   };
 
+  fieldsets = [
+    {
+      'title': 'Personal information',
+      'fields': [
+        'recipient',
+        'survey'
+      ],
+      widget: {
+        id: 'tabs',
+        tabs: [
+          {
+            title: 'One',
+            fields: ['recipient']
+          },
+          {
+            title: 'Two',
+            fields: ['survey']
+          }
+        ]
+      }
+    },
+    {
+      'title': 'Else',
+      'fields': [
+        'transaction',
+        'shipping',
+        'contact',
+        'confirmation'
+      ]
+    },
+  ];
+
   constructor() { }
 
   onClick(message: string) {

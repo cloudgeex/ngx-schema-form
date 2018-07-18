@@ -5,7 +5,8 @@ import {
   AfterContentInit,
   HostBinding,
   SimpleChange,
-  SimpleChanges
+  SimpleChanges,
+  Input
 } from '@angular/core';
 import { merge } from 'rxjs';
 
@@ -36,6 +37,9 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
   @ContentChildren(ButtonComponent)
   childButtons: QueryList<ButtonComponent>;
 
+  @Input()
+  fieldsets: { [key: string]: any }[];
+
   constructor(
     protected actionRegistry: ActionRegistry,
     protected validatorRegistry: ValidatorRegistry,
@@ -62,6 +66,10 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
       type: SchemaPropertyType.Object,
       properties: schema.properties
     };
+
+    if (this.fieldsets) {
+      this.formComponent.schema.fieldsets = this.fieldsets;
+    }
 
     if (schema.required && schema.required.length > 0) {
       this.formComponent.schema.requred = schema.required;
