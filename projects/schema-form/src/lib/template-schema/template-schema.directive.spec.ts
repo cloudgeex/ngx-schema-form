@@ -9,7 +9,7 @@ import { By } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 
 import { FormProperty } from '../model/form-property';
-import { FormComponent } from '../form.component';
+import { FormComponent } from '../form/form.component';
 import { SchemaFormModule } from '../schema-form.module';
 import { TemplateSchemaModule } from './template-schema.module';
 import { TemplateSchemaDirective } from './template-schema.directive';
