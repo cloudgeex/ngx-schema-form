@@ -5,7 +5,7 @@ import { ControlWidget } from '../../widget';
 @Component({
   selector: 'sf-string-widget',
   template: `<input *ngIf="this.getInputType()==='hidden'; else notHiddenFieldBlock"
-  [attr.name]="name" type="hidden" [formControl]="control">
+  [attr.name]="name" type="hidden" [formControl]="formProperty">
 <ng-template #notHiddenFieldBlock>
 <div class="widget form-group">
     <label [attr.for]="id" class="horizontal control-label">
@@ -14,11 +14,11 @@ import { ControlWidget } from '../../widget';
     <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
     <input [name]="name" [attr.readonly]="(schema.widget.id!=='color') && schema.readOnly?true:null"
     class="text-widget.id textline-widget form-control" [attr.type]="this.getInputType()"
-    [attr.id]="id"  [formControl]="control" [attr.placeholder]="schema.placeholder"
+    [attr.id]="id"  [formControl]="formProperty" [attr.placeholder]="schema.placeholder"
     [attr.maxLength]="schema.maxLength || null"
     [attr.minLength]="schema.minLength || null"
     [attr.disabled]="(schema.widget.id=='color' && schema.readOnly)?true:null">
-    <input *ngIf="(schema.widget.id==='color' && schema.readOnly)" [attr.name]="name" type="hidden" [formControl]="control">
+    <input *ngIf="(schema.widget.id==='color' && schema.readOnly)" [attr.name]="name" type="hidden" [formControl]="formProperty">
     <span class="help-block" *ngFor="let message of errorMessages">{{ message }}</span>
 
 </div>

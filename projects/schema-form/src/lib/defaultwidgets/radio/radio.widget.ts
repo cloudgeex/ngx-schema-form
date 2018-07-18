@@ -9,11 +9,11 @@ import { ControlWidget } from '../../widget';
     <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
 	<div *ngFor="let option of schema.oneOf" class="radio">
 		<label class="horizontal control-label">
-			<input [formControl]="control" [attr.name]="name" value="{{option.enum[0]}}" type="radio"  [attr.disabled]="schema.readOnly">
+			<input [formControl]="formProperty" [attr.name]="name" value="{{option.enum[0]}}" type="radio"  [attr.disabled]="schema.readOnly">
 			{{option.description}}
 		</label>
 	</div>
-	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="formProperty">
 </div>`
 })
 export class RadioWidget extends ControlWidget {}

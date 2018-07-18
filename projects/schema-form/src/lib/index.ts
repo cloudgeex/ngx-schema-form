@@ -1,7 +1,7 @@
-export { FormComponent } from './form.component';
-export { FormElementComponent } from './formelement.component';
-export { FormElementComponentAction } from './formelement.action.component';
-export { WidgetChooserDirective } from './widgetchooser.directive';
+export { FormComponent } from './form/form.component';
+export { FormElementComponent } from './form/form-element.component';
+export { FormElementActionComponent } from './form/form-element-action.component';
+export { WidgetChooserDirective } from './form/form-widget-chooser.directive';
 export { WidgetRegistry } from './widgetregistry';
 export { SchemaValidatorFactory } from './schemavalidatorfactory';
 export { ZSchemaValidatorFactory } from './z-schema-validator-factory';

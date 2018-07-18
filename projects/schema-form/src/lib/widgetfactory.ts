@@ -2,27 +2,40 @@ import {
   ViewContainerRef,
   ComponentRef,
   ComponentFactoryResolver,
-  Injectable
+  Injectable,
+  Injector
 } from '@angular/core';
 
-import { WidgetRegistry } from './widgetregistry';
+import { WidgetRegistry, WidgetType } from './widgetregistry';
 import { Widget } from './widget';
 
 @Injectable()
 export class WidgetFactory {
 
-  private resolver: ComponentFactoryResolver;
-  private registry: WidgetRegistry;
+  constructor(
+    private widgetRegistry: WidgetRegistry,
+    private factoryResolver: ComponentFactoryResolver
+  ) { }
 
-  constructor(registry: WidgetRegistry, resolver: ComponentFactoryResolver) {
-    this.registry = registry;
-    this.resolver = resolver;
-  }
+  createWidget(
+    container: ViewContainerRef,
+    id: string,
+    opts: {
+      type: WidgetType,
+      injector?: Injector
+    } = {
+      type: WidgetType.Field
+    }
+  ): ComponentRef<Widget<any>> {
 
-  createWidget(container: ViewContainerRef, type: string): ComponentRef<Widget<any>> {
-    const componentClass = this.registry.getWidgetType(type);
+    const componentClass = this.widgetRegistry.getWidgetType(id, opts.type);
+    const componentFactory = this.factoryResolver
+      .resolveComponentFactory<Widget<any>>(componentClass);
 
-    const componentFactory = this.resolver.resolveComponentFactory<Widget<any>>(componentClass);
-    return container.createComponent(componentFactory);
+    return container.createComponent(
+      componentFactory,
+      undefined, // index
+      opts.injector
+    );
   }
 }

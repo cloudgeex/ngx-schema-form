@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { SchemaFormModule } from '../schema-form.module';
 import { FormComponent } from './form.component';
-import { SchemaFormModule } from './schema-form.module';
 
 class BaseTest {
   schema: any = {

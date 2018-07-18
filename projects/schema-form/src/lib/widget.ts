@@ -1,4 +1,4 @@
-import { AfterViewInit } from '@angular/core';
+import { TemplateRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { FormProperty } from './model/form-property';
@@ -22,3 +22,10 @@ export class ControlWidget extends Widget<GenericProperty> { }
 export class ArrayLayoutWidget extends Widget<ArrayProperty> { }
 
 export class ObjectLayoutWidget extends Widget<ObjectProperty> { }
+
+export class FieldsetLayoutWidget extends Widget<ObjectProperty> {
+  title: string;
+  description: string;
+  formProperties: FormProperty[];
+  widget: any;
+}

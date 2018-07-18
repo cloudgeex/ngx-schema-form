@@ -10,17 +10,16 @@ import {
   ValidatorFn
 } from '@angular/forms';
 
-import { Action } from './model/action';
-import { ActionRegistry } from './model/actionregistry';
-import { SchemaPreprocessor } from './model/schemapreprocessor';
-import { ValidatorRegistry } from './model/validatorregistry';
-import { SchemaPropertyType } from './schema';
-
-import { SchemaValidatorFactory } from './schemavalidatorfactory';
-import { WidgetFactory } from './widgetfactory';
-import { TerminatorService } from './terminator.service';
-import { FormPropertyFactory } from './model/form-property-factory';
-import { FormProperty } from './model/form-property';
+import { Action } from '../model/action';
+import { ActionRegistry } from '../model/actionregistry';
+import { SchemaPreprocessor } from '../model/schemapreprocessor';
+import { ValidatorRegistry } from '../model/validatorregistry';
+import { SchemaPropertyType } from '../schema';
+import { SchemaValidatorFactory } from '../schemavalidatorfactory';
+import { WidgetFactory } from '../widgetfactory';
+import { TerminatorService } from '../terminator.service';
+import { FormPropertyFactory } from '../model/form-property-factory';
+import { FormProperty } from '../model/form-property';
 
 export function useFactory(schemaValidatorFactory, validatorRegistry) {
   return new FormPropertyFactory(schemaValidatorFactory, validatorRegistry);
@@ -116,12 +115,14 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
       this.schema.type = SchemaPropertyType.Object;
     }
 
+
     if (this.schema && changes.schema) {
       let value: any;
       if (this.rootFormProperty) {
         value = this.rootFormProperty.value;
-        this.terminator.destroy();
       }
+
+      this.terminator.destroy();
 
       SchemaPreprocessor.preprocess(this.schema);
       this.rootFormProperty = this.formPropertyFactory.createProperty(

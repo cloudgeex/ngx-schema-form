@@ -9,12 +9,20 @@ import { RangeWidget } from './range/range.widget';
 import { SelectWidget } from './select/select.widget';
 import { StringWidget } from './string/string.widget';
 import { TextAreaWidget } from './textarea/textarea.widget';
+import { FieldsetWidget } from './fieldset/fieldset.widget';
+import { TabsWidget } from './tabs/tabs.widget';
 
-import { WidgetRegistry } from '../widgetregistry';
+import { WidgetRegistry, WidgetType } from '../widgetregistry';
 
 export class DefaultWidgetRegistry extends WidgetRegistry {
   constructor() {
     super();
+
+    this.register('fieldset', FieldsetWidget, WidgetType.Fieldset);
+    this.register('tabs', TabsWidget, WidgetType.Fieldset);
+
+    this.setDefaultWidget(FieldsetWidget, WidgetType.Fieldset);
+
 
     this.register('array',  ArrayWidget);
     this.register('object',  ObjectWidget);

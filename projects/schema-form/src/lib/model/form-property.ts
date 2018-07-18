@@ -21,5 +21,3 @@ export interface FormProperty extends AbstractControl {
   setVisible(visible: boolean);
   bindVisibility();
 }
-
-

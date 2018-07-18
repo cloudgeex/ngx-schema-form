@@ -4,12 +4,19 @@ import { ObjectLayoutWidget } from '../../widget';
 
 @Component({
   selector: 'sf-form-object',
-  template: `<fieldset *ngFor="let fieldset of formProperty.schema.fieldsets">
-	<legend *ngIf="fieldset.title">{{fieldset.title}}</legend>
-	<div *ngIf="fieldset.description">{{fieldset.description}}</div>
-	<div *ngFor="let fieldId of fieldset.fields">
-		<sf-form-element [formProperty]="formProperty.get(fieldId)"></sf-form-element>
-	</div>
-</fieldset>`
+  template: `
+    <ng-template #formElement let-formProperty="formProperty">
+      <sf-form-element [formProperty]="formProperty"></sf-form-element>
+    </ng-template>
+
+    <ng-container *ngFor="let fieldset of formProperty.schema.fieldsets">
+      <ng-template
+        sfFieldsetWidgetChooser
+        [formProperty]="formProperty"
+        [fieldset]="fieldset"
+        [templateRef]="formElement">
+      </ng-template>
+    </ng-container>
+  `
 })
 export class ObjectWidget extends ObjectLayoutWidget { }

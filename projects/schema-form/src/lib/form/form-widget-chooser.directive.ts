@@ -8,13 +8,13 @@ import {
   OnDestroy,
   OnChanges
 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { filter, startWith, distinctUntilChanged } from 'rxjs/operators';
+import { filter, startWith, distinctUntilChanged, take } from 'rxjs/operators';
 
-import { TerminatorService } from './terminator.service';
-import { WidgetFactory } from './widgetfactory';
-import { FormProperty } from './model/form-property';
-import { GenericProperty } from './model/generic-property';
+import { TerminatorService } from '../terminator.service';
+import { Widget } from '../widget';
+import { WidgetFactory } from '../widgetfactory';
+import { FormProperty } from '../model/form-property';
+import { GenericProperty } from '../model/generic-property';
 
 
 @Directive({
@@ -26,7 +26,6 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
   formProperty: FormProperty;
 
   private componentRef: ComponentRef<any>;
-  private subs: Subscription;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
@@ -36,23 +35,21 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
 
-    this.subs = this.terminator.onDestroy.subscribe(destroy => {
-      if (destroy) {
-        this.destroyComponentRef();
-      }
+    this.terminator.destroyed.pipe(take(1)).subscribe(() => {
+      this.destroyComponentRef();
     });
 
   }
 
   ngOnChanges() {
+
     this.componentRef = this.widgetFactory.createWidget(
       this.viewContainerRef,
       this.formProperty.schema.widget.id
     );
 
-    const component = this.componentRef.instance;
+    const component = <Widget<any>>this.componentRef.instance;
     component.formProperty = this.formProperty;
-    component.control = this.formProperty;
     component.schema = this.formProperty.schema;
     component.id = this.formProperty.id;
 
@@ -87,7 +84,6 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
     this.destroyComponentRef();
   }
 }

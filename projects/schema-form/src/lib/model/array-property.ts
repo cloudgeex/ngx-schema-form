@@ -5,9 +5,10 @@ import { FormProperty } from './form-property';
 import { FormPropertyErrors } from './form-property-errors';
 import { FormPropertyFactory } from './form-property-factory';
 import { ControlProperty } from './control-property';
+import { GroupProperty } from './group-property';
 
 
-export class ArrayProperty extends ControlProperty(FormArray) {
+export class ArrayProperty extends ControlProperty(FormArray) implements GroupProperty {
 
   constructor(
     private formPropertyFactory: FormPropertyFactory,
@@ -92,6 +93,23 @@ export class ArrayProperty extends ControlProperty(FormArray) {
     this.controls.forEach((control: FormProperty) => {
       control.bindVisibility();
     });
+  }
+
+  forEach(fn: (property: FormProperty) => void, opts = { includeSelf: true }) {
+
+    if (opts.includeSelf) {
+      fn(this);
+    }
+
+    for (const control of this.controls) {
+      const property = <GroupProperty>control;
+      if (property.forEach instanceof Function) {
+        property.forEach(fn, { includeSelf: true });
+        continue;
+      }
+
+      fn(property);
+    }
   }
 
   private getPropertyFromSchemaItems(): FormProperty {

@@ -390,7 +390,24 @@
 				"favoriteColor",
 				"colors",
 				"survey"
-			]
+			],
+      "widget": {
+        "id": "tabs",
+        "tabs":[
+          {
+            "title": "Identification",
+            "fields": ["firstName", "lastName"]
+          },
+          {
+            "title": "Categories",
+            "fields": ["categories", "bornOn", "moreInfo", "favoriteColor"]
+          },
+          {
+            "title": "More",
+            "fields": ["colors", "survey"]
+          }
+        ]
+      }
 		},
 		{
 			"id": "part_2",

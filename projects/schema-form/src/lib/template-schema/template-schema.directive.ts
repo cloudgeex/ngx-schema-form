@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { merge } from 'rxjs';
 
-import { FormComponent } from '../form.component';
+import { FormComponent } from '../form/form.component';
 import { ActionRegistry } from '../model/actionregistry';
 import { ValidatorRegistry } from '../model/validatorregistry';
 import { TerminatorService } from '../terminator.service';

@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { EventEmitter } from '@angular/core';
 
-@Injectable()
 export class TerminatorService {
-  public onDestroy: Subject<boolean>;
 
-  constructor() {
-    this.onDestroy = new Subject();
-  }
+  public destroyed = new EventEmitter();
+
 
   destroy() {
-    this.onDestroy.next(true);
+    this.destroyed.emit();
   }
 }

@@ -1,31 +1,41 @@
+
+export enum WidgetType {
+  Field = 'field',
+  Fieldset = 'fieldset'
+}
+
 export class WidgetRegistry {
 
-  private widgets: { [type: string]: any } = {};
+  private widgets: { [type: string]: { [id: string]: any } } = {};
 
-  private defaultWidget: any;
+  private defaultWidget: { [type: string]: any } = {};
 
-  constructor() { }
-
-  setDefaultWidget(widget: any) {
-    this.defaultWidget = widget;
+  setDefaultWidget(widget: any, type = WidgetType.Field) {
+    this.defaultWidget[type] = widget;
   }
 
-  getDefaultWidget() {
-    return this.defaultWidget;
+  getDefaultWidget(type = WidgetType.Field) {
+    return this.defaultWidget[type];
   }
 
-  hasWidget(type: string) {
-    return this.widgets.hasOwnProperty(type);
-  }
-
-  register(type: string, widget: any) {
-    this.widgets[type] = widget;
-  }
-
-  getWidgetType(type: string): any {
-    if (this.hasWidget(type)) {
-      return this.widgets[type];
+  hasWidget(id: string, type = WidgetType.Field) {
+    if (!this.widgets.hasOwnProperty(type)) {
+      return false;
     }
-    return this.defaultWidget;
+    return this.widgets[type].hasOwnProperty(id);
+  }
+
+  register(id: string, widget: any, type = WidgetType.Field) {
+    if (!this.widgets.hasOwnProperty(type)) {
+      this.widgets[type] = {};
+    }
+    this.widgets[type][id] = widget;
+  }
+
+  getWidgetType(id: string, type = WidgetType.Field): any {
+    if (this.hasWidget(id, type)) {
+      return this.widgets[type][id];
+    }
+    return this.getDefaultWidget(type);
   }
 }

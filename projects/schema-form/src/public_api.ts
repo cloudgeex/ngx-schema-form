@@ -3,16 +3,20 @@
  */
 
 // export * from './lib/index';
-export { FormComponent } from './lib/form.component';
-export { FormElementComponent } from './lib/formelement.component';
-export { FormElementComponentAction } from './lib/formelement.action.component';
-export { WidgetChooserComponent } from './lib/widgetchooser.component';
-export { WidgetRegistry } from './lib/widgetregistry';
-export { Validator } from './lib/model/validator';
+export { FormComponent } from './lib/form/form.component';
+export { FormElementComponent } from './lib/form/form-element.component';
 export {
-  SchemaValidatorFactory,
-  ZSchemaValidatorFactory
-} from './lib/schemavalidatorfactory';
+  FormElementActionComponent
+} from './lib/form/form-element-action.component';
+export { FormFieldComponent } from './lib/form/form-field.component';
+export {
+  FieldsetWidgetChooserDirective
+} from './lib/form/form-fieldset-widget-chooser.directive';
+export { WidgetChooserDirective } from './lib/form/form-widget-chooser.directive';
+export { WidgetRegistry } from './lib/widgetregistry';
+export { SchemaValidatorFactory } from './lib/schemavalidatorfactory';
+export { ZSchemaValidatorFactory } from './lib/z-schema-validator-factory';
+export { AjvSchemaValidatorFactory } from './lib/ajv-schema-validator-factory';
 export {
   Widget,
   ControlWidget,
@@ -31,6 +35,8 @@ export { RadioWidget } from './lib/defaultwidgets/radio/radio.widget';
 export { RangeWidget } from './lib/defaultwidgets/range/range.widget';
 export { SelectWidget } from './lib/defaultwidgets/select/select.widget';
 export { StringWidget } from './lib/defaultwidgets/string/string.widget';
+export { FieldsetWidget } from './lib/defaultwidgets/fieldset/fieldset.widget';
+export { TabsWidget } from './lib/defaultwidgets/tabs/tabs.widget';
 export {
   DefaultWidgetRegistry
 } from './lib/defaultwidgets/defaultwidgetregistry';

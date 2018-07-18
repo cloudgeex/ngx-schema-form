@@ -7,16 +7,17 @@ import {
   ViewContainerRef,
   OnInit,
   OnDestroy
-} from "@angular/core";
-import {Subscription} from 'rxjs';
-import {WidgetFactory} from "./widgetfactory";
-import {TerminatorService} from "./terminator.service";
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { WidgetFactory } from '../widgetfactory';
+import { TerminatorService } from '../terminator.service';
 
 @Component({
   selector: 'sf-form-element-action',
   template: '<ng-template #target></ng-template>'
 })
-export class FormElementComponentAction implements OnInit, OnChanges, OnDestroy {
+export class FormElementActionComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   button: any;
@@ -34,15 +35,15 @@ export class FormElementComponentAction implements OnInit, OnChanges, OnDestroy 
   }
 
   ngOnInit() {
-    this.subs = this.terminator.onDestroy.subscribe(destroy => {
-      if (destroy) {
-        this.ref.destroy();
-      }
+    this.subs = this.terminator.destroyed.subscribe(() => {
+      this.ref.destroy();
     });
   }
 
   ngOnChanges() {
-    this.ref = this.widgetFactory.createWidget(this.container, this.button.widget || 'button');
+    this.ref = this.widgetFactory.createWidget(
+      this.container, this.button.widget || 'button'
+    );
     this.ref.instance.button = this.button;
     this.ref.instance.formProperty = this.formProperty;
   }
