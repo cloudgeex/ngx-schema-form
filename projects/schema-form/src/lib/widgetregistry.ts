@@ -1,4 +1,5 @@
 
+// TODO add button type
 export enum WidgetType {
   Field = 'field',
   Fieldset = 'fieldset'

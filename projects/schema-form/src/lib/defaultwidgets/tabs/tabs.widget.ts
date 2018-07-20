@@ -28,5 +28,5 @@ import { FieldsetLayoutWidget } from '../../widget';
   `
 })
 export class TabsWidget extends FieldsetLayoutWidget {
-  selectedTab: number = 0;
+  selectedTab = 0;
 }

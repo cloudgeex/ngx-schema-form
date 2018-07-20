@@ -40,9 +40,18 @@ export class FormElementActionComponent implements OnInit, OnChanges, OnDestroy 
     });
   }
 
+  getWidgetId(): string {
+    if (!this.button.widget || !this.button.widget.id) {
+      return 'button';
+    }
+
+    return this.button.widget.id;
+  }
+
   ngOnChanges() {
     this.ref = this.widgetFactory.createWidget(
-      this.container, this.button.widget || 'button'
+      this.container,
+      this.getWidgetId()
     );
     this.ref.instance.button = this.button;
     this.ref.instance.formProperty = this.formProperty;

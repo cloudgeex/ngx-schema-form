@@ -2,7 +2,7 @@ export { FormComponent } from './form/form.component';
 export { FormElementComponent } from './form/form-element.component';
 export { FormElementActionComponent } from './form/form-element-action.component';
 export { WidgetChooserDirective } from './form/form-widget-chooser.directive';
-export { WidgetRegistry } from './widgetregistry';
+export { WidgetRegistry, WidgetType } from './widgetregistry';
 export { SchemaValidatorFactory } from './schemavalidatorfactory';
 export { ZSchemaValidatorFactory } from './z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
@@ -11,6 +11,7 @@ export {
   ControlWidget,
   ArrayLayoutWidget,
   ObjectLayoutWidget,
+  FieldsetLayoutWidget
 } from './widget';
 export {
   ArrayWidget,
@@ -24,6 +25,8 @@ export {
   StringWidget,
   TextAreaWidget,
   ButtonWidget,
+  FieldsetWidget,
+  TabsWidget,
   DefaultWidgetRegistry
 } from './defaultwidgets';
 export { SchemaFormModule } from './schema-form.module';

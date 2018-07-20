@@ -18,10 +18,12 @@ export class DefaultWidgetRegistry extends WidgetRegistry {
   constructor() {
     super();
 
+
+    this.setDefaultWidget(FieldsetWidget, WidgetType.Fieldset);
+
     this.register('fieldset', FieldsetWidget, WidgetType.Fieldset);
     this.register('tabs', TabsWidget, WidgetType.Fieldset);
 
-    this.setDefaultWidget(FieldsetWidget, WidgetType.Fieldset);
 
 
     this.register('array',  ArrayWidget);

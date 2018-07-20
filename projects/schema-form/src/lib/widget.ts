@@ -23,9 +23,9 @@ export class ArrayLayoutWidget extends Widget<ArrayProperty> { }
 
 export class ObjectLayoutWidget extends Widget<ObjectProperty> { }
 
-export class FieldsetLayoutWidget extends Widget<ObjectProperty> {
+export class FieldsetLayoutWidget<T = any> extends Widget<ObjectProperty> {
   title: string;
   description: string;
   formProperties: FormProperty[];
-  widget: any;
+  widget: T;
 }

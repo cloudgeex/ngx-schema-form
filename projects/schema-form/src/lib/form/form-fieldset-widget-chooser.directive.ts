@@ -81,6 +81,8 @@ export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChan
     });
     component.widget = this.fieldset.widget;
 
+    this.formProperty.fieldsetWidgetInstance = component;
+
   }
 
   destroyComponentRef() {

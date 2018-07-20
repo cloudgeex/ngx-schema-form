@@ -15,12 +15,6 @@ import { TemplateSchemaElement } from '../template-schema-element';
 @Component({
   selector: 'sf-button',
   templateUrl: './button.component.html',
-  providers: [
-    {
-      provide: TemplateSchemaElement,
-      useExisting: forwardRef(() => ButtonComponent),
-    }
-  ]
 })
 export class ButtonComponent extends TemplateSchemaElement implements AfterContentInit {
 

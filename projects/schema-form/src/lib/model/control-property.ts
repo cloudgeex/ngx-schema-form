@@ -22,6 +22,9 @@ export function ControlProperty<T extends Constructor<AbstractControl>>(
 ): T & Constructor<FormProperty> {
 
   abstract class Property extends Base implements FormProperty {
+
+    widgetInstance: any;
+
     nonEmptyValue: any;
     nonEmptyValueChanges = new EventEmitter();
     visibilityChanges = new BehaviorSubject<boolean>(true);

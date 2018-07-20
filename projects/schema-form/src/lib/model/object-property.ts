@@ -9,6 +9,8 @@ import { GroupProperty } from './group-property';
 
 export class ObjectProperty extends ControlProperty(FormGroup) implements GroupProperty {
 
+  fieldsetWidgetInstance: any;
+
   constructor(path: string, schema: Schema) {
     super({});
     this.path = path;

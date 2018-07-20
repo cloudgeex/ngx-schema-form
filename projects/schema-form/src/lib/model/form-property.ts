@@ -17,6 +17,8 @@ export interface FormProperty extends AbstractControl {
   nonEmptyValue: any;
   nonEmptyValueChanges: EventEmitter<any>;
 
+  widgetInstance: any;
+
   getErrors(): FormPropertyErrors | null;
   setVisible(visible: boolean);
   bindVisibility();

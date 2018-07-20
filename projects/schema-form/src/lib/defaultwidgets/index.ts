@@ -10,3 +10,5 @@ export { StringWidget } from './string/string.widget';
 export { TextAreaWidget } from './textarea/textarea.widget';
 export { ButtonWidget } from './button/button.widget';
 export { DefaultWidgetRegistry } from './defaultwidgetregistry';
+export { FieldsetWidget } from './fieldset/fieldset.widget';
+export { TabsWidget } from './tabs/tabs.widget';

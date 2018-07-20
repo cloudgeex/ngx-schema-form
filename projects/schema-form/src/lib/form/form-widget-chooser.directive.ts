@@ -53,6 +53,8 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
     component.schema = this.formProperty.schema;
     component.id = this.formProperty.id;
 
+    this.formProperty.widgetInstance = component;
+
     if (this.formProperty instanceof GenericProperty) {
       this.formProperty.statusChanges
         .pipe(

@@ -119,6 +119,7 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
     if (this.schema && changes.schema) {
       let value: any;
       if (this.rootFormProperty) {
+        // TODO validate model against schema
         value = this.rootFormProperty.value;
       }
 
