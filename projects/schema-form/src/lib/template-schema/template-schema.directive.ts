@@ -72,7 +72,7 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
     }
 
     if (schema.required && schema.required.length > 0) {
-      this.formComponent.schema.requred = schema.required;
+      this.formComponent.schema.required = schema.required;
     }
 
     const buttons = this.getButtons();

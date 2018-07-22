@@ -49,7 +49,7 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
   name: string;
 
   @Input()
-  type = SchemaPropertyType.String;
+  type: SchemaPropertyType;
 
   @Input()
   format: string;
@@ -94,8 +94,17 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
 
     const oneOf = this.getOneOf();
 
+    let type: string;
+    if (!this.type && properties) {
+      type = SchemaPropertyType.Object;
+    } else if (!this.type) {
+      type = SchemaPropertyType.String;
+    } else {
+      type = this.type;
+    }
+
     const schema = <any>{
-      type: this.type
+      type
     };
 
     if (this.title !== undefined) {

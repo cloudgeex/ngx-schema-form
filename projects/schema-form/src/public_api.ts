@@ -13,7 +13,7 @@ export {
   FieldsetWidgetChooserDirective
 } from './lib/form/form-fieldset-widget-chooser.directive';
 export { WidgetChooserDirective } from './lib/form/form-widget-chooser.directive';
-export { WidgetRegistry } from './lib/widgetregistry';
+export { WidgetRegistry, WidgetType } from './lib/widgetregistry';
 export { SchemaValidatorFactory } from './lib/schemavalidatorfactory';
 export { ZSchemaValidatorFactory } from './lib/z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './lib/ajv-schema-validator-factory';
@@ -21,7 +21,8 @@ export {
   Widget,
   ControlWidget,
   ArrayLayoutWidget,
-  ObjectLayoutWidget
+  ObjectLayoutWidget,
+  FieldsetLayoutWidget
 } from './lib/widget';
 
 export { ArrayWidget } from './lib/defaultwidgets/array/array.widget';

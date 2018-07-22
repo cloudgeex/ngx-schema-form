@@ -121,11 +121,13 @@ export class FormPropertyFactory {
       property.schema
     );
 
+    // TODO use pipe startWith to do initial run
     property.valueChanges
       .subscribe(() => {
         const value = property.nonEmptyValue;
         property.nonEmptyValueChanges.emit(value);
 
+        // TODO property should define if it wants to validate on pristine or not
         if (property.pristine) {
           return;
         }
