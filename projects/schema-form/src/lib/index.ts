@@ -1,6 +1,6 @@
 export { FormComponent } from './form/form.component';
 export { FormElementComponent } from './form/form-element.component';
-export { FormElementActionComponent } from './form/form-element-action.component';
+export { FormElementActionDirective } from './form/form-element-action.directive';
 export { WidgetChooserDirective } from './form/form-widget-chooser.directive';
 export { WidgetRegistry, WidgetType } from './widgetregistry';
 export { SchemaValidatorFactory } from './schemavalidatorfactory';

@@ -1,9 +1,8 @@
 import {
-  Component,
+  Directive,
   ComponentRef,
   Input,
   OnChanges,
-  ViewChild,
   ViewContainerRef,
   OnInit,
   OnDestroy
@@ -16,11 +15,10 @@ import { ButtonWidget } from '../widget';
 import { WidgetType } from '../widgetregistry';
 import { TerminatorService } from '../terminator.service';
 
-@Component({
-  selector: 'sf-form-element-action',
-  template: '<ng-template #target></ng-template>'
+@Directive({
+  selector: '[sfFormElementAction]'
 })
-export class FormElementActionComponent implements OnInit, OnChanges, OnDestroy {
+export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   button: any;
@@ -28,13 +26,13 @@ export class FormElementActionComponent implements OnInit, OnChanges, OnDestroy 
   @Input()
   formProperty: any;
 
-  @ViewChild('target', {read: ViewContainerRef}) container: ViewContainerRef;
-
   private componentRef: ComponentRef<any>;
 
-  constructor(private widgetFactory: WidgetFactory = null,
-              private terminator: TerminatorService) {
-  }
+  constructor(
+    private container: ViewContainerRef,
+    private widgetFactory: WidgetFactory,
+    private terminator: TerminatorService
+  ) { }
 
   ngOnInit() {
     this.terminator.destroyed
@@ -82,6 +80,5 @@ export class FormElementActionComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   ngOnDestroy() {
-    console.log('??')
   }
 }

@@ -19,11 +19,11 @@ export abstract class FormElementTemplateRef extends TemplateRef<any> { }
     [class.has-error]="!formProperty.hasOwnProperty('controls') && !formProperty.valid"
 	  [class.has-success]="!formProperty.hasOwnProperty('controls') && formProperty.valid">
 	<ng-template sfWidgetChooser [formProperty]="formProperty"> </ng-template>
-  <sf-form-element-action
+  <ng-template sfFormElementAction
     *ngFor="let button of buttons"
     [button]="button"
     [formProperty]="formProperty">
-  </sf-form-element-action>
+  </ng-template>
 </div>`
 })
 export class FormElementComponent implements OnInit {

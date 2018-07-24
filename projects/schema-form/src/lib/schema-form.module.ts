@@ -8,7 +8,7 @@ import { WidgetChooserDirective } from './form/form-widget-chooser.directive';
 import {
   FieldsetWidgetChooserDirective
 } from './form/form-fieldset-widget-chooser.directive';
-import { FormElementActionComponent } from './form/form-element-action.component';
+import { FormElementActionDirective } from './form/form-element-action.directive';
 import { FormFieldComponent } from './form/form-field.component';
 import { ArrayWidget } from './defaultwidgets/array/array.widget';
 import { ButtonWidget } from './defaultwidgets/button/button.widget';
@@ -45,7 +45,7 @@ const moduleProviders = [
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   declarations: [
     FormElementComponent,
-    FormElementActionComponent,
+    FormElementActionDirective,
     FormComponent,
     WidgetChooserDirective,
     FieldsetWidgetChooserDirective,
@@ -67,7 +67,6 @@ const moduleProviders = [
   ],
   entryComponents: [
     FormElementComponent,
-    FormElementActionComponent,
     FormComponent,
     FormFieldComponent,
     ArrayWidget,
@@ -87,7 +86,7 @@ const moduleProviders = [
   exports: [
     FormComponent,
     FormElementComponent,
-    FormElementActionComponent,
+    FormElementActionDirective,
     FormFieldComponent,
     WidgetChooserDirective,
     ArrayWidget,

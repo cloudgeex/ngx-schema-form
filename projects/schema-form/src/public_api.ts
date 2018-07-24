@@ -6,8 +6,8 @@
 export { FormComponent } from './lib/form/form.component';
 export { FormElementComponent } from './lib/form/form-element.component';
 export {
-  FormElementActionComponent
-} from './lib/form/form-element-action.component';
+  FormElementActionDirective
+} from './lib/form/form-element-action.directive';
 export { FormFieldComponent } from './lib/form/form-field.component';
 export {
   FieldsetWidgetChooserDirective
