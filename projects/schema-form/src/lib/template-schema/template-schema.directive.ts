@@ -9,6 +9,7 @@ import {
   Input
 } from '@angular/core';
 import { merge } from 'rxjs';
+import { filter, debounceTime } from 'rxjs/operators';
 
 import { FormComponent } from '../form/form.component';
 import { ActionRegistry } from '../model/actionregistry';
@@ -45,7 +46,7 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
     protected validatorRegistry: ValidatorRegistry,
     private formComponent: FormComponent,
     private terminatorService: TerminatorService,
-    private templateSchemaService: TemplateSchemaService
+    private templateSchemaService: TemplateSchemaService,
   ) {
     super();
   }
@@ -55,6 +56,9 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
     this.validatorRegistry.clear();
 
     const schema = this.getFieldsSchema(fields);
+    fields.forEach((field) => {
+      field.register();
+    });
 
     const _validators = this.getFieldsValidators(fields);
     _validators.forEach(({ path, validators }) => {
@@ -99,9 +103,14 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
 
     merge(
       this.childFields.changes,
+      this.childButtons.changes,
       this.templateSchemaService.changes
     )
-   .subscribe(() => {
+    .pipe(
+      filter((value) => Boolean(value)),
+      debounceTime(50)
+    )
+    .subscribe(() => {
       this.terminatorService.destroy();
       this.setFormDocumentSchema(this.childFields.toArray());
     });

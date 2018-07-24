@@ -62,10 +62,10 @@ export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChan
         useValue: this.templateRef,
       }],
     });
-    const widgetId = this.getFieldsetWidgetId();
+    const widget = this.getFieldsetWidget();
     this.componentRef = this.widgetFactory.createWidget(
       this.viewContainerRef,
-      widgetId,
+      widget.id,
       {
         type: WidgetType.Fieldset,
         injector
@@ -79,7 +79,8 @@ export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChan
     component.formProperties = this.fieldset.fields.map((id) => {
       return this.formProperty.get(id);
     });
-    component.widget = this.fieldset.widget;
+
+    component.widget = widget;
 
     this.formProperty.fieldsetWidgetInstance = component;
 
@@ -94,16 +95,20 @@ export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChan
     this.destroyComponentRef();
   }
 
-  private getFieldsetWidgetId(): string {
+  private getFieldsetWidget(): any {
     if (!this.fieldset.widget) {
-      return;
+      return { id: 'fieldset' };
     }
 
     if (typeof this.fieldset.widget === 'string') {
-      return this.fieldset.widget;
+      return { id: this.fieldset.widget };
     }
 
-    return this.fieldset.widget.id;
+    if (!this.fieldset.widget.id) {
+      this.fieldset.widget.id = 'fieldset';
+    }
+
+    return this.fieldset.widget;
   }
 
 

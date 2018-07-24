@@ -2,7 +2,8 @@
 // TODO add button type
 export enum WidgetType {
   Field = 'field',
-  Fieldset = 'fieldset'
+  Fieldset = 'fieldset',
+  Button = 'button'
 }
 
 export class WidgetRegistry {
@@ -33,7 +34,7 @@ export class WidgetRegistry {
     this.widgets[type][id] = widget;
   }
 
-  getWidgetType(id: string, type = WidgetType.Field): any {
+  getWidgetType<T = any>(id: string, type = WidgetType.Field): T {
     if (this.hasWidget(id, type)) {
       return this.widgets[type][id];
     }

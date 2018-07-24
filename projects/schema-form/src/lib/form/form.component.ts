@@ -2,7 +2,8 @@ import {
   Component,
   OnChanges,
   Input,
-  SimpleChanges
+  SimpleChanges,
+  forwardRef
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -20,6 +21,7 @@ import { WidgetFactory } from '../widgetfactory';
 import { TerminatorService } from '../terminator.service';
 import { FormPropertyFactory } from '../model/form-property-factory';
 import { FormProperty } from '../model/form-property';
+import { FieldRegistry } from '../template-schema/field/field-registry';
 
 export function useFactory(schemaValidatorFactory, validatorRegistry) {
   return new FormPropertyFactory(schemaValidatorFactory, validatorRegistry);
@@ -35,6 +37,11 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
       </sf-form-element>
     </form>`,
   providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FormComponent),
+      multi: true
+    },
     ActionRegistry,
     ValidatorRegistry,
     SchemaPreprocessor,
@@ -45,11 +52,7 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
       deps: [SchemaValidatorFactory, ValidatorRegistry]
     },
     TerminatorService,
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FormComponent,
-      multi: true
-    }
+    FieldRegistry
   ]
 })
 export class FormComponent implements OnChanges, ControlValueAccessor {
@@ -75,6 +78,7 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
   ) {}
 
   writeValue(value: any) {
+    // value should be object
     if (this.rootFormProperty && value) {
       this.rootFormProperty.patchValue(value);
     }
@@ -120,7 +124,7 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
       let value: any;
       if (this.rootFormProperty) {
         // TODO validate model against schema
-        value = this.rootFormProperty.value;
+        value = this.rootFormProperty.nonEmptyValue;
       }
 
       this.terminator.destroy();

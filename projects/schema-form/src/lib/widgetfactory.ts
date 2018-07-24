@@ -17,7 +17,7 @@ export class WidgetFactory {
     private factoryResolver: ComponentFactoryResolver
   ) { }
 
-  createWidget(
+  createWidget<T = Widget<any>>(
     container: ViewContainerRef,
     id: string,
     opts: {
@@ -26,11 +26,11 @@ export class WidgetFactory {
     } = {
       type: WidgetType.Field
     }
-  ): ComponentRef<Widget<any>> {
+  ): ComponentRef<T> {
 
     const componentClass = this.widgetRegistry.getWidgetType(id, opts.type);
     const componentFactory = this.factoryResolver
-      .resolveComponentFactory<Widget<any>>(componentClass);
+      .resolveComponentFactory<T>(componentClass);
 
     return container.createComponent(
       componentFactory,

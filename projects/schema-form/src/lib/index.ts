@@ -11,7 +11,8 @@ export {
   ControlWidget,
   ArrayLayoutWidget,
   ObjectLayoutWidget,
-  FieldsetLayoutWidget
+  FieldsetLayoutWidget,
+  ButtonWidget as BaseButtonWidget
 } from './widget';
 export {
   ArrayWidget,

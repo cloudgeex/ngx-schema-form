@@ -5,7 +5,8 @@ import {
   Output,
   ElementRef,
   EventEmitter,
-  forwardRef
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -16,7 +17,7 @@ import { TemplateSchemaElement } from '../template-schema-element';
   selector: 'sf-button',
   templateUrl: './button.component.html',
 })
-export class ButtonComponent extends TemplateSchemaElement implements AfterContentInit {
+export class ButtonComponent extends TemplateSchemaElement implements OnChanges, AfterContentInit {
 
   @Input()
   id: string;
@@ -30,6 +31,8 @@ export class ButtonComponent extends TemplateSchemaElement implements AfterConte
   @Output()
   click = new EventEmitter<any>();
 
+  changes = new EventEmitter<any>();
+
   constructor(private elementRef: ElementRef) {
     super();
   }
@@ -42,6 +45,12 @@ export class ButtonComponent extends TemplateSchemaElement implements AfterConte
       this.label = textContent;
     }
 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.label || changes.widget) {
+      this.changes.emit({ label: this.label, widget: this.widget });
+    }
   }
 
   ngAfterContentInit() {

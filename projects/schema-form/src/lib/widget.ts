@@ -1,6 +1,7 @@
 import { TemplateRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
+import { Action } from './model/action';
 import { FormProperty } from './model/form-property';
 import { ArrayProperty } from './model/array-property';
 import { GenericProperty } from './model/generic-property';
@@ -27,5 +28,16 @@ export class FieldsetLayoutWidget<T = any> extends Widget<ObjectProperty> {
   title: string;
   description: string;
   formProperties: FormProperty[];
-  widget: T;
+  widget: string | T;
 }
+
+export abstract class ButtonWidget<T = any> {
+  formProperty: FormProperty;
+  id = '';
+  label = '';
+  widget: string | T = 'button';
+  // TODO use function signature
+  action?: Action;
+}
+
+

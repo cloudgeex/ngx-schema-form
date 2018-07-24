@@ -9,8 +9,11 @@ import {
   OnDestroy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { WidgetFactory } from '../widgetfactory';
+import { ButtonWidget } from '../widget';
+import { WidgetType } from '../widgetregistry';
 import { TerminatorService } from '../terminator.service';
 
 @Component({
@@ -27,17 +30,19 @@ export class FormElementActionComponent implements OnInit, OnChanges, OnDestroy 
 
   @ViewChild('target', {read: ViewContainerRef}) container: ViewContainerRef;
 
-  private ref: ComponentRef<any>;
-  private subs: Subscription;
+  private componentRef: ComponentRef<any>;
 
   constructor(private widgetFactory: WidgetFactory = null,
               private terminator: TerminatorService) {
   }
 
   ngOnInit() {
-    this.subs = this.terminator.destroyed.subscribe(() => {
-      this.ref.destroy();
-    });
+    this.terminator.destroyed
+      .subscribe(() => {
+        console.log('des`')
+        this.container.clear();
+        this.componentRef.destroy();
+      });
   }
 
   getWidgetId(): string {
@@ -49,15 +54,34 @@ export class FormElementActionComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   ngOnChanges() {
-    this.ref = this.widgetFactory.createWidget(
+    this.componentRef = this.widgetFactory.createWidget<ButtonWidget>(
       this.container,
-      this.getWidgetId()
+      this.getWidgetId(),
+      {
+        type: WidgetType.Button
+      }
     );
-    this.ref.instance.button = this.button;
-    this.ref.instance.formProperty = this.formProperty;
+
+    const instance = this.componentRef.instance;
+    instance.id = this.button.id;
+    instance.label = this.button.label;
+    instance.action = this.button.action;
+    instance.widget = this.button.widget;
+    instance.formProperty = this.formProperty;
+
+    if (this.button.field) {
+      this.button.field.changes
+        .pipe(takeUntil(this.terminator.destroyed))
+        .subscribe((button) => {
+          // TODO make sure widget id is not changed
+          instance.label = button.label;
+          Object.assign(instance.widget, button.widget);
+          this.componentRef.changeDetectorRef.detectChanges();
+        });
+    }
   }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    console.log('??')
   }
 }

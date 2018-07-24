@@ -38,7 +38,8 @@ export abstract class FieldParent extends TemplateSchemaElement {
       // register as button action the EventEmitter click
       this.actionRegistry.register(
         button.id,
-        button.click.emit.bind(button.click)
+        button.click.emit.bind(button.click),
+        button
       );
 
       const _button = <any>{

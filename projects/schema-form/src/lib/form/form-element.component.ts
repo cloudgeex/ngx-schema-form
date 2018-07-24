@@ -50,15 +50,24 @@ export class FormElementComponent implements OnInit {
     }
   }
 
+  // TODO add type to button attribute
   private createButtonCallback(button) {
-    button.action = (e) => {
-      let action;
-      if (button.id && (action = this.actionRegistry.get(button.id))) {
-        if (action) {
-          action(this.formProperty, button.parameters);
-        }
+    const _button = this.actionRegistry.get(button.id);
+    if (!_button) {
+      return;
+    }
+
+    if (_button.field) {
+      button.field = _button.field;
+    }
+    button.action = (event) => {
+      if (_button.action) {
+        _button.action(event, this.formProperty, button.parameters);
       }
-      e.preventDefault();
+
+      if (event.hasOwnProperty('preventDefault')) {
+        event.preventDefault();
+      }
     };
   }
 

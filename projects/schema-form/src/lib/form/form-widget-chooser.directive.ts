@@ -8,13 +8,20 @@ import {
   OnDestroy,
   OnChanges
 } from '@angular/core';
-import { filter, startWith, distinctUntilChanged, take } from 'rxjs/operators';
+import {
+  filter,
+  startWith,
+  distinctUntilChanged,
+  take,
+  takeUntil
+} from 'rxjs/operators';
 
 import { TerminatorService } from '../terminator.service';
 import { Widget } from '../widget';
 import { WidgetFactory } from '../widgetfactory';
 import { FormProperty } from '../model/form-property';
 import { GenericProperty } from '../model/generic-property';
+import { FieldRegistry } from '../template-schema/field/field-registry';
 
 
 @Directive({
@@ -31,6 +38,7 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
     private viewContainerRef: ViewContainerRef,
     private widgetFactory: WidgetFactory = null,
     private terminator: TerminatorService,
+    private fieldRegsitry: FieldRegistry
   ) { }
 
   ngOnInit() {
@@ -52,6 +60,22 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
     component.formProperty = this.formProperty;
     component.schema = this.formProperty.schema;
     component.id = this.formProperty.id;
+
+    // templateSchema field updates
+    const field = this.fieldRegsitry.getField(this.formProperty.path);
+    if (field) {
+
+      if (field.required) {
+        component.schema.widget.required = field.required;
+      }
+
+      field.changes
+        .pipe(takeUntil(this.terminator.destroyed))
+        .subscribe((schema) => {
+          component.schema = Object.assign(this.formProperty.schema, schema);
+          this.componentRef.changeDetectorRef.detectChanges();
+        });
+    }
 
     this.formProperty.widgetInstance = component;
 

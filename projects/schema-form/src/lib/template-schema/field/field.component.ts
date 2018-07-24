@@ -11,7 +11,8 @@ import {
   forwardRef,
   SimpleChanges,
   SimpleChange,
-  OnChanges
+  OnChanges,
+  EventEmitter
 } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import { Observable, merge } from 'rxjs';
@@ -28,6 +29,7 @@ import { ButtonComponent } from '../button/button.component';
 import { FieldParent } from './field-parent';
 import { Field } from './field';
 import { ItemComponent } from './item/item.component';
+import { FieldRegistry } from './field-registry';
 
 
 @Component({
@@ -78,9 +80,12 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
   @Input()
   schema: any = { };
 
+  changes = new EventEmitter();
+
   constructor(
     private elementRef: ElementRef,
     private templateSchemaService: TemplateSchemaService,
+    private fieldRegsitry: FieldRegistry,
     protected actionRegistry: ActionRegistry
   ) {
     super();
@@ -179,6 +184,20 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
     return _validators;
   }
 
+  register(parentFieldPath = '') {
+    const path = parentFieldPath + this.path;
+    this.fieldRegsitry.register(path, this);
+    if (this.childFields.length) {
+      this.childFields.forEach((field) => {
+        if (field === this) {
+          return;
+        }
+
+        field.register(path);
+      });
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges) {
 
     const keys = Object.keys(changes);
@@ -189,6 +208,18 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
           this.templateSchemaService.changed();
           break;
         }
+      }
+
+      if (this.childFields) {
+        const schema = this.getSchema();
+        delete schema.name;
+        delete schema.format;
+        if (typeof schema.widget === 'string') {
+          delete schema.widget;
+        } else if (schema.widget && schema.width.id) {
+          delete schema.widget.id;
+        }
+        this.changes.emit(schema);
       }
     }
 
@@ -236,7 +267,10 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
       this.childItems.changes,
       this.childButtons.changes
     )
-    .subscribe(() => this.templateSchemaService.changed());
+    .pipe(filter((value) => Boolean(value)))
+    .subscribe(() => {
+      this.templateSchemaService.changed();
+    });
   }
 
 }

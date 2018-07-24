@@ -22,7 +22,8 @@ export {
   ControlWidget,
   ArrayLayoutWidget,
   ObjectLayoutWidget,
-  FieldsetLayoutWidget
+  FieldsetLayoutWidget,
+  ButtonWidget as BaseButtonWidget
 } from './lib/widget';
 
 export { ArrayWidget } from './lib/defaultwidgets/array/array.widget';

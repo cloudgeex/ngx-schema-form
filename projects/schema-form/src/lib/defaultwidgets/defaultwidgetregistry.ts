@@ -18,17 +18,19 @@ export class DefaultWidgetRegistry extends WidgetRegistry {
   constructor() {
     super();
 
-
+    // fieldsets
     this.setDefaultWidget(FieldsetWidget, WidgetType.Fieldset);
-
     this.register('fieldset', FieldsetWidget, WidgetType.Fieldset);
     this.register('tabs', TabsWidget, WidgetType.Fieldset);
 
+    // buttons
+    this.setDefaultWidget(ButtonWidget, WidgetType.Button);
+    this.register('button', ButtonWidget, WidgetType.Button);
 
-
+    // properties
+    this.setDefaultWidget(StringWidget);
     this.register('array',  ArrayWidget);
     this.register('object',  ObjectWidget);
-
     this.register('string', StringWidget);
     this.register('search', StringWidget);
     this.register('tel', StringWidget);
@@ -39,21 +41,14 @@ export class DefaultWidgetRegistry extends WidgetRegistry {
     this.register('date', StringWidget);
     this.register('date-time', StringWidget);
     this.register('time', StringWidget);
-
     this.register('integer', IntegerWidget);
     this.register('number', IntegerWidget);
     this.register('range', RangeWidget);
-
     this.register('textarea', TextAreaWidget);
-
     this.register('file', FileWidget);
     this.register('select', SelectWidget);
     this.register('radio', RadioWidget);
     this.register('boolean', CheckboxWidget);
     this.register('checkbox', CheckboxWidget);
-
-    this.register('button', ButtonWidget);
-
-    this.setDefaultWidget(StringWidget);
   }
 }

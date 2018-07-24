@@ -129,7 +129,7 @@ export class FormPropertyFactory {
 
         // TODO property should define if it wants to validate on pristine or not
         if (property.pristine) {
-          return;
+          //return;
         }
 
         const errors = validate(value);
