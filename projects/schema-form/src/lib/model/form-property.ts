@@ -10,6 +10,7 @@ export interface FormProperty extends AbstractControl {
   id: string;
   path: string;
   schema: Schema;
+  name: string;
 
   visible: boolean;
   visibilityChanges: BehaviorSubject<boolean>;

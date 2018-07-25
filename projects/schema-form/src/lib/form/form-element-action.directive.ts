@@ -2,22 +2,21 @@ import {
   Directive,
   ComponentRef,
   Input,
-  OnChanges,
   ViewContainerRef,
   OnInit,
   OnDestroy
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
+import { Unsubscriber } from '../unsubscriber';
 import { WidgetFactory } from '../widgetfactory';
-import { ButtonWidget } from '../widget';
+import { ButtonLayoutWidget } from '../widget';
 import { WidgetType } from '../widgetregistry';
 
 @Directive({
   selector: '[sfFormElementAction]'
 })
-export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy {
+export class FormElementActionDirective implements OnInit, OnDestroy {
 
   @Input()
   button: any;
@@ -26,28 +25,34 @@ export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy 
   formProperty: any;
 
   private componentRef: ComponentRef<any>;
-  private subs: Subscription;
+
+  @Unsubscriber()
+  private subs;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
     private widgetFactory: WidgetFactory,
   ) { }
 
-  ngOnInit() {
-  }
 
-  getWidgetId(): string {
-    if (!this.button.widget || !this.button.widget.id) {
-      return 'button';
+  getWidget(): any  {
+    const id = 'button';
+    if (!this.button.widget) {
+      return { id };
     }
 
-    return this.button.widget.id;
+    if (!this.button.widget.id) {
+      this.button.widget.id = id;
+    }
+
+    return this.button.widget;
   }
 
-  ngOnChanges() {
-    this.componentRef = this.widgetFactory.createWidget<ButtonWidget>(
+  ngOnInit() {
+    const widget = this.getWidget();
+    this.componentRef = this.widgetFactory.createWidget<ButtonLayoutWidget>(
       this.viewContainerRef,
-      this.getWidgetId(),
+      widget.id,
       {
         type: WidgetType.Button
       }
@@ -57,27 +62,30 @@ export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy 
     instance.id = this.button.id;
     instance.label = this.button.label;
     instance.action = this.button.action;
-    instance.widget = this.button.widget;
+    instance.widget = widget;
     instance.formProperty = this.formProperty;
 
+    // watch changes on field if template schema is used
     if (this.button.field) {
       this.subs = this.button.field.changes
         .subscribe((button) => {
           // TODO make sure widget id is not changed
+          // TODO widget id change should trigger a form rebuild
           instance.label = button.label;
-          Object.assign(instance.widget, button.widget);
+          if (typeof button.widget !== 'string') {
+            Object.assign(instance.widget, button.widget);
+          }
           this.componentRef.changeDetectorRef.detectChanges();
         });
     }
   }
 
   ngOnDestroy() {
-
-    if (this.subs) {
-      this.subs.unsubscribe();
+    if (this.componentRef) {
+      this.componentRef.destroy();
     }
-
-    this.componentRef.destroy();
-    this.viewContainerRef.clear();
+    if (this.viewContainerRef) {
+      this.viewContainerRef.clear();
+    }
   }
 }

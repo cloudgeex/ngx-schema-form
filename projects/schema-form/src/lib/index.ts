@@ -7,12 +7,12 @@ export { SchemaValidatorFactory } from './schemavalidatorfactory';
 export { ZSchemaValidatorFactory } from './z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 export {
-  Widget,
+  WidgetLayout,
   ControlWidget,
   ArrayLayoutWidget,
   ObjectLayoutWidget,
   FieldsetLayoutWidget,
-  ButtonWidget as BaseButtonWidget
+  ButtonLayoutWidget
 } from './widget';
 export {
   ArrayWidget,

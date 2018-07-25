@@ -2,13 +2,11 @@ import {
   Directive,
   ComponentRef,
   Input,
-  ViewChild,
   ViewContainerRef,
   OnInit,
-  OnDestroy,
-  OnChanges
+  OnDestroy
 } from '@angular/core';
-
+import { AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import {
   filter,
@@ -19,7 +17,7 @@ import {
 } from 'rxjs/operators';
 
 import { Unsubscriber } from '../unsubscriber';
-import { Widget } from '../widget';
+import { WidgetLayout } from '../widget';
 import { WidgetFactory } from '../widgetfactory';
 import { FormProperty } from '../model/form-property';
 import { GenericProperty } from '../model/generic-property';
@@ -29,7 +27,7 @@ import { FieldRegistry } from '../template-schema/field/field-registry';
 @Directive({
   selector: '[sfWidgetChooser]',
 })
-export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
+export class WidgetChooserDirective implements OnInit, OnDestroy {
 
   @Input()
   formProperty: FormProperty;
@@ -45,18 +43,25 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
     private fieldRegsitry: FieldRegistry
   ) { }
 
-  ngOnInit() {
+  isWidgetRequired(): boolean {
+    const parent = (<AbstractControl>this.formProperty.parent) as FormProperty;
+    if (!parent || !parent.schema.required) {
+      return false;
+    }
 
+    return parent.schema.required.includes(this.formProperty.name);
   }
 
-  ngOnChanges() {
+  ngOnInit() {
+
+    // TODO break into functions
 
     this.componentRef = this.widgetFactory.createWidget(
       this.viewContainerRef,
       this.formProperty.schema.widget.id
     );
 
-    const component = <Widget<any>>this.componentRef.instance;
+    const component = <WidgetLayout<any>>this.componentRef.instance;
     component.formProperty = this.formProperty;
     component.schema = this.formProperty.schema;
     component.id = this.formProperty.id;
@@ -64,26 +69,34 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
     // templateSchema field updates
     const field = this.fieldRegsitry.getField(this.formProperty.path);
     if (field) {
-
-      if (field.required) {
-        component.schema.widget.required = field.required;
-      }
-
       this.subs = field.changes.subscribe((schema) => {
         component.schema = Object.assign(this.formProperty.schema, schema);
         this.componentRef.changeDetectorRef.detectChanges();
       });
     }
 
+    // required field
+    component.schema.widget.required = this.isWidgetRequired();
+
+    // widget instance in formProperty
     this.formProperty.widgetInstance = component;
 
+    // error messages
     if (this.formProperty instanceof GenericProperty) {
       this.subs = this.formProperty.statusChanges
         .pipe(
+          // initial, to add error messages from schema validator
+          startWith('INVALID'),
           filter((status: string) => {
             const errorMessages = component.errorMessages;
             const hasErrorMessages = errorMessages && errorMessages.length > 0;
-            return status === 'INVALID' || status === 'VALID' && hasErrorMessages;
+
+            // it's valid, but error messages need to be cleared
+            if (status === 'VALID' && hasErrorMessages) {
+              return true;
+            }
+
+            return status === 'INVALID';
           }),
           distinctUntilChanged()
         )
@@ -91,6 +104,7 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
           const propertyErrors = this.formProperty.getErrors();
 
           if (!propertyErrors) {
+            // clear errors emssages
             this.componentRef.instance.errorMessages = [];
             return;
           }

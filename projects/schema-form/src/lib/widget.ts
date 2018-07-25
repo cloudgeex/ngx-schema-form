@@ -9,7 +9,13 @@ import { ObjectProperty } from './model/object-property';
 
 import { Schema } from './schema';
 
-export abstract class Widget<T extends FormProperty> {
+// TODO replace defautl widgets with components and create default abstract types
+export abstract class Widget {
+  id: string;
+  required?: boolean;
+}
+
+export abstract class WidgetLayout<T extends FormProperty> {
   formProperty: T;
   errorMessages: string[];
 
@@ -18,25 +24,26 @@ export abstract class Widget<T extends FormProperty> {
   schema: Schema = {};
 }
 
-export class ControlWidget extends Widget<GenericProperty> { }
+export class ControlWidget extends WidgetLayout<GenericProperty> { }
 
-export class ArrayLayoutWidget extends Widget<ArrayProperty> { }
+export class ArrayLayoutWidget extends WidgetLayout<ArrayProperty> { }
 
-export class ObjectLayoutWidget extends Widget<ObjectProperty> { }
+export class ObjectLayoutWidget extends WidgetLayout<ObjectProperty> { }
 
-export class FieldsetLayoutWidget<T = any> extends Widget<ObjectProperty> {
+export class FieldsetLayoutWidget<T = any> extends WidgetLayout<ObjectProperty> {
   title: string;
   description: string;
   formProperties: FormProperty[];
-  widget: string | T;
+  widget: T;
 }
 
-export abstract class ButtonWidget<T = any> {
+export abstract class ButtonLayoutWidget<T = any> {
   formProperty: FormProperty;
   id = '';
   label = '';
-  widget: string | T = 'button';
-  // TODO use function signature
+
+  // TODO use T only
+  widget: T;
   action?: Action;
 }
 

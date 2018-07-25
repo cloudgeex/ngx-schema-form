@@ -6,9 +6,12 @@ import {
   FormArray,
   Validators
 } from '@angular/forms';
+import { startWith } from 'rxjs/operators';
+
+
+
 import { SchemaValidatorFactory } from '../schemavalidatorfactory';
 import { ValidatorRegistry } from '../model/validatorregistry';
-
 import { Schema, SchemaPropertyType } from '../schema';
 
 import { FormProperty } from './form-property';
@@ -123,14 +126,10 @@ export class FormPropertyFactory {
 
     // TODO use pipe startWith to do initial run
     property.valueChanges
+      .pipe(startWith(null))
       .subscribe(() => {
         const value = property.nonEmptyValue;
         property.nonEmptyValueChanges.emit(value);
-
-        // TODO property should define if it wants to validate on pristine or not
-        if (property.pristine) {
-          //return;
-        }
 
         const errors = validate(value);
         if (!errors) {

@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
 
-import { ButtonWidget as BaseButtonWidget } from '../../widget';
+import { ButtonLayoutWidget } from '../../widget';
 
 @Component({
   selector: 'sf-button-widget',
   template: '<button (click)="action($event)">{{label}}</button>'
 })
-export class ButtonWidget extends BaseButtonWidget {
+export class ButtonWidget extends ButtonLayoutWidget {
 }

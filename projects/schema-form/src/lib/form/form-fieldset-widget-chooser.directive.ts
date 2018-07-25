@@ -5,7 +5,6 @@ import {
   ViewContainerRef,
   OnInit,
   OnDestroy,
-  OnChanges,
   TemplateRef,
   Injector,
 } from '@angular/core';
@@ -22,7 +21,7 @@ import { FormElementTemplateRef } from './form-element.component';
 @Directive({
   selector: '[sfFieldsetWidgetChooser]',
 })
-export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
+export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy {
 
   @Input()
   formProperty: ObjectProperty;
@@ -41,10 +40,6 @@ export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChan
   ) { }
 
   ngOnInit() {
-
-  }
-
-  ngOnChanges() {
 
     const injector = Injector.create({
       providers: [{

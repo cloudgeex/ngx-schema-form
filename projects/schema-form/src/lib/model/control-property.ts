@@ -40,6 +40,10 @@ export function ControlProperty<T extends Constructor<AbstractControl>>(
     readonly path: string;
     readonly schema: Schema;
 
+    get name(): string {
+      return this.path.split('/').pop();
+    }
+
     protected _visible = true;
     get visible(): boolean {
       return this._visible;

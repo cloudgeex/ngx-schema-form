@@ -52,7 +52,6 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
   }
 
   setFormDocumentSchema(fields: FieldComponent[]) {
-    console.log('changing form')
     this.actionRegistry.clear();
     this.validatorRegistry.clear();
 

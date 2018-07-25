@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { Widget } from '../widget';
 import { ActionRegistry } from '../model/actionregistry';
 import { FormProperty } from '../model/form-property';
 

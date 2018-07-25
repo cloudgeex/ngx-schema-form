@@ -31,8 +31,11 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
   selector: 'sf-form',
   template: `
     <ng-container *ngIf="rootFormProperty" >
-      <form>
+      <form >
         <sf-form-element [formProperty]="rootFormProperty"> </sf-form-element>
+        <button type="submit" class="btn btn-primary">
+          Submit
+        </button>
       </form>
     </ng-container>
   `,
@@ -131,19 +134,22 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
       this.changeDetectorRef.detectChanges();
 
       SchemaPreprocessor.preprocess(this.schema);
-      this.rootFormProperty = this.formPropertyFactory.createProperty(
+      const rootFormProperty = this.formPropertyFactory.createProperty(
         this.schema
       );
+      (<any>window).rootFormProperty = rootFormProperty;
 
       // registerOnChange for changes after init
       if (this.onChangeCallback) {
-        this.rootFormProperty.nonEmptyValueChanges.subscribe(
+        rootFormProperty.nonEmptyValueChanges.subscribe(
           this.onChangeCallback
         );
         if (value) {
-          this.rootFormProperty.patchValue(value);
+          rootFormProperty.patchValue(value);
         }
       }
+
+      this.rootFormProperty = rootFormProperty;
     }
   }
 
