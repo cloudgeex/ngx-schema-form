@@ -1,12 +1,17 @@
 export { FormComponent } from './form/form.component';
 export { FormElementComponent } from './form/form-element.component';
-export { FormElementActionDirective } from './form/form-element-action.directive';
-export { WidgetChooserDirective } from './form/form-widget-chooser.directive';
+export {
+  FormButtonWidgetChooserDirective
+} from './form/form-button-widget-chooser.directive';
+export {
+  FormPropertyWidgetChooserDirective
+} from './form/form-property-widget-chooser.directive';
 export { WidgetRegistry, WidgetType } from './widgetregistry';
 export { SchemaValidatorFactory } from './schemavalidatorfactory';
 export { ZSchemaValidatorFactory } from './z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 export {
+  Widget,
   WidgetLayout,
   ControlWidget,
   ArrayLayoutWidget,

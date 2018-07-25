@@ -18,8 +18,8 @@ export abstract class FormElementTemplateRef extends TemplateRef<any> { }
   template: `<div *ngIf="formProperty.visible && formProperty.schema.widget?.id !== 'none'"
     [class.has-error]="!formProperty.hasOwnProperty('controls') && !formProperty.valid"
 	  [class.has-success]="!formProperty.hasOwnProperty('controls') && formProperty.valid">
-	<ng-template sfWidgetChooser [formProperty]="formProperty"> </ng-template>
-  <ng-template sfFormElementAction
+	<ng-template sfFormPropertyWidgetChooser [formProperty]="formProperty"> </ng-template>
+  <ng-template sfFormButtonWidgetChooser
     *ngFor="let button of buttons"
     [button]="button"
     [formProperty]="formProperty">

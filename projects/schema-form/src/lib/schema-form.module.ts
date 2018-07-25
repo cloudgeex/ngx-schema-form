@@ -4,11 +4,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FormElementComponent } from './form/form-element.component';
 import { FormComponent } from './form/form.component';
-import { WidgetChooserDirective } from './form/form-widget-chooser.directive';
 import {
-  FieldsetWidgetChooserDirective
+  FormPropertyWidgetChooserDirective
+} from './form/form-property-widget-chooser.directive';
+import {
+  FormFieldsetWidgetChooserDirective
 } from './form/form-fieldset-widget-chooser.directive';
-import { FormElementActionDirective } from './form/form-element-action.directive';
+import {
+  FormButtonWidgetChooserDirective
+} from './form/form-button-widget-chooser.directive';
 import { FormFieldComponent } from './form/form-field.component';
 import { ArrayWidget } from './defaultwidgets/array/array.widget';
 import { ButtonWidget } from './defaultwidgets/button/button.widget';
@@ -45,10 +49,10 @@ const moduleProviders = [
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   declarations: [
     FormElementComponent,
-    FormElementActionDirective,
+    FormButtonWidgetChooserDirective,
     FormComponent,
-    WidgetChooserDirective,
-    FieldsetWidgetChooserDirective,
+    FormPropertyWidgetChooserDirective,
+    FormFieldsetWidgetChooserDirective,
     DefaultWidget,
     ArrayWidget,
     ButtonWidget,
@@ -86,9 +90,9 @@ const moduleProviders = [
   exports: [
     FormComponent,
     FormElementComponent,
-    FormElementActionDirective,
+    FormButtonWidgetChooserDirective,
     FormFieldComponent,
-    WidgetChooserDirective,
+    FormPropertyWidgetChooserDirective,
     ArrayWidget,
     ButtonWidget,
     ObjectWidget,
@@ -101,7 +105,7 @@ const moduleProviders = [
     SelectWidget,
     StringWidget,
     FieldsetWidget,
-    FieldsetWidgetChooserDirective,
+    FormFieldsetWidgetChooserDirective,
     TabsWidget
   ]
 })

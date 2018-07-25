@@ -19,9 +19,9 @@ import { ObjectProperty } from '../model/object-property';
 import { FormElementTemplateRef } from './form-element.component';
 
 @Directive({
-  selector: '[sfFieldsetWidgetChooser]',
+  selector: '[sfFormFieldsetWidgetChooser]',
 })
-export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy {
+export class FormFieldsetWidgetChooserDirective implements OnInit, OnDestroy {
 
   @Input()
   formProperty: ObjectProperty;

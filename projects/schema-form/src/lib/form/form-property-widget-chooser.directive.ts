@@ -25,9 +25,9 @@ import { FieldRegistry } from '../template-schema/field/field-registry';
 
 
 @Directive({
-  selector: '[sfWidgetChooser]',
+  selector: '[sfFormPropertyWidgetChooser]',
 })
-export class WidgetChooserDirective implements OnInit, OnDestroy {
+export class FormPropertyWidgetChooserDirective implements OnInit, OnDestroy {
 
   @Input()
   formProperty: FormProperty;

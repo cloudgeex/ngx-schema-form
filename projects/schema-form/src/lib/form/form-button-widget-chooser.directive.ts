@@ -14,9 +14,9 @@ import { ButtonLayoutWidget } from '../widget';
 import { WidgetType } from '../widgetregistry';
 
 @Directive({
-  selector: '[sfFormElementAction]'
+  selector: '[sfFormButtonWidgetChooser]'
 })
-export class FormElementActionDirective implements OnInit, OnDestroy {
+export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
 
   @Input()
   button: any;

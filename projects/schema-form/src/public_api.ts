@@ -2,23 +2,26 @@
  * Public API Surface of schema-form
  */
 
-// export * from './lib/index';
+// TODO cleanup external api
 export { FormComponent } from './lib/form/form.component';
 export { FormElementComponent } from './lib/form/form-element.component';
 export {
-  FormElementActionDirective
-} from './lib/form/form-element-action.directive';
+  FormButtonWidgetChooserDirective
+} from './lib/form/form-button-widget-chooser.directive';
 export { FormFieldComponent } from './lib/form/form-field.component';
 export {
-  FieldsetWidgetChooserDirective
+  FormFieldsetWidgetChooserDirective
 } from './lib/form/form-fieldset-widget-chooser.directive';
-export { WidgetChooserDirective } from './lib/form/form-widget-chooser.directive';
+export {
+  FormPropertyWidgetChooserDirective
+} from './lib/form/form-property-widget-chooser.directive';
 export { WidgetRegistry, WidgetType } from './lib/widgetregistry';
 export { SchemaValidatorFactory } from './lib/schemavalidatorfactory';
 export { ZSchemaValidatorFactory } from './lib/z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './lib/ajv-schema-validator-factory';
 export {
   Widget,
+  WidgetLayout,
   ControlWidget,
   ArrayLayoutWidget,
   ObjectLayoutWidget,

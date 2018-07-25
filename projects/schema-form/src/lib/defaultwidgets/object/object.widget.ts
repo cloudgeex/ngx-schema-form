@@ -11,7 +11,7 @@ import { ObjectLayoutWidget } from '../../widget';
 
     <ng-container *ngFor="let fieldset of formProperty.schema.fieldsets">
       <ng-template
-        sfFieldsetWidgetChooser
+        sfFormFieldsetWidgetChooser
         [formProperty]="formProperty"
         [fieldset]="fieldset"
         [templateRef]="formElement">
