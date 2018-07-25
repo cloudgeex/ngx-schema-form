@@ -3,7 +3,8 @@ import {
   Input,
   OnInit,
   TemplateRef,
-  InjectionToken
+  InjectionToken,
+  Renderer2
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
@@ -34,7 +35,9 @@ export class FormElementComponent implements OnInit {
 
   buttons = [];
 
-  constructor(private actionRegistry: ActionRegistry) {}
+  constructor(
+    private actionRegistry: ActionRegistry,
+  ) {}
 
   ngOnInit() {
     this.parseButtons();

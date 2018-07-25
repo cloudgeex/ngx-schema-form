@@ -8,6 +8,8 @@ import {
   OnDestroy,
   OnChanges
 } from '@angular/core';
+
+import { Subscription } from 'rxjs';
 import {
   filter,
   startWith,
@@ -16,7 +18,7 @@ import {
   takeUntil
 } from 'rxjs/operators';
 
-import { TerminatorService } from '../terminator.service';
+import { Unsubscriber } from '../unsubscriber';
 import { Widget } from '../widget';
 import { WidgetFactory } from '../widgetfactory';
 import { FormProperty } from '../model/form-property';
@@ -34,18 +36,16 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
 
   private componentRef: ComponentRef<any>;
 
+  @Unsubscriber()
+  private subs;
+
   constructor(
     private viewContainerRef: ViewContainerRef,
-    private widgetFactory: WidgetFactory = null,
-    private terminator: TerminatorService,
+    private widgetFactory: WidgetFactory,
     private fieldRegsitry: FieldRegistry
   ) { }
 
   ngOnInit() {
-
-    this.terminator.destroyed.pipe(take(1)).subscribe(() => {
-      this.destroyComponentRef();
-    });
 
   }
 
@@ -69,18 +69,16 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
         component.schema.widget.required = field.required;
       }
 
-      field.changes
-        .pipe(takeUntil(this.terminator.destroyed))
-        .subscribe((schema) => {
-          component.schema = Object.assign(this.formProperty.schema, schema);
-          this.componentRef.changeDetectorRef.detectChanges();
-        });
+      this.subs = field.changes.subscribe((schema) => {
+        component.schema = Object.assign(this.formProperty.schema, schema);
+        this.componentRef.changeDetectorRef.detectChanges();
+      });
     }
 
     this.formProperty.widgetInstance = component;
 
     if (this.formProperty instanceof GenericProperty) {
-      this.formProperty.statusChanges
+      this.subs = this.formProperty.statusChanges
         .pipe(
           filter((status: string) => {
             const errorMessages = component.errorMessages;
@@ -104,12 +102,12 @@ export class WidgetChooserDirective implements OnInit, OnDestroy, OnChanges {
 
   }
 
-  destroyComponentRef() {
-    this.componentRef.destroy();
-    this.viewContainerRef.clear();
-  }
-
   ngOnDestroy() {
-    this.destroyComponentRef();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
+    if (this.viewContainerRef) {
+      this.viewContainerRef.clear();
+    }
   }
 }

@@ -14,7 +14,6 @@ import { filter, debounceTime } from 'rxjs/operators';
 import { FormComponent } from '../form/form.component';
 import { ActionRegistry } from '../model/actionregistry';
 import { ValidatorRegistry } from '../model/validatorregistry';
-import { TerminatorService } from '../terminator.service';
 import { SchemaPropertyType } from '../schema';
 
 import { TemplateSchemaService } from './template-schema.service';
@@ -22,6 +21,7 @@ import { FieldComponent } from './field/field.component';
 import { Field } from './field/field';
 import { ButtonComponent } from './button/button.component';
 import { FieldParent } from './field/field-parent';
+import { FieldRegistry } from './field/field-registry';
 
 
 @Directive({
@@ -45,17 +45,19 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
     protected actionRegistry: ActionRegistry,
     protected validatorRegistry: ValidatorRegistry,
     private formComponent: FormComponent,
-    private terminatorService: TerminatorService,
     private templateSchemaService: TemplateSchemaService,
+    private fieldRegistry: FieldRegistry,
   ) {
     super();
   }
 
   setFormDocumentSchema(fields: FieldComponent[]) {
+    console.log('changing form')
     this.actionRegistry.clear();
     this.validatorRegistry.clear();
 
     const schema = this.getFieldsSchema(fields);
+    this.fieldRegistry.clear();
     fields.forEach((field) => {
       field.register();
     });
@@ -111,7 +113,6 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
       debounceTime(50)
     )
     .subscribe(() => {
-      this.terminatorService.destroy();
       this.setFormDocumentSchema(this.childFields.toArray());
     });
 

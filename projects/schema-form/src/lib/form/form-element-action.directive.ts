@@ -13,7 +13,6 @@ import { take, takeUntil } from 'rxjs/operators';
 import { WidgetFactory } from '../widgetfactory';
 import { ButtonWidget } from '../widget';
 import { WidgetType } from '../widgetregistry';
-import { TerminatorService } from '../terminator.service';
 
 @Directive({
   selector: '[sfFormElementAction]'
@@ -27,20 +26,14 @@ export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy 
   formProperty: any;
 
   private componentRef: ComponentRef<any>;
+  private subs: Subscription;
 
   constructor(
-    private container: ViewContainerRef,
+    private viewContainerRef: ViewContainerRef,
     private widgetFactory: WidgetFactory,
-    private terminator: TerminatorService
   ) { }
 
   ngOnInit() {
-    this.terminator.destroyed
-      .subscribe(() => {
-        console.log('des`')
-        this.container.clear();
-        this.componentRef.destroy();
-      });
   }
 
   getWidgetId(): string {
@@ -53,7 +46,7 @@ export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy 
 
   ngOnChanges() {
     this.componentRef = this.widgetFactory.createWidget<ButtonWidget>(
-      this.container,
+      this.viewContainerRef,
       this.getWidgetId(),
       {
         type: WidgetType.Button
@@ -68,8 +61,7 @@ export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy 
     instance.formProperty = this.formProperty;
 
     if (this.button.field) {
-      this.button.field.changes
-        .pipe(takeUntil(this.terminator.destroyed))
+      this.subs = this.button.field.changes
         .subscribe((button) => {
           // TODO make sure widget id is not changed
           instance.label = button.label;
@@ -80,5 +72,12 @@ export class FormElementActionDirective implements OnInit, OnChanges, OnDestroy 
   }
 
   ngOnDestroy() {
+
+    if (this.subs) {
+      this.subs.unsubscribe();
+    }
+
+    this.componentRef.destroy();
+    this.viewContainerRef.clear();
   }
 }

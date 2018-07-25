@@ -9,10 +9,7 @@ import {
   TemplateRef,
   Injector,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 
-import { TerminatorService } from '../terminator.service';
 import { WidgetFactory } from '../widgetfactory';
 import { WidgetType } from '../widgetregistry';
 import { FieldsetLayoutWidget } from '../widget';
@@ -36,32 +33,26 @@ export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChan
   @Input()
   templateRef: TemplateRef<any>;
 
-
   private componentRef: ComponentRef<any>;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
-    private widgetFactory: WidgetFactory = null,
-    private terminator: TerminatorService,
+    private widgetFactory: WidgetFactory
   ) { }
 
   ngOnInit() {
 
-    this.terminator.destroyed
-      .pipe(take(1))
-      .subscribe(() => {
-        this.destroyComponentRef();
-      });
-
   }
 
   ngOnChanges() {
+
     const injector = Injector.create({
       providers: [{
         provide: FormElementTemplateRef,
         useValue: this.templateRef,
       }],
     });
+
     const widget = this.getFieldsetWidget();
     this.componentRef = this.widgetFactory.createWidget(
       this.viewContainerRef,
@@ -86,13 +77,9 @@ export class FieldsetWidgetChooserDirective implements OnInit, OnDestroy, OnChan
 
   }
 
-  destroyComponentRef() {
+  ngOnDestroy() {
     this.componentRef.destroy();
     this.viewContainerRef.clear();
-  }
-
-  ngOnDestroy() {
-    this.destroyComponentRef();
   }
 
   private getFieldsetWidget(): any {

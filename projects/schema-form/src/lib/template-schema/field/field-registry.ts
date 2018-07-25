@@ -19,4 +19,8 @@ export class FieldRegistry {
       return this.fields[propertyPath];
     }
   }
+
+  clear(): void {
+    this.fields = {};
+  }
 }

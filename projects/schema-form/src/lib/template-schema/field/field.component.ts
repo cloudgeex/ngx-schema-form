@@ -85,7 +85,7 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
   constructor(
     private elementRef: ElementRef,
     private templateSchemaService: TemplateSchemaService,
-    private fieldRegsitry: FieldRegistry,
+    private fieldRegistry: FieldRegistry,
     protected actionRegistry: ActionRegistry
   ) {
     super();
@@ -186,7 +186,7 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
 
   register(parentFieldPath = '') {
     const path = parentFieldPath + this.path;
-    this.fieldRegsitry.register(path, this);
+    this.fieldRegistry.register(path, this);
     if (this.childFields.length) {
       this.childFields.forEach((field) => {
         if (field === this) {

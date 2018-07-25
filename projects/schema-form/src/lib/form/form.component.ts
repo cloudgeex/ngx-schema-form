@@ -3,7 +3,8 @@ import {
   OnChanges,
   Input,
   SimpleChanges,
-  forwardRef
+  forwardRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -18,7 +19,6 @@ import { ValidatorRegistry } from '../model/validatorregistry';
 import { SchemaPropertyType } from '../schema';
 import { SchemaValidatorFactory } from '../schemavalidatorfactory';
 import { WidgetFactory } from '../widgetfactory';
-import { TerminatorService } from '../terminator.service';
 import { FormPropertyFactory } from '../model/form-property-factory';
 import { FormProperty } from '../model/form-property';
 import { FieldRegistry } from '../template-schema/field/field-registry';
@@ -30,12 +30,12 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
 @Component({
   selector: 'sf-form',
   template: `
-    <form>
-      <sf-form-element
-        *ngIf="rootFormProperty"
-        [formProperty]="rootFormProperty">
-      </sf-form-element>
-    </form>`,
+    <ng-container *ngIf="rootFormProperty" >
+      <form>
+        <sf-form-element [formProperty]="rootFormProperty"> </sf-form-element>
+      </form>
+    </ng-container>
+  `,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -51,7 +51,6 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
       useFactory: useFactory,
       deps: [SchemaValidatorFactory, ValidatorRegistry]
     },
-    TerminatorService,
     FieldRegistry
   ]
 })
@@ -71,10 +70,10 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
   private onChangeCallback: any;
 
   constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private formPropertyFactory: FormPropertyFactory,
     private actionRegistry: ActionRegistry,
     private validatorRegistry: ValidatorRegistry,
-    private terminator: TerminatorService
   ) {}
 
   writeValue(value: any) {
@@ -127,7 +126,9 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
         value = this.rootFormProperty.nonEmptyValue;
       }
 
-      this.terminator.destroy();
+      // force component destruction
+      this.rootFormProperty = null;
+      this.changeDetectorRef.detectChanges();
 
       SchemaPreprocessor.preprocess(this.schema);
       this.rootFormProperty = this.formPropertyFactory.createProperty(
