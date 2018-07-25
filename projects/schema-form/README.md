@@ -14,4 +14,5 @@ TODO:
 - tests, lots of them.
 - add animation for control tree update
 - expose widget from template schema fields, fieldsets and buttons
-
+- default widgets initial invalid messages show only after submit (configurable)
+- refactor default widgets to be components, and create widgets abstract types for basic for default widgets;
