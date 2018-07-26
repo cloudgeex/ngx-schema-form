@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ControlWidget } from '../../../widget';
+import { RadioWidget } from '../../base/radio.widget';
 
 @Component({
   selector: 'sf-radio-widget',
@@ -16,4 +16,4 @@ import { ControlWidget } from '../../../widget';
 	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="formProperty">
 </div>`
 })
-export class RadioComponent extends ControlWidget {}
+export class RadioComponent extends RadioWidget {}

@@ -1,7 +1,6 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component } from '@angular/core';
 
-import { ControlWidget } from '../../../widget';
+import { FileWidget } from '../../base/file.widget';
 
 @Component({
   selector: 'sf-file-widget',
@@ -10,35 +9,12 @@ import { ControlWidget } from '../../../widget';
 		{{ schema.title }}
 	</label>
     <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
-  <input [name]="name" class="text-widget file-widget" [attr.id]="id"
+  <input [name]="formProperty.name" class="text-widget file-widget" [attr.id]="id"
     type="file" [attr.disabled]="schema.readOnly?true:null"
     (change)="onFileChange($event)">
-	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="fileName">
+	<input *ngIf="schema.readOnly" [attr.name]="formProperty.name" type="hidden" [formControl]="fileName">
 </div>`
 })
-export class FileComponent extends ControlWidget implements AfterViewInit {
+export class FileComponent extends FileWidget {
 
-  protected reader = new FileReader();
-  protected filedata: any = {};
-  fileName = new FormControl();
-
-  constructor() {
-    super();
-  }
-
-  ngAfterViewInit() {
-    this.reader.onloadend = () => {
-      this.filedata.data = btoa(this.reader.result);
-      this.formProperty.setValue(this.filedata);
-    };
-  }
-
-  onFileChange($event) {
-    const file = $event.target.files[0];
-    this.filedata.filename = file.name;
-    this.filedata.size = file.size;
-    this.filedata['content-type'] = file.type;
-    this.filedata.encoding = 'base64';
-    this.reader.readAsBinaryString(file);
-  }
 }

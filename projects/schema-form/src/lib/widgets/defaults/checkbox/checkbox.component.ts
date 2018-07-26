@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
-import { ControlWidget } from '../../../widget';
+import { CheckboxWidget } from '../../base/checkbox.widget';
 
 @Component({
   selector: 'sf-checkbox-widget',
@@ -10,7 +10,11 @@ import { ControlWidget } from '../../../widget';
     </label>
   <div *ngIf="schema.type!='array'" class="checkbox">
     <label class="horizontal control-label">
-      <input [formControl]="formProperty" [attr.name]="name" [indeterminate]="formProperty.value !== false && formProperty.value !== true ? true :null" type="checkbox" [attr.disabled]="schema.readOnly">
+      <input
+        [formControl]="formProperty"
+        [attr.name]="name"
+        [indeterminate]="formProperty.value !== false && formProperty.value !== true ? true :null"
+        type="checkbox" [attr.disabled]="schema.readOnly">
       <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="formProperty">
       {{schema.description}}
     </label>
@@ -29,33 +33,6 @@ import { ControlWidget } from '../../../widget';
   </ng-container>
 </div>`
 })
-export class CheckboxComponent extends ControlWidget implements OnInit {
+export class CheckboxComponent extends CheckboxWidget {
 
-  checked: any = {};
-
-  ngOnInit() {
-    if (this.schema.type === 'array') {
-      this.formProperty.valueChanges.subscribe((values: any[]) => {
-
-        values.forEach((value: any) => {
-          if (!this.checked[value]) {
-            this.checked[value] = true;
-          }
-        });
-
-      });
-    }
-  }
-
-  check(checked: boolean, value: any) {
-    if (checked) {
-      this.checked[value] = true;
-    } else {
-      delete this.checked[value];
-    }
-
-    this.formProperty.patchValue(
-      Object.keys(this.checked).filter((key) => this.checked[key])
-    );
-  }
 }

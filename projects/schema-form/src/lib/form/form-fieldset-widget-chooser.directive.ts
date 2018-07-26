@@ -11,7 +11,7 @@ import {
 
 import { WidgetFactory } from '../widgetfactory';
 import { WidgetType } from '../widgetregistry';
-import { FieldsetLayoutWidget } from '../widget';
+import { FieldsetWidget } from '../widgets/base/fieldset.widget';
 import { FormProperty } from '../model/form-property';
 import { GenericProperty } from '../model/generic-property';
 import { ObjectProperty } from '../model/object-property';
@@ -32,7 +32,7 @@ export class FormFieldsetWidgetChooserDirective implements OnInit, OnDestroy {
   @Input()
   templateRef: TemplateRef<any>;
 
-  private componentRef: ComponentRef<any>;
+  private componentRef: ComponentRef<FieldsetWidget>;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
@@ -49,7 +49,7 @@ export class FormFieldsetWidgetChooserDirective implements OnInit, OnDestroy {
     });
 
     const widget = this.getFieldsetWidget();
-    this.componentRef = this.widgetFactory.createWidget(
+    this.componentRef = this.widgetFactory.createWidget<FieldsetWidget>(
       this.viewContainerRef,
       widget.id,
       {
@@ -58,7 +58,7 @@ export class FormFieldsetWidgetChooserDirective implements OnInit, OnDestroy {
       }
     );
 
-    const component = <FieldsetLayoutWidget>this.componentRef.instance;
+    const component = this.componentRef.instance;
     component.formProperty = this.formProperty;
     component.title = this.fieldset.title;
     component.description = this.fieldset.description;

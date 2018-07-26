@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { FieldsetLayoutWidget } from '../../../widget';
+import { FieldsetWidget } from '../../base/fieldset.widget';
 
 @Component({
   selector: 'sf-form-fieldset',
@@ -14,4 +14,4 @@ import { FieldsetLayoutWidget } from '../../../widget';
   </fieldset>
   `
 })
-export class FieldsetComponent extends FieldsetLayoutWidget { }
+export class FieldsetComponent extends FieldsetWidget { }

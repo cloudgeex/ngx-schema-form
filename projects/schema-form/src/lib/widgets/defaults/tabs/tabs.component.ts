@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { FieldsetLayoutWidget } from '../../../widget';
+import { FieldsetWidget } from '../../base/fieldset.widget';
 
 @Component({
   selector: 'sf-form-tabs',
@@ -27,6 +27,6 @@ import { FieldsetLayoutWidget } from '../../../widget';
     </div>
   `
 })
-export class TabsComponent extends FieldsetLayoutWidget {
+export class TabsComponent extends FieldsetWidget {
   selectedTab = 0;
 }

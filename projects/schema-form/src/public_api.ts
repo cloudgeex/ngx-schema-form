@@ -21,12 +21,10 @@ export { ZSchemaValidatorFactory } from './lib/z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './lib/ajv-schema-validator-factory';
 export {
   Widget,
-  WidgetLayout,
-  ControlWidget,
+  PropertyWidget,
   ArrayLayoutWidget,
   ObjectLayoutWidget,
   FieldsetLayoutWidget,
-  ButtonLayoutWidget
 } from './lib/widget';
 
 export { ArrayWidget } from './lib/widgets/base/array.widget';

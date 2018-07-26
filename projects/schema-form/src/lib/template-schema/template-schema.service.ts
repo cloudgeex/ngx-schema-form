@@ -2,12 +2,12 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 export class TemplateSchemaService {
 
-  changes = new EventEmitter();
+  changes = new EventEmitter<boolean>();
 
   constructor() { }
 
   changed() {
-    this.changes.emit();
+    this.changes.emit(true);
   }
 
 }

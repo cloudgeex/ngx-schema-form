@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { WidgetRegistry, WidgetType } from './widgetregistry';
-import { WidgetLayout } from './widget';
+import { Widget } from './widget';
 
 @Injectable()
 export class WidgetFactory {
@@ -17,7 +17,7 @@ export class WidgetFactory {
     private factoryResolver: ComponentFactoryResolver
   ) { }
 
-  createWidget<T = WidgetLayout<any>>(
+  createWidget<T extends Widget>(
     container: ViewContainerRef,
     id: string,
     opts: {

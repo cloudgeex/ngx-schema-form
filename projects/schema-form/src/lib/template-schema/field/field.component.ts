@@ -80,6 +80,7 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
   @Input()
   schema: any = { };
 
+  // changes that can be reflected in the widget components without rebuild
   changes = new EventEmitter();
 
   constructor(
@@ -200,27 +201,28 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
 
   ngOnChanges(changes: SimpleChanges) {
 
+    /*
     const keys = Object.keys(changes);
-    if (keys.length > 0) {
-      for (const key of keys) {
-        if (!changes[key].isFirstChange()) {
-          // on any input change, force schema change generation
-          this.templateSchemaService.changed();
-          break;
-        }
+    // TODO check for particular properties change (widget.id, validator, etc.)
+    for (const key of keys) {
+      if (!changes[key].isFirstChange()) {
+        // on any input change, force schema change generation
+        this.templateSchemaService.changed();
+        break;
       }
+    }
+     */
 
-      if (this.childFields) {
-        const schema = this.getSchema();
-        delete schema.name;
-        delete schema.format;
-        if (typeof schema.widget === 'string') {
-          delete schema.widget;
-        } else if (schema.widget && schema.width.id) {
-          delete schema.widget.id;
-        }
-        this.changes.emit(schema);
+    if (this.childFields) {
+      const schema = this.getSchema();
+      delete schema.name;
+      delete schema.format;
+      if (typeof schema.widget === 'string') {
+        delete schema.widget;
+      } else if (schema.widget && schema.width.id) {
+        delete schema.widget.id;
       }
+      this.changes.emit(schema);
     }
 
   }

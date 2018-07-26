@@ -17,7 +17,7 @@ import {
 } from 'rxjs/operators';
 
 import { Unsubscriber } from '../unsubscriber';
-import { WidgetLayout } from '../widget';
+import { PropertyWidget } from '../widget';
 import { WidgetFactory } from '../widgetfactory';
 import { FormProperty } from '../model/form-property';
 import { GenericProperty } from '../model/generic-property';
@@ -56,12 +56,12 @@ export class FormPropertyWidgetChooserDirective implements OnInit, OnDestroy {
 
     // TODO break into functions
 
-    this.componentRef = this.widgetFactory.createWidget(
+    this.componentRef = this.widgetFactory.createWidget<PropertyWidget>(
       this.viewContainerRef,
       this.formProperty.schema.widget.id
     );
 
-    const component = <WidgetLayout<any>>this.componentRef.instance;
+    const component = this.componentRef.instance;
     component.formProperty = this.formProperty;
     component.schema = this.formProperty.schema;
     component.id = this.formProperty.id;
@@ -75,8 +75,7 @@ export class FormPropertyWidgetChooserDirective implements OnInit, OnDestroy {
       });
     }
 
-    // required field
-    component.schema.widget.required = this.isWidgetRequired();
+    component.required = this.isWidgetRequired();
 
     // widget instance in formProperty
     this.formProperty.widgetInstance = component;

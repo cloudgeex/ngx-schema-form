@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ObjectLayoutWidget } from '../../../widget';
+import { ObjectWidget } from '../../base/object.widget';
+
 
 @Component({
   selector: 'sf-form-object',
@@ -19,4 +20,4 @@ import { ObjectLayoutWidget } from '../../../widget';
     </ng-container>
   `
 })
-export class ObjectComponent extends ObjectLayoutWidget { }
+export class ObjectComponent extends ObjectWidget { }

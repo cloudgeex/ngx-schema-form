@@ -10,9 +10,10 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { ActionRegistry } from '../model/actionregistry';
 import { Action } from '../model/action';
+import { FormProperty } from '../model/form-property';
 import { Unsubscriber } from '../unsubscriber';
 import { WidgetFactory } from '../widgetfactory';
-import { ButtonLayoutWidget } from '../widget';
+import { ButtonWidget } from '../widgets/base';
 import { WidgetType } from '../widgetregistry';
 import { FormAction } from '../form/form.component';
 
@@ -25,9 +26,9 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
   button: any;
 
   @Input()
-  formProperty: any;
+  formProperty: FormProperty;
 
-  private componentRef: ComponentRef<any>;
+  private componentRef: ComponentRef<ButtonWidget>;
 
   @Unsubscriber()
   private subs;
@@ -77,7 +78,7 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
 
   ngOnInit() {
     const widget = this.getWidget();
-    this.componentRef = this.widgetFactory.createWidget<ButtonLayoutWidget>(
+    this.componentRef = this.widgetFactory.createWidget<ButtonWidget>(
       this.viewContainerRef,
       widget.id,
       {
@@ -86,15 +87,11 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
     );
 
     const instance = this.componentRef.instance;
-    instance.id = this.button.id;
     instance.label = this.button.label;
     instance.formProperty = this.formProperty;
-    if (instance.widget) {
-      // for widget defaults
-      Object.assign(instance.widget, widget);
-    } else {
-      instance.widget = widget;
-    }
+
+    Object.assign(instance, widget);
+
     // after widget has been merged with defaults
     instance.action = this.getButtonAction(widget);
 
@@ -106,7 +103,7 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
           // TODO widget id change should trigger a form rebuild
           instance.label = button.label;
           if (typeof button.widget !== 'string') {
-            Object.assign(instance.widget, button.widget);
+            Object.assign(instance, button.widget);
           }
           // TODO dont rebuild if there is no changes
           // rebuild action in case onInvalidProperty changed

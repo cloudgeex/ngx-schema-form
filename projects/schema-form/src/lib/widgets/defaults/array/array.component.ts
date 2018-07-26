@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ArrayLayoutWidget } from '../../../widget';
-import { ArrayProperty } from '../../../model/array-property';
+import { ArrayWidget } from '../../base/array.widget';
+
 
 @Component({
   selector: 'sf-array-widget',
@@ -21,15 +21,7 @@ import { ArrayProperty } from '../../../model/array-property';
 	</button>
 </div>`
 })
-export class ArrayComponent extends ArrayLayoutWidget {
+export class ArrayComponent extends ArrayWidget {
 
-
-  addItem() {
-    this.formProperty.addProperty();
-  }
-
-  removeItem(index: number) {
-    this.formProperty.removeAt(index);
-  }
 
 }

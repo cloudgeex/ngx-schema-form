@@ -12,12 +12,10 @@ export { ZSchemaValidatorFactory } from './z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 export {
   Widget,
-  WidgetLayout,
-  ControlWidget,
+  PropertyWidget,
   ArrayLayoutWidget,
   ObjectLayoutWidget,
   FieldsetLayoutWidget,
-  ButtonLayoutWidget
 } from './widget';
 export {
   ArrayWidget,

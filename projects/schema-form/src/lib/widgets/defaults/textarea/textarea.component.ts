@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ControlWidget } from '../../../widget';
+import { TextAreaWidget } from '../../base/textarea.widget';
 
 @Component({
   selector: 'sf-textarea-widget',
@@ -9,7 +9,7 @@ import { ControlWidget } from '../../../widget';
 		{{ schema.title }}
 	</label>
     <span *ngIf="schema.description" class="formHelp">{{schema.description}}</span>
-	<textarea [attr.readonly]="schema.readOnly" [name]="name"
+	<textarea [attr.readonly]="schema.readOnly" [name]="formProperty.name"
 		class="text-widget textarea-widget form-control"
 		[attr.placeholder]="schema.placeholder"
 		[attr.maxLength]="schema.maxLength || null"
@@ -17,4 +17,4 @@ import { ControlWidget } from '../../../widget';
 		[formControl]="formProperty"></textarea>
 </div>`
 })
-export class TextAreaComponent extends ControlWidget {}
+export class TextAreaComponent extends TextAreaWidget {}
