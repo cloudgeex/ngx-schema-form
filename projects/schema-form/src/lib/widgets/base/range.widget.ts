@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
-import { PropertyWidget } from './widget';
+import { PropertyWidget, Widget } from './widget';
 
-export abstract class RangeWidget extends PropertyWidget {}
+export abstract class RangeWidget<T extends Widget = Widget>
+extends PropertyWidget<T> {}

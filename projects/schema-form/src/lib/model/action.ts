@@ -1,3 +1,8 @@
 import { FormProperty } from './form-property';
 
-export type Action = (event?: any, formProperty?: FormProperty, parameters?: any) => void;
+export interface ActionEvent<T = any> {
+  event: T;
+  formProperty: FormProperty;
+}
+
+export type Action<T = any, U = any> = (event: ActionEvent<T>, params?: U) => void;

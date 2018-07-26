@@ -21,7 +21,9 @@ import { FieldComponent } from './field/field.component';
 import { Field } from './field/field';
 import { ButtonComponent } from './button/button.component';
 import { FieldParent } from './field/field-parent';
-import { FieldRegistry } from './field/field-registry';
+import {
+  TemplateSchemaElementRegistry
+} from '../template-schema/template-schema-element-registry';
 
 
 @Directive({
@@ -42,11 +44,11 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
   fieldsets: { [key: string]: any }[];
 
   constructor(
-    protected actionRegistry: ActionRegistry,
-    protected validatorRegistry: ValidatorRegistry,
     private formComponent: FormComponent,
     private templateSchemaService: TemplateSchemaService,
-    private fieldRegistry: FieldRegistry,
+    protected actionRegistry: ActionRegistry,
+    protected validatorRegistry: ValidatorRegistry,
+    protected templateRegistry: TemplateSchemaElementRegistry,
   ) {
     super();
   }
@@ -55,11 +57,10 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
     this.actionRegistry.clear();
     this.validatorRegistry.clear();
 
-    // TODO rething this
-    this.formComponent.registerFormActions();
-
     const schema = this.getFieldsSchema(fields);
-    this.fieldRegistry.clear();
+
+    this.templateRegistry.clear();
+    // register fields recursively
     fields.forEach((field) => {
       field.register();
     });

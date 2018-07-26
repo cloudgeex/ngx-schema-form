@@ -1,3 +1,4 @@
-import { PropertyWidget } from './widget';
+import { PropertyWidget, Widget } from './widget';
 
-export abstract class SelectWidget extends PropertyWidget {}
+export abstract class SelectWidget<T extends Widget = Widget>
+extends PropertyWidget<T> { }

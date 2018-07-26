@@ -25,15 +25,14 @@ import { SchemaValidatorFactory } from '../schemavalidatorfactory';
 import { WidgetFactory } from '../widgetfactory';
 import { FormPropertyFactory } from '../model/form-property-factory';
 import { FormProperty } from '../model/form-property';
-import { FieldRegistry } from '../template-schema/field/field-registry';
+import {
+  TemplateSchemaElementRegistry
+} from '../template-schema/template-schema-element-registry';
 
 export function useFactory(schemaValidatorFactory, validatorRegistry) {
   return new FormPropertyFactory(schemaValidatorFactory, validatorRegistry);
 }
 
-export enum FormAction {
-  MarkAsSubmitted = '_mark_as_submitted'
-}
 
 @Component({
   selector: 'sf-form',
@@ -61,13 +60,10 @@ export enum FormAction {
       useFactory: useFactory,
       deps: [SchemaValidatorFactory, ValidatorRegistry]
     },
-    FieldRegistry
+    TemplateSchemaElementRegistry
   ]
 })
 export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
-
-  @ViewChild(NgForm)
-  form: NgForm;
 
   @Input()
   schema: any = null;
@@ -167,19 +163,6 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
 
   }
 
-  markAsSubmitted() {
-    this.form.ngSubmit.emit();
-    (<any>this.form).submitted = true;
-  }
-
-  // TODO rething this
-  registerFormActions() {
-    this.actionRegistry.register(
-      FormAction.MarkAsSubmitted,
-      this.markAsSubmitted.bind(this)
-    );
-  }
-
   private registerValidators() {
     this.validatorRegistry.clear();
     if (!this.validators) {
@@ -198,7 +181,6 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
 
   private registerActions() {
     this.actionRegistry.clear();
-    this.registerFormActions();
     if (!this.actions) {
       return;
     }

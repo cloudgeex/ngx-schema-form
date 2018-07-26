@@ -24,19 +24,15 @@ export class FieldsetLayoutWidget<T = Widget> extends Widget {
 
 export abstract class ButtonLayoutWidget<T extends Widget = Widget> extends Widget {
 
-  formProperty: FormProperty;
+  formProperty?: FormProperty;
   label?: string;
 
   action?: Action;
-  onInvalidProperty = {
-    disable: false,
-    preventClick: false,
-    markFormAsSubmitted: false
-  };
   widget: T;
 }
 
-export abstract class PropertyWidget<T extends Widget = Widget, U extends FormProperty = FormProperty> extends Widget {
+export abstract class PropertyWidget<T extends Widget = Widget, U extends FormProperty = FormProperty>
+extends Widget {
   formProperty: U;
   errorMessages: string[];
 
@@ -47,7 +43,8 @@ export abstract class PropertyWidget<T extends Widget = Widget, U extends FormPr
   required?: boolean;
 }
 
-export class ArrayPropertyWidget<T extends Widget = Widget> extends PropertyWidget<T, ArrayProperty> {
+export class ArrayPropertyWidget<T extends Widget = Widget>
+extends PropertyWidget<T, ArrayProperty> {
   /*
   schema: {
     [key: string]: any,
@@ -56,7 +53,8 @@ export class ArrayPropertyWidget<T extends Widget = Widget> extends PropertyWidg
   */
 }
 
-export class ObjectPropertyWidget<T extends Widget = Widget> extends PropertyWidget<T, ObjectProperty> {
+export class ObjectPropertyWidget<T extends Widget = Widget>
+extends PropertyWidget<T, ObjectProperty> {
   /*
   schema: {
     [key: string]: any,

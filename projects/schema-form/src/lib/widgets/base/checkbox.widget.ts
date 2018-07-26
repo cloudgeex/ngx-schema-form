@@ -1,8 +1,9 @@
 import { OnInit } from '@angular/core';
 
-import { PropertyWidget } from './widget';
+import { PropertyWidget, Widget } from './widget';
 
-export abstract class CheckboxWidget extends PropertyWidget implements OnInit {
+export abstract class CheckboxWidget<T extends Widget = Widget>
+extends PropertyWidget<T> implements OnInit {
 
   checked: { [key: string]: boolean } = {};
 

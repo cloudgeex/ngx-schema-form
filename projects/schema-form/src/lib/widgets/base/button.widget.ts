@@ -1,7 +1,14 @@
 import { Action } from '../../model/action';
-import { ButtonLayoutWidget } from './widget';
+import { ButtonLayoutWidget, Widget } from './widget';
 
+export class ButtonWidgetOptions {
+  onInvalidFormProperty = {
+    disable: false,
+    preventClick: false
+  };
+}
 
-export abstract class ButtonWidget extends ButtonLayoutWidget {
-
+export abstract class ButtonWidget<T extends Widget = Widget>
+extends ButtonLayoutWidget<T> {
+  options = new ButtonWidgetOptions();
 }

@@ -1,9 +1,10 @@
 import { AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { PropertyWidget } from './widget';
+import { PropertyWidget, Widget } from './widget';
 
-export abstract class FileWidget extends PropertyWidget implements AfterViewInit {
+export abstract class FileWidget<T extends Widget = Widget>
+extends PropertyWidget<T> implements AfterViewInit {
 
   protected reader = new FileReader();
   protected filedata: any = {};

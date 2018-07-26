@@ -1,3 +1,4 @@
-import { ObjectPropertyWidget } from './widget';
+import { ObjectPropertyWidget, Widget } from './widget';
 
-export abstract class ObjectWidget extends ObjectPropertyWidget { }
+export abstract class ObjectWidget<T extends Widget = Widget>
+extends ObjectPropertyWidget<T> { }

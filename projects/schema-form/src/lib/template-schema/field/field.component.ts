@@ -29,7 +29,10 @@ import { ButtonComponent } from '../button/button.component';
 import { FieldParent } from './field-parent';
 import { Field } from './field';
 import { ItemComponent } from './item/item.component';
-import { FieldRegistry } from './field-registry';
+import {
+  TemplateSchemaElementRegistry
+} from '../template-schema-element-registry';
+
 
 
 @Component({
@@ -86,8 +89,8 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
   constructor(
     private elementRef: ElementRef,
     private templateSchemaService: TemplateSchemaService,
-    private fieldRegistry: FieldRegistry,
-    protected actionRegistry: ActionRegistry
+    protected templateRegistry: TemplateSchemaElementRegistry,
+    protected actionRegistry: ActionRegistry,
   ) {
     super();
   }
@@ -187,7 +190,7 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
 
   register(parentFieldPath = '') {
     const path = parentFieldPath + this.path;
-    this.fieldRegistry.register(path, this);
+    this.templateRegistry.register(path, this);
     if (this.childFields.length) {
       this.childFields.forEach((field) => {
         if (field === this) {

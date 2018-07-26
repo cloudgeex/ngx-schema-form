@@ -5,6 +5,11 @@ import { SchemaPropertyType } from '../../schema';
 import { ActionRegistry } from '../../model/actionregistry';
 import { ButtonComponent } from '../button/button.component';
 import { TemplateSchemaElement } from '../template-schema-element';
+import {
+  TemplateSchemaElementRegistry,
+  TemplateElementType
+} from '../template-schema-element-registry';
+
 
 import { Field } from './field';
 
@@ -22,6 +27,7 @@ export abstract class FieldParent extends TemplateSchemaElement {
   }
 
   protected abstract actionRegistry: ActionRegistry;
+  protected abstract templateRegistry: TemplateSchemaElementRegistry;
   protected abstract childButtons: QueryList<ButtonComponent>;
 
 
@@ -38,13 +44,19 @@ export abstract class FieldParent extends TemplateSchemaElement {
       // register as button action the EventEmitter click
       this.actionRegistry.register(
         button.id,
-        button.click.emit.bind(button.click),
-        button
+        button.click.emit.bind(button.click)
+      );
+
+      this.templateRegistry.register(
+        button.id,
+        button,
+        TemplateElementType.Button
       );
 
       const _button = <any>{
         id: button.id,
         label: button.label,
+        options: button.options
       };
 
       if (button.widget) {

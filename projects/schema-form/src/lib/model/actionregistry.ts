@@ -1,19 +1,17 @@
 import { Action } from './action';
-import { ButtonComponent} from '../template-schema/button/button.component';
 
-// TODO rethink ref button component, ActionRegistry is doing more than it should
 export class ActionRegistry {
-  actions: {[key: string]: {action: Action, field?: ButtonComponent} } = {};
+  actions: { [key: string]: Action } = {};
 
-  clear() {
+  clear(): void {
     this.actions = {};
   }
 
-  register(actionId: string, action: Action, field?: ButtonComponent) {
-    this.actions[actionId] = { action, field };
+  register(actionId: string, action: Action): void {
+    this.actions[actionId] = action;
   }
 
-  get(actionId: string): { action: Action, field?: ButtonComponent } {
+  get(actionId: string): Action {
     return this.actions[actionId];
   }
 }

@@ -49,5 +49,6 @@ export {
 export { SchemaFormModule } from './schema-form.module';
 export { TemplateSchemaModule } from './template-schema/template-schema.module';
 export { FormPropertyFactory } from './model/form-property-factory';
+export { Action, ActionEvent } from './model/action';
 
 export { SchemaPreprocessor } from './model/schemapreprocessor';

@@ -1,13 +1,11 @@
 export * from './action';
 export * from './actionregistry';
 
-export * from './formpropertyfactory';
-export * from './formproperty';
-export * from './atomicproperty';
-export * from './objectproperty';
-export * from './arrayproperty';
+export * from './form-property-factory';
+export * from './form-property';
+export * from './object-property';
+export * from './array-property';
 
-export * from './validator';
 export * from './validatorregistry';
 
 export * from './schemapreprocessor';

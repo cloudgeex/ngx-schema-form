@@ -6,17 +6,24 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, distinctUntilChanged } from 'rxjs/operators';
 
 import { ActionRegistry } from '../model/actionregistry';
-import { Action } from '../model/action';
+import { Action, ActionEvent } from '../model/action';
 import { FormProperty } from '../model/form-property';
 import { Unsubscriber } from '../unsubscriber';
 import { WidgetFactory } from '../widgetfactory';
 import { ButtonWidget } from '../widgets/base';
 import { WidgetType } from '../widgetregistry';
 import { Widget } from '../widgets/base/widget';
-import { FormAction } from '../form/form.component';
+import {
+  TemplateElementType,
+  TemplateSchemaElementRegistry
+} from '../template-schema/template-schema-element-registry';
+import {
+  ButtonComponent
+} from '../template-schema/button/button.component';
+
 
 @Directive({
   selector: '[sfFormButtonWidgetChooser]'
@@ -24,7 +31,7 @@ import { FormAction } from '../form/form.component';
 export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
 
   @Input()
-  button: any;
+  button: ButtonWidget; // from schema
 
   @Input()
   formProperty: FormProperty;
@@ -37,7 +44,8 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
   constructor(
     private viewContainerRef: ViewContainerRef,
     private widgetFactory: WidgetFactory,
-    private actionRegistry: ActionRegistry
+    private actionRegistry: ActionRegistry,
+    private templateRegistry: TemplateSchemaElementRegistry
   ) { }
 
 
@@ -54,27 +62,57 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
     return this.button.widget;
   }
 
-  getButtonAction(widget: ButtonWidget): Action {
+  getButtonAction(widgetInstance: ButtonWidget): (event, params?) => void {
 
-    return (event) => {
+    return (event, params?): void => {
 
-      // TODO rethink this, ActionRegistry is doing more than it should
-      if (widget.onInvalidProperty.markFormAsSubmitted) {
-        this.actionRegistry.get(FormAction.MarkAsSubmitted).action();
-      }
-
-      console.log(this.formProperty.invalid)
-      if (this.formProperty.invalid && widget.onInvalidProperty.preventClick) {
+      const options = this.button.options;
+      if (this.formProperty.invalid && options.onInvalidFormProperty.preventClick) {
         return;
       }
 
-      if (!this.button.action) {
+      const action = this.actionRegistry.get(this.button.id);
+      if (!action) {
         return;
       }
 
-      this.button.action(event);
+      action({ event, formProperty: this.formProperty }, params);
+
+      if (event.hasOwnProperty('preventDefault')) {
+        event.preventDefault();
+      }
     };
 
+  }
+
+  bindTemplateChanges() {
+    const element = this.templateRegistry.getElement<ButtonComponent>(
+      this.button.id,
+      TemplateElementType.Button
+    );
+
+    if (!element) {
+      return;
+    }
+
+    // templateSchema button changes
+    this.subs = element.changes.subscribe((button) => {
+
+      const instance = this.componentRef.instance;
+      // TODO make sure widget id is not changed
+      // TODO widget id change should trigger a form rebuild
+      instance.label = button.label;
+      if (typeof button.widget !== 'string') {
+        Object.assign(instance.widget, button.widget);
+      }
+
+      Object.assign(instance.options, button.options);
+      // TODO dont rebuild if there is no changes
+      // rebuild action in case onInvalidProperty changed
+      instance.action = this.getButtonAction(instance);
+
+      this.componentRef.changeDetectorRef.detectChanges();
+    });
   }
 
   ngOnInit() {
@@ -97,26 +135,14 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
       instance.widget = widget;
     }
 
+    // update instance options, with schema options
+    Object.assign(instance.options, this.button.options);
+
     // after widget has been merged with defaults
     instance.action = this.getButtonAction(instance);
 
-    // watch changes on field if template schema is used
-    if (this.button.field) {
-      this.subs = this.button.field.changes
-        .subscribe((button) => {
-          // TODO make sure widget id is not changed
-          // TODO widget id change should trigger a form rebuild
-          instance.label = button.label;
-          if (typeof button.widget !== 'string') {
-            Object.assign(instance.widget, button.widget);
-          }
-          // TODO dont rebuild if there is no changes
-          // rebuild action in case onInvalidProperty changed
-          instance.action = this.getButtonAction(instance);
-
-          this.componentRef.changeDetectorRef.detectChanges();
-        });
-    }
+    // react to templateSchema button changes
+    this.bindTemplateChanges();
   }
 
   ngOnDestroy() {

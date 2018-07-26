@@ -61,3 +61,5 @@ export { SchemaFormModule } from './lib/schema-form.module';
 export {
   TemplateSchemaModule
 } from './lib/template-schema/template-schema.module';
+
+export { Action, ActionEvent } from './lib/model/action';

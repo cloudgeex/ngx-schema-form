@@ -11,6 +11,7 @@ import {
 import { Subject } from 'rxjs';
 
 import { TemplateSchemaElement } from '../template-schema-element';
+import { ButtonWidgetOptions } from '../../widgets/base/button.widget';
 
 
 @Component({
@@ -24,6 +25,9 @@ export class ButtonComponent extends TemplateSchemaElement implements OnChanges,
 
   @Input()
   label = '';
+
+  @Input()
+  options = new ButtonWidgetOptions();
 
   @Input()
   widget: string | object;

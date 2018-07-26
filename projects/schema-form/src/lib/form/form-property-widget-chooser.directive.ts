@@ -21,7 +21,10 @@ import { PropertyWidget } from '../widgets/base/widget';
 import { WidgetFactory } from '../widgetfactory';
 import { FormProperty } from '../model/form-property';
 import { GenericProperty } from '../model/generic-property';
-import { FieldRegistry } from '../template-schema/field/field-registry';
+import {
+  TemplateSchemaElementRegistry
+} from '../template-schema/template-schema-element-registry';
+
 
 
 @Directive({
@@ -40,7 +43,7 @@ export class FormPropertyWidgetChooserDirective implements OnInit, OnDestroy {
   constructor(
     private viewContainerRef: ViewContainerRef,
     private widgetFactory: WidgetFactory,
-    private fieldRegsitry: FieldRegistry
+    protected templateRegistry: TemplateSchemaElementRegistry,
   ) { }
 
   isWidgetRequired(): boolean {
@@ -67,9 +70,9 @@ export class FormPropertyWidgetChooserDirective implements OnInit, OnDestroy {
     component.id = this.formProperty.id;
 
     // templateSchema field updates
-    const field = this.fieldRegsitry.getField(this.formProperty.path);
-    if (field) {
-      this.subs = field.changes.subscribe((schema) => {
+    const element = this.templateRegistry.getElement(this.formProperty.path);
+    if (element) {
+      this.subs = element.changes.subscribe((schema) => {
         component.schema = Object.assign(this.formProperty.schema, schema);
         this.componentRef.changeDetectorRef.detectChanges();
       });
