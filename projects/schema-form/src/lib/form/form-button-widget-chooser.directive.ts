@@ -15,6 +15,7 @@ import { Unsubscriber } from '../unsubscriber';
 import { WidgetFactory } from '../widgetfactory';
 import { ButtonWidget } from '../widgets/base';
 import { WidgetType } from '../widgetregistry';
+import { Widget } from '../widget';
 import { FormAction } from '../form/form.component';
 
 @Directive({
@@ -40,8 +41,7 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
   ) { }
 
 
-  // TODO return proper ButtonWidget type
-  getWidget(): any  {
+  getWidget(): Widget  {
     const id = 'button';
     if (!this.button.widget) {
       return { id };
@@ -54,16 +54,17 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
     return this.button.widget;
   }
 
-  getButtonAction(widget: any): Action {
+  getButtonAction(widget: ButtonWidget): Action {
 
     return (event) => {
 
       // TODO rethink this, ActionRegistry is doing more than it should
-      if (widget.onInvalidProperty.markAsSubmitted) {
+      if (widget.onInvalidProperty.markFormAsSubmitted) {
         this.actionRegistry.get(FormAction.MarkAsSubmitted).action();
       }
 
-      if (widget.onInvalidProperty.preventClick) {
+      console.log(this.formProperty.invalid)
+      if (this.formProperty.invalid && widget.onInvalidProperty.preventClick) {
         return;
       }
 
@@ -90,10 +91,14 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
     instance.label = this.button.label;
     instance.formProperty = this.formProperty;
 
-    Object.assign(instance, widget);
+    if (instance.widget) {
+      Object.assign(instance.widget, widget);
+    } else {
+      instance.widget = widget;
+    }
 
     // after widget has been merged with defaults
-    instance.action = this.getButtonAction(widget);
+    instance.action = this.getButtonAction(instance);
 
     // watch changes on field if template schema is used
     if (this.button.field) {
@@ -103,11 +108,11 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
           // TODO widget id change should trigger a form rebuild
           instance.label = button.label;
           if (typeof button.widget !== 'string') {
-            Object.assign(instance, button.widget);
+            Object.assign(instance.widget, button.widget);
           }
           // TODO dont rebuild if there is no changes
           // rebuild action in case onInvalidProperty changed
-          instance.action = this.getButtonAction(widget);
+          instance.action = this.getButtonAction(instance);
 
           this.componentRef.changeDetectorRef.detectChanges();
         });

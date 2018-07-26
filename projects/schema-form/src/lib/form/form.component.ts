@@ -165,15 +165,19 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
 
   ngOnInit() {
 
-    this.actionRegistry.register(
-      FormAction.MarkAsSubmitted,
-      this.markAsSubmitted.bind(this)
-    );
   }
 
   markAsSubmitted() {
     this.form.ngSubmit.emit();
     (<any>this.form).submitted = true;
+  }
+
+  // TODO rething this
+  registerFormActions() {
+    this.actionRegistry.register(
+      FormAction.MarkAsSubmitted,
+      this.markAsSubmitted.bind(this)
+    );
   }
 
   private registerValidators() {
@@ -194,6 +198,7 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
 
   private registerActions() {
     this.actionRegistry.clear();
+    this.registerFormActions();
     if (!this.actions) {
       return;
     }

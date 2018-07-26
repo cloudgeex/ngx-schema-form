@@ -109,7 +109,8 @@ export class FormPropertyWidgetChooserDirective implements OnInit, OnDestroy {
           }
 
           const errorMessages = propertyErrors.getMessages();
-          component.errorMessages = errorMessages;
+          this.componentRef.instance.errorMessages = errorMessages;
+          this.componentRef.changeDetectorRef.detectChanges();
         });
     }
 

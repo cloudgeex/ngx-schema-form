@@ -13,8 +13,8 @@ export { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 export {
   Widget,
   PropertyWidget,
-  ArrayLayoutWidget,
-  ObjectLayoutWidget,
+  ArrayPropertyWidget,
+  ObjectPropertyWidget,
   FieldsetLayoutWidget,
 } from './widget';
 export {

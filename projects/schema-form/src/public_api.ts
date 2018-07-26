@@ -22,8 +22,8 @@ export { AjvSchemaValidatorFactory } from './lib/ajv-schema-validator-factory';
 export {
   Widget,
   PropertyWidget,
-  ArrayLayoutWidget,
-  ObjectLayoutWidget,
+  ArrayPropertyWidget,
+  ObjectPropertyWidget,
   FieldsetLayoutWidget,
 } from './lib/widget';
 

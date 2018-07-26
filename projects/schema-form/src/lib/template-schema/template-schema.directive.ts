@@ -55,6 +55,9 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
     this.actionRegistry.clear();
     this.validatorRegistry.clear();
 
+    // TODO rething this
+    this.formComponent.registerFormActions();
+
     const schema = this.getFieldsSchema(fields);
     this.fieldRegistry.clear();
     fields.forEach((field) => {

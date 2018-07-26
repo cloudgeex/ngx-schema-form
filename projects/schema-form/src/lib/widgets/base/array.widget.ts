@@ -1,6 +1,6 @@
-import { ArrayLayoutWidget } from '../../widget';
+import { ArrayPropertyWidget } from '../../widget';
 
-export abstract class ArrayWidget extends ArrayLayoutWidget {
+export abstract class ArrayWidget extends ArrayPropertyWidget {
 
 
   addItem() {

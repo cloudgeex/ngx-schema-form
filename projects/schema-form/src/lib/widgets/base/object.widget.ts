@@ -1,3 +1,3 @@
-import { ObjectLayoutWidget } from '../../widget';
+import { ObjectPropertyWidget } from '../../widget';
 
-export abstract class ObjectWidget extends ObjectLayoutWidget { }
+export abstract class ObjectWidget extends ObjectPropertyWidget { }

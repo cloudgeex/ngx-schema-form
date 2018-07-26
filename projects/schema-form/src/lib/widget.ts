@@ -10,29 +10,58 @@ import { ObjectProperty } from './model/object-property';
 import { Schema } from './schema';
 
 
-export abstract class Widget<T extends FormProperty = FormProperty> {
-  formProperty: T;
-}
-
-export abstract class PropertyWidget<T extends FormProperty = FormProperty, U = any> extends Widget {
+export abstract class Widget {
   id: string;
-  formProperty: T;
-  errorMessages: string[];
-
-  schema: {
-    [key: string]: any,
-    widget: U
-  };
-  required?: boolean;
 }
 
-export class ArrayLayoutWidget extends PropertyWidget<ArrayProperty> { }
-
-export class ObjectLayoutWidget extends PropertyWidget<ObjectProperty> { }
-
-export class FieldsetLayoutWidget<T = any> extends Widget<ObjectProperty> {
+export class FieldsetLayoutWidget<T = Widget> extends Widget {
+  formProperty: ObjectProperty;
   title: string;
   description: string;
   formProperties: FormProperty[];
   widget: T;
 }
+
+export abstract class ButtonLayoutWidget<T extends Widget = Widget> extends Widget {
+
+  formProperty: FormProperty;
+  label?: string;
+
+  action?: Action;
+  onInvalidProperty = {
+    disable: false,
+    preventClick: false,
+    markFormAsSubmitted: false
+  };
+  widget: T;
+}
+
+export abstract class PropertyWidget<T extends Widget = Widget, U extends FormProperty = FormProperty> extends Widget {
+  formProperty: U;
+  errorMessages: string[];
+
+  schema: {
+    [key: string]: any,
+    widget: T
+  };
+  required?: boolean;
+}
+
+export class ArrayPropertyWidget<T extends Widget = Widget> extends PropertyWidget<T, ArrayProperty> {
+  /*
+  schema: {
+    [key: string]: any,
+    widget: T
+  };
+  */
+}
+
+export class ObjectPropertyWidget<T extends Widget = Widget> extends PropertyWidget<T, ObjectProperty> {
+  /*
+  schema: {
+    [key: string]: any,
+    widget: T
+  };
+  */
+}
+
