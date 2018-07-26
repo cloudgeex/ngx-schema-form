@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ControlWidget } from '../../widget';
+import { ControlWidget } from '../../../widget';
 
 @Component({
   selector: 'sf-string-widget',
@@ -25,7 +25,7 @@ import { ControlWidget } from '../../widget';
   </ng-template>
   `
 })
-export class StringWidget extends ControlWidget {
+export class StringComponent extends ControlWidget {
 
 
   getInputType(): string {

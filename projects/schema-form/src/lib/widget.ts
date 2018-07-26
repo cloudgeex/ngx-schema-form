@@ -46,5 +46,3 @@ export abstract class ButtonLayoutWidget<T = any> {
   widget: T;
   action?: Action;
 }
-
-

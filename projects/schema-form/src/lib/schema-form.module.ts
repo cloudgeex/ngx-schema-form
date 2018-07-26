@@ -14,20 +14,20 @@ import {
   FormButtonWidgetChooserDirective
 } from './form/form-button-widget-chooser.directive';
 import { FormFieldComponent } from './form/form-field.component';
-import { ArrayWidget } from './defaultwidgets/array/array.widget';
-import { ButtonWidget } from './defaultwidgets/button/button.widget';
-import { ObjectWidget } from './defaultwidgets/object/object.widget';
-import { CheckboxWidget } from './defaultwidgets/checkbox/checkbox.widget';
-import { FileWidget } from './defaultwidgets/file/file.widget';
-import { IntegerWidget } from './defaultwidgets/integer/integer.widget';
-import { TextAreaWidget } from './defaultwidgets/textarea/textarea.widget';
-import { RadioWidget } from './defaultwidgets/radio/radio.widget';
-import { RangeWidget } from './defaultwidgets/range/range.widget';
-import { SelectWidget } from './defaultwidgets/select/select.widget';
-import { StringWidget } from './defaultwidgets/string/string.widget';
-import { FieldsetWidget } from './defaultwidgets/fieldset/fieldset.widget';
-import { TabsWidget } from './defaultwidgets/tabs/tabs.widget';
-import { DefaultWidgetRegistry } from './defaultwidgets/defaultwidgetregistry';
+import { ArrayComponent } from './widgets/defaults/array/array.component';
+import { ButtonComponent } from './widgets/defaults/button/button.component';
+import { ObjectComponent } from './widgets/defaults/object/object.component';
+import { CheckboxComponent } from './widgets/defaults/checkbox/checkbox.component';
+import { FileComponent } from './widgets/defaults/file/file.component';
+import { IntegerComponent } from './widgets/defaults/integer/integer.component';
+import { TextAreaComponent } from './widgets/defaults/textarea/textarea.component';
+import { RadioComponent } from './widgets/defaults/radio/radio.component';
+import { RangeComponent } from './widgets/defaults/range/range.component';
+import { SelectComponent } from './widgets/defaults/select/select.component';
+import { StringComponent } from './widgets/defaults/string/string.component';
+import { FieldsetComponent } from './widgets/defaults/fieldset/fieldset.component';
+import { TabsComponent } from './widgets/defaults/tabs/tabs.component';
+import { DefaultWidgetRegistry } from './widgets/defaults/defaultwidgetregistry';
 import { DefaultWidget } from './default.widget';
 
 import { WidgetRegistry } from './widgetregistry';
@@ -54,38 +54,38 @@ const moduleProviders = [
     FormPropertyWidgetChooserDirective,
     FormFieldsetWidgetChooserDirective,
     DefaultWidget,
-    ArrayWidget,
-    ButtonWidget,
-    ObjectWidget,
-    CheckboxWidget,
-    FileWidget,
-    IntegerWidget,
-    TextAreaWidget,
-    RadioWidget,
-    RangeWidget,
-    SelectWidget,
-    StringWidget,
-    FieldsetWidget,
+    ArrayComponent,
+    ButtonComponent,
+    ObjectComponent,
+    CheckboxComponent,
+    FileComponent,
+    IntegerComponent,
+    TextAreaComponent,
+    RadioComponent,
+    RangeComponent,
+    SelectComponent,
+    StringComponent,
+    FieldsetComponent,
     FormFieldComponent,
-    TabsWidget
+    TabsComponent
   ],
   entryComponents: [
     FormElementComponent,
     FormComponent,
     FormFieldComponent,
-    ArrayWidget,
-    ButtonWidget,
-    ObjectWidget,
-    CheckboxWidget,
-    FileWidget,
-    IntegerWidget,
-    TextAreaWidget,
-    RadioWidget,
-    RangeWidget,
-    SelectWidget,
-    StringWidget,
-    FieldsetWidget,
-    TabsWidget
+    ArrayComponent,
+    ButtonComponent,
+    ObjectComponent,
+    CheckboxComponent,
+    FileComponent,
+    IntegerComponent,
+    TextAreaComponent,
+    RadioComponent,
+    RangeComponent,
+    SelectComponent,
+    StringComponent,
+    FieldsetComponent,
+    TabsComponent
   ],
   exports: [
     FormComponent,
@@ -93,20 +93,20 @@ const moduleProviders = [
     FormButtonWidgetChooserDirective,
     FormFieldComponent,
     FormPropertyWidgetChooserDirective,
-    ArrayWidget,
-    ButtonWidget,
-    ObjectWidget,
-    CheckboxWidget,
-    FileWidget,
-    IntegerWidget,
-    TextAreaWidget,
-    RadioWidget,
-    RangeWidget,
-    SelectWidget,
-    StringWidget,
-    FieldsetWidget,
+    ArrayComponent,
+    ButtonComponent,
+    ObjectComponent,
+    CheckboxComponent,
+    FileComponent,
+    IntegerComponent,
+    TextAreaComponent,
+    RadioComponent,
+    RangeComponent,
+    SelectComponent,
+    StringComponent,
+    FieldsetComponent,
     FormFieldsetWidgetChooserDirective,
-    TabsWidget
+    TabsComponent
   ]
 })
 export class SchemaFormModule {

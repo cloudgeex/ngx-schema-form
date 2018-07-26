@@ -13,6 +13,7 @@ import { FormProperty } from '../model/form-property';
 
 export abstract class FormElementTemplateRef extends TemplateRef<any> { }
 
+// TODO move has-error/success classes to fieldset
 @Component({
   selector: 'sf-form-element',
   template: `<div *ngIf="formProperty.visible && formProperty.schema.widget?.id !== 'none'"
@@ -54,17 +55,19 @@ export class FormElementComponent implements OnInit {
 
   // TODO add type to button attribute
   private createButtonCallback(button) {
-    const _button = this.actionRegistry.get(button.id);
-    if (!_button) {
+    const register = this.actionRegistry.get(button.id);
+    if (!register) {
       return;
     }
 
-    if (_button.field) {
-      button.field = _button.field;
+    if (register.field) {
+      button.field = register.field;
     }
+
     button.action = (event) => {
-      if (_button.action) {
-        _button.action(event, this.formProperty, button.parameters);
+
+      if (register.action) {
+        register.action(event, this.formProperty, button.parameters);
       }
 
       if (event.hasOwnProperty('preventDefault')) {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ControlWidget } from '../../widget';
+import { ControlWidget } from '../../../widget';
 
 @Component({
   selector: 'sf-range-widget',
@@ -14,4 +14,4 @@ import { ControlWidget } from '../../widget';
 	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden">
 </div>`
 })
-export class RangeWidget extends ControlWidget {}
+export class RangeComponent extends ControlWidget {}

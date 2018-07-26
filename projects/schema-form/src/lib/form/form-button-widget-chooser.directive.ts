@@ -8,10 +8,13 @@ import {
 } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 
+import { ActionRegistry } from '../model/actionregistry';
+import { Action } from '../model/action';
 import { Unsubscriber } from '../unsubscriber';
 import { WidgetFactory } from '../widgetfactory';
 import { ButtonLayoutWidget } from '../widget';
 import { WidgetType } from '../widgetregistry';
+import { FormAction } from '../form/form.component';
 
 @Directive({
   selector: '[sfFormButtonWidgetChooser]'
@@ -32,9 +35,11 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
   constructor(
     private viewContainerRef: ViewContainerRef,
     private widgetFactory: WidgetFactory,
+    private actionRegistry: ActionRegistry
   ) { }
 
 
+  // TODO return proper ButtonWidget type
   getWidget(): any  {
     const id = 'button';
     if (!this.button.widget) {
@@ -46,6 +51,28 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
     }
 
     return this.button.widget;
+  }
+
+  getButtonAction(widget: any): Action {
+
+    return (event) => {
+
+      // TODO rethink this, ActionRegistry is doing more than it should
+      if (widget.onInvalidProperty.markAsSubmitted) {
+        this.actionRegistry.get(FormAction.MarkAsSubmitted).action();
+      }
+
+      if (widget.onInvalidProperty.preventClick) {
+        return;
+      }
+
+      if (!this.button.action) {
+        return;
+      }
+
+      this.button.action(event);
+    };
+
   }
 
   ngOnInit() {
@@ -61,9 +88,15 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
     const instance = this.componentRef.instance;
     instance.id = this.button.id;
     instance.label = this.button.label;
-    instance.action = this.button.action;
-    instance.widget = widget;
     instance.formProperty = this.formProperty;
+    if (instance.widget) {
+      // for widget defaults
+      Object.assign(instance.widget, widget);
+    } else {
+      instance.widget = widget;
+    }
+    // after widget has been merged with defaults
+    instance.action = this.getButtonAction(widget);
 
     // watch changes on field if template schema is used
     if (this.button.field) {
@@ -75,6 +108,10 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
           if (typeof button.widget !== 'string') {
             Object.assign(instance.widget, button.widget);
           }
+          // TODO dont rebuild if there is no changes
+          // rebuild action in case onInvalidProperty changed
+          instance.action = this.getButtonAction(widget);
+
           this.componentRef.changeDetectorRef.detectChanges();
         });
     }

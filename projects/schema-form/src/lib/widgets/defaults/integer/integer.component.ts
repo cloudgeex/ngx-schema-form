@@ -2,7 +2,7 @@ import {
   Component,
 } from '@angular/core';
 
-import { ControlWidget } from '../../widget';
+import { ControlWidget } from '../../../widget';
 
 @Component({
   selector: 'sf-integer-widget',
@@ -19,4 +19,4 @@ import { ControlWidget } from '../../widget';
   [attr.minLength]="schema.minLength || null">
 </div>`
 })
-export class IntegerWidget extends ControlWidget {}
+export class IntegerComponent extends ControlWidget {}

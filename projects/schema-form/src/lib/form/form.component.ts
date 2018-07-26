@@ -4,12 +4,16 @@ import {
   Input,
   SimpleChanges,
   forwardRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  OnInit
 } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
-  ValidatorFn
+  ValidatorFn,
+  NgForm
 } from '@angular/forms';
 
 import { Action } from '../model/action';
@@ -27,17 +31,20 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
   return new FormPropertyFactory(schemaValidatorFactory, validatorRegistry);
 }
 
+export enum FormAction {
+  MarkAsSubmitted = '_mark_as_submitted'
+}
+
 @Component({
   selector: 'sf-form',
   template: `
-    <ng-container *ngIf="rootFormProperty" >
-      <form >
-        <sf-form-element [formProperty]="rootFormProperty"> </sf-form-element>
-        <button type="submit" class="btn btn-primary">
-          Submit
-        </button>
-      </form>
-    </ng-container>
+    <form #form="ngForm">
+      <sf-form-element *ngIf="rootFormProperty; else noSchema" [formProperty]="rootFormProperty">
+      </sf-form-element>
+      <ng-template #noSchema>
+        You need to provide a json or a template schema!
+      </ng-template>
+    </form>
   `,
   providers: [
     {
@@ -57,7 +64,10 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
     FieldRegistry
   ]
 })
-export class FormComponent implements OnChanges, ControlValueAccessor {
+export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
+
+  @ViewChild(NgForm)
+  form: NgForm;
 
   @Input()
   schema: any = null;
@@ -151,6 +161,19 @@ export class FormComponent implements OnChanges, ControlValueAccessor {
 
       this.rootFormProperty = rootFormProperty;
     }
+  }
+
+  ngOnInit() {
+
+    this.actionRegistry.register(
+      FormAction.MarkAsSubmitted,
+      this.markAsSubmitted.bind(this)
+    );
+  }
+
+  markAsSubmitted() {
+    this.form.ngSubmit.emit();
+    (<any>this.form).submitted = true;
   }
 
   private registerValidators() {

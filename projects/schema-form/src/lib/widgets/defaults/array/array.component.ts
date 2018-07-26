@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ArrayLayoutWidget } from '../../widget';
-import { ArrayProperty } from '../../model/array-property';
+import { ArrayLayoutWidget } from '../../../widget';
+import { ArrayProperty } from '../../../model/array-property';
 
 @Component({
   selector: 'sf-array-widget',
@@ -21,7 +21,7 @@ import { ArrayProperty } from '../../model/array-property';
 	</button>
 </div>`
 })
-export class ArrayWidget extends ArrayLayoutWidget {
+export class ArrayComponent extends ArrayLayoutWidget {
 
 
   addItem() {

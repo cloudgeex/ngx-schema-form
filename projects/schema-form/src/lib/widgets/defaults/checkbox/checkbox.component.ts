@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
-import { ControlWidget } from '../../widget';
+import { ControlWidget } from '../../../widget';
 
 @Component({
   selector: 'sf-checkbox-widget',
@@ -29,7 +29,7 @@ import { ControlWidget } from '../../widget';
   </ng-container>
 </div>`
 })
-export class CheckboxWidget extends ControlWidget implements OnInit {
+export class CheckboxComponent extends ControlWidget implements OnInit {
 
   checked: any = {};
 

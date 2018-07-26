@@ -1,0 +1,14 @@
+export { ArrayComponent } from './array/array.component';
+export { CheckboxComponent } from './checkbox/checkbox.component';
+export { FileComponent } from './file/file.component';
+export { IntegerComponent } from './integer/integer.component';
+export { ObjectComponent } from './object/object.component';
+export { RadioComponent } from './radio/radio.component';
+export { RangeComponent } from './range/range.component';
+export { SelectComponent } from './select/select.component';
+export { StringComponent } from './string/string.component';
+export { TextAreaComponent } from './textarea/textarea.component';
+export { ButtonComponent } from './button/button.component';
+export { DefaultWidgetRegistry } from './defaultwidgetregistry';
+export { FieldsetComponent } from './fieldset/fieldset.component';
+export { TabsComponent } from './tabs/tabs.component';

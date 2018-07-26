@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { ControlWidget } from '../../widget';
+import { ControlWidget } from '../../../widget';
 
 @Component({
   selector: 'sf-file-widget',
@@ -16,7 +16,7 @@ import { ControlWidget } from '../../widget';
 	<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="fileName">
 </div>`
 })
-export class FileWidget extends ControlWidget implements AfterViewInit {
+export class FileComponent extends ControlWidget implements AfterViewInit {
 
   protected reader = new FileReader();
   protected filedata: any = {};

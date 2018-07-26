@@ -32,9 +32,23 @@ export {
   TextAreaWidget,
   ButtonWidget,
   FieldsetWidget,
-  TabsWidget,
+} from './widgets/base';
+export {
+  ArrayComponent,
+  CheckboxComponent,
+  FileComponent,
+  IntegerComponent,
+  ObjectComponent,
+  RadioComponent,
+  RangeComponent,
+  SelectComponent,
+  StringComponent,
+  TextAreaComponent,
+  ButtonComponent,
+  FieldsetComponent,
+  TabsComponent,
   DefaultWidgetRegistry
-} from './defaultwidgets';
+} from './widgets/defaults';
 export { SchemaFormModule } from './schema-form.module';
 export { TemplateSchemaModule } from './template-schema/template-schema.module';
 export { FormPropertyFactory } from './model/form-property-factory';

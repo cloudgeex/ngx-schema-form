@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ControlWidget } from '../../widget';
+import { ControlWidget } from '../../../widget';
 
 @Component({
   selector: 'sf-textarea-widget',
@@ -17,4 +17,4 @@ import { ControlWidget } from '../../widget';
 		[formControl]="formProperty"></textarea>
 </div>`
 })
-export class TextAreaWidget extends ControlWidget {}
+export class TextAreaComponent extends ControlWidget {}
