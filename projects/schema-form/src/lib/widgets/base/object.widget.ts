@@ -1,3 +1,3 @@
-import { ObjectPropertyWidget } from '../../widget';
+import { ObjectPropertyWidget } from './widget';
 
 export abstract class ObjectWidget extends ObjectPropertyWidget { }

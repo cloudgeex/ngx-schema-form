@@ -1,3 +1,10 @@
+export {
+  Widget,
+  PropertyWidget,
+  ArrayPropertyWidget,
+  ObjectPropertyWidget,
+  FieldsetLayoutWidget
+} from './widget';
 export { ArrayWidget } from './array.widget';
 export { CheckboxWidget } from './checkbox.widget';
 export { FileWidget } from './file.widget';

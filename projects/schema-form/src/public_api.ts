@@ -25,7 +25,7 @@ export {
   ArrayPropertyWidget,
   ObjectPropertyWidget,
   FieldsetLayoutWidget,
-} from './lib/widget';
+} from './lib/widgets/base/widget';
 
 export { ArrayWidget } from './lib/widgets/base/array.widget';
 export { ButtonWidget } from './lib/widgets/base/button.widget';

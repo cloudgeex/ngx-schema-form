@@ -1,6 +1,6 @@
 import { OnInit } from '@angular/core';
 
-import { PropertyWidget } from '../../widget';
+import { PropertyWidget } from './widget';
 
 export abstract class CheckboxWidget extends PropertyWidget implements OnInit {
 

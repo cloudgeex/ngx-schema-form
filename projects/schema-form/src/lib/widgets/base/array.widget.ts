@@ -1,4 +1,4 @@
-import { ArrayPropertyWidget } from '../../widget';
+import { ArrayPropertyWidget } from './widget';
 
 export abstract class ArrayWidget extends ArrayPropertyWidget {
 

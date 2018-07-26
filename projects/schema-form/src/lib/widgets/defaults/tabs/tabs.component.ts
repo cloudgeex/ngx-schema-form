@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { FieldsetWidget } from '../../base/fieldset.widget';
-import { Widget } from '../../../widget';
+import { Widget } from '../../base/widget';
 
 export interface Tab {
   title: string;

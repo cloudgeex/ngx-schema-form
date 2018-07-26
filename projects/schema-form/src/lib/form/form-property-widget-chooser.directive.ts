@@ -17,7 +17,7 @@ import {
 } from 'rxjs/operators';
 
 import { Unsubscriber } from '../unsubscriber';
-import { PropertyWidget } from '../widget';
+import { PropertyWidget } from '../widgets/base/widget';
 import { WidgetFactory } from '../widgetfactory';
 import { FormProperty } from '../model/form-property';
 import { GenericProperty } from '../model/generic-property';

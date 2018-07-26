@@ -1,13 +1,13 @@
 import { TemplateRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import { Action } from './model/action';
-import { FormProperty } from './model/form-property';
-import { ArrayProperty } from './model/array-property';
-import { GenericProperty } from './model/generic-property';
-import { ObjectProperty } from './model/object-property';
+import { Action } from '../../model/action';
+import { FormProperty } from '../../model/form-property';
+import { ArrayProperty } from '../../model/array-property';
+import { GenericProperty } from '../../model/generic-property';
+import { ObjectProperty } from '../../model/object-property';
 
-import { Schema } from './schema';
+import { Schema } from '../../schema';
 
 
 export abstract class Widget {

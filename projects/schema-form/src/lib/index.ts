@@ -16,8 +16,7 @@ export {
   ArrayPropertyWidget,
   ObjectPropertyWidget,
   FieldsetLayoutWidget,
-} from './widget';
-export {
+
   ArrayWidget,
   CheckboxWidget,
   FileWidget,

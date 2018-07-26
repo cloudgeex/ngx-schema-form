@@ -1,7 +1,7 @@
 import { AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { PropertyWidget } from '../../widget';
+import { PropertyWidget } from './widget';
 
 export abstract class FileWidget extends PropertyWidget implements AfterViewInit {
 

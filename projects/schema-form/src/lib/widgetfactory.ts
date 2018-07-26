@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { WidgetRegistry, WidgetType } from './widgetregistry';
-import { Widget } from './widget';
+import { Widget } from './widgets/base/widget';
 
 @Injectable()
 export class WidgetFactory {

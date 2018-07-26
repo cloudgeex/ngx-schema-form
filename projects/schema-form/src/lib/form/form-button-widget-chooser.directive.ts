@@ -15,7 +15,7 @@ import { Unsubscriber } from '../unsubscriber';
 import { WidgetFactory } from '../widgetfactory';
 import { ButtonWidget } from '../widgets/base';
 import { WidgetType } from '../widgetregistry';
-import { Widget } from '../widget';
+import { Widget } from '../widgets/base/widget';
 import { FormAction } from '../form/form.component';
 
 @Directive({
