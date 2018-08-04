@@ -21,6 +21,7 @@ import { BooleanProperty } from './boolean-property';
 import { StringProperty } from './string-property';
 import { ArrayProperty } from './array-property';
 import { ObjectProperty } from './object-property';
+import { SchemaPreprocessor } from './schemapreprocessor';
 
 
 export type PropertyParent = ObjectProperty | ArrayProperty;
@@ -39,8 +40,11 @@ export class FormPropertyFactory {
     propertyKey?: string
   ): FormProperty {
 
+
     let property: FormProperty;
     const path = this.generatePath(propertyParent, propertyKey);
+
+    SchemaPreprocessor.preprocess(schema, path);
 
     // TODO test for parsing for reference schema
     if (schema.$ref) {

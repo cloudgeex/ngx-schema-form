@@ -14,6 +14,7 @@ function schemaWarning(message, path): void {
   throw new Error(mesg);
 }
 
+// TODO create error classes
 export class SchemaPreprocessor {
 
   static preprocess(jsonSchema: any, path = '/'): any {
@@ -111,25 +112,32 @@ export class SchemaPreprocessor {
     }
   }
 
+  // TODO rename and remove unnecessary code according to change
+  // TODO test, to make sure removal of recursion checks does not break anything
   private static recursiveCheck(jsonSchema, path: string) {
     if (jsonSchema.type === 'object') {
       for (const fieldId in jsonSchema.properties) {
         if (jsonSchema.properties.hasOwnProperty(fieldId)) {
           const fieldSchema = jsonSchema.properties[fieldId];
-          SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
+          // SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
         }
       }
       if (jsonSchema.hasOwnProperty('definitions')) {
         for (const fieldId in jsonSchema.definitions) {
           if (jsonSchema.definitions.hasOwnProperty(fieldId)) {
             const fieldSchema = jsonSchema.definitions[fieldId];
-            SchemaPreprocessor.removeRecursiveRefProperties(fieldSchema, `#/definitions/${fieldId}`);
-            SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
+            SchemaPreprocessor.removeRecursiveRefProperties(
+              fieldSchema,
+              `#/definitions/${fieldId}`
+            );
+            // formPropertyFactory recursive is used instead
+            // SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
           }
         }
       }
     } else if (jsonSchema.type === 'array') {
-      SchemaPreprocessor.preprocess(jsonSchema.items, path + '*/');
+      // formPropertyFactory recursive is used instead
+      // SchemaPreprocessor.preprocess(jsonSchema.items, path + '*/');
     }
   }
 
@@ -142,7 +150,10 @@ export class SchemaPreprocessor {
             && jsonSchema.properties[fieldId].$ref === definitionPath) {
             delete jsonSchema.properties[fieldId];
           } else if (jsonSchema.properties[fieldId].type === 'object') {
-            SchemaPreprocessor.removeRecursiveRefProperties(jsonSchema.properties[fieldId], definitionPath);
+            SchemaPreprocessor.removeRecursiveRefProperties(
+              jsonSchema.properties[fieldId],
+              definitionPath
+            );
           }
         }
       }

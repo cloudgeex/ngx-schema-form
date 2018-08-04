@@ -18,7 +18,6 @@ import {
 
 import { Action } from '../model/action';
 import { ActionRegistry } from '../model/actionregistry';
-import { SchemaPreprocessor } from '../model/schemapreprocessor';
 import { ValidatorRegistry } from '../model/validatorregistry';
 import { SchemaPropertyType } from '../schema';
 import { SchemaValidatorFactory } from '../schemavalidatorfactory';
@@ -53,7 +52,6 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
     },
     ActionRegistry,
     ValidatorRegistry,
-    SchemaPreprocessor,
     WidgetFactory,
     {
       provide: FormPropertyFactory,
@@ -139,11 +137,12 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
       this.rootFormProperty = null;
       this.changeDetectorRef.detectChanges();
 
-      SchemaPreprocessor.preprocess(this.schema);
+      // SchemaPreprocessor is now done in formPropertyFactory using property
+      // creation recursion, this removes the need to traverse the tree twice.
+      // TODO test schema preprocessing move
       const rootFormProperty = this.formPropertyFactory.createProperty(
         this.schema
       );
-      (<any>window).rootFormProperty = rootFormProperty;
 
       // registerOnChange for changes after init
       if (this.onChangeCallback) {
