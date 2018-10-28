@@ -12,7 +12,7 @@ extends PropertyWidget<T> implements AfterViewInit {
 
   ngAfterViewInit() {
     this.reader.onloadend = () => {
-      this.filedata.data = btoa(this.reader.result);
+			this.filedata.data = this.reader.result;
       this.formProperty.setValue(this.filedata);
     };
   }
@@ -23,6 +23,6 @@ extends PropertyWidget<T> implements AfterViewInit {
     this.filedata.size = file.size;
     this.filedata['content-type'] = file.type;
     this.filedata.encoding = 'base64';
-    this.reader.readAsBinaryString(file);
+    this.reader.readAsDataURL(file);
   }
 }

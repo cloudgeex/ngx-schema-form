@@ -94,6 +94,9 @@ export class ObjectProperty extends ControlProperty(FormGroup) implements GroupP
     }
   }
 
+  markAllAsTouched() {
+    this.forEach((control) => control.markAsTouched());
+  }
 }
 
 

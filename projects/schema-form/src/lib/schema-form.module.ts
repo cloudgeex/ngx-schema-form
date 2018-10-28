@@ -34,7 +34,7 @@ import { WidgetRegistry } from './widgetregistry';
 import { SchemaValidatorFactory } from './schemavalidatorfactory';
 import { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 
-const moduleProviders = [
+export const moduleProviders = [
   {
     provide: WidgetRegistry,
     useClass: DefaultWidgetRegistry

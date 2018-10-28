@@ -18,6 +18,9 @@ export class ItemComponent extends TemplateSchemaElement implements OnInit {
   @Input()
   value: any;
 
+  @Input()
+  label: string;
+
   description: string;
 
   constructor(private elementRef: ElementRef) {
@@ -25,7 +28,9 @@ export class ItemComponent extends TemplateSchemaElement implements OnInit {
   }
 
   ngOnInit() {
-    this.description = this.getTextContent(this.elementRef);
+    // TODO use title instead
+    //this.description = this.getTextContent(this.elementRef);
+    this.description = this.label;
   }
 
 }

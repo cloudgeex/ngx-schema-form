@@ -66,10 +66,12 @@ export class FormButtonWidgetChooserDirective implements OnInit, OnDestroy {
 
     return (event, params?): void => {
 
-      const options = this.button.options;
-      if (this.formProperty.invalid && options.onInvalidFormProperty.preventClick) {
-        return;
-      }
+      // TODO check this with invalid schema.
+      // (should be disabled when schema not be valid)
+      // const options = this.button.options;
+      // if (this.formProperty.invalid && options.onInvalidFormProperty.preventClick) {
+      //   return;
+      // }
 
       const action = this.actionRegistry.get(this.button.id);
       if (!action) {

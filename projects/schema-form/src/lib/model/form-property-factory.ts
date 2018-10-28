@@ -83,7 +83,8 @@ export class FormPropertyFactory {
           }
           break;
         default:
-          throw new TypeError(`Undefined type ${schema.type}`);
+          console.error(schema);
+          throw new TypeError(`Unsupported property type ${schema.type}`);
       }
     }
 
@@ -101,6 +102,10 @@ export class FormPropertyFactory {
 
     if (propertyParent) {
       property.setParent(propertyParent);
+    }
+
+    if (property.schema.visible === false) {
+      property.setVisible(false);
     }
 
     this.bindCustomValidator(property);
@@ -143,8 +148,19 @@ export class FormPropertyFactory {
         Object.keys(errors).forEach((path: string) => {
           const control = property.get(path);
           if (control) {
-            // set error to specific control
-            control.setErrors(errors[path], { emitEvent: true });
+            /** TODO ajv is not validating array prop required fields.
+              performing this manually.
+            */
+            if (control.parent !== null) {
+                const schema = control.parent['schema'];
+                if (schema.hasOwnProperty('required')) {
+                  if (schema.required.indexOf(control['name']) !== -1) {
+                    // set error to specific control
+                    control.setErrors(errors[path], { emitEvent: true });
+                  }
+                }
+            }
+
           }
         });
       });

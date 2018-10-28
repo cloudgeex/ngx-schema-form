@@ -7,7 +7,8 @@ import {
   ChangeDetectorRef,
   ViewChild,
   ElementRef,
-  OnInit
+  OnInit,
+  ViewEncapsulation
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -23,7 +24,7 @@ import { SchemaPropertyType } from '../schema';
 import { SchemaValidatorFactory } from '../schemavalidatorfactory';
 import { WidgetFactory } from '../widgetfactory';
 import { FormPropertyFactory } from '../model/form-property-factory';
-import { FormProperty } from '../model/form-property';
+import { GroupProperty } from '../model/group-property';
 import {
   TemplateSchemaElementRegistry
 } from '../template-schema/template-schema-element-registry';
@@ -59,7 +60,9 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
       deps: [SchemaValidatorFactory, ValidatorRegistry]
     },
     TemplateSchemaElementRegistry
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'form'
 })
 export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
 
@@ -72,7 +75,10 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input()
   validators: { [path: string]: ValidatorFn | ValidatorFn[] } = {};
 
-  rootFormProperty: FormProperty = null;
+  rootFormProperty: GroupProperty | null = null;
+
+  @ViewChild(NgForm)
+  private ngForm: NgForm;
 
   private onChangeCallback: any;
 
@@ -112,6 +118,15 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
     }
   }
 
+  validate(): boolean {
+    if (!this.ngForm || !this.rootFormProperty) {
+      return false;
+    }
+    this.ngForm.ngSubmit.emit();
+    this.rootFormProperty.markAllAsTouched();
+    return this.rootFormProperty.valid;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.validators) {
       this.registerValidators();
@@ -142,7 +157,7 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
       // TODO test schema preprocessing move
       const rootFormProperty = this.formPropertyFactory.createProperty(
         this.schema
-      );
+      ) as GroupProperty;
 
       // registerOnChange for changes after init
       if (this.onChangeCallback) {

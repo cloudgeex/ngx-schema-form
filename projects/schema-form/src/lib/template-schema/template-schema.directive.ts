@@ -32,7 +32,8 @@ import {
     TemplateSchemaService
   ]
 })
-export class TemplateSchemaDirective extends FieldParent implements AfterContentInit {
+export class TemplateSchemaDirective extends FieldParent
+implements AfterContentInit {
 
   @ContentChildren(FieldComponent)
   childFields: QueryList<FieldComponent>;
@@ -113,7 +114,9 @@ export class TemplateSchemaDirective extends FieldParent implements AfterContent
     )
     .pipe(
       filter((value) => Boolean(value)),
-      debounceTime(50)
+      // building the json schema is a heavy task, avoid unnecessary builds
+      // TODO use this
+      // debounceTime(50)
     )
     .subscribe(() => {
       this.setFormDocumentSchema(this.childFields.toArray());

@@ -11,8 +11,10 @@ export class StringProperty extends GenericProperty {
     if (typeof value !== 'string') {
       value = `${value}`;
     }
+    // TODO remove this
+    if (value === 'null') {
+      value = ''
+    }
     super.setValue(value, options);
   }
 }
-
-

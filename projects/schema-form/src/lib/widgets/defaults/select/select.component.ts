@@ -16,7 +16,6 @@ import { SelectWidget } from '../../base/select.widget';
   <select
     *ngIf="schema.type!='array'"
     [formControl]="formProperty"
-    [attr.name]="name"
     [attr.disabled]="schema.readOnly"
     class="form-control">
     <option *ngFor="let option of schema.oneOf" [ngValue]="option.enum[0]" >
@@ -24,11 +23,11 @@ import { SelectWidget } from '../../base/select.widget';
     </option>
   </select>
 
-  <select *ngIf="schema.type==='array'" multiple [formControl]="formProperty" [attr.name]="name" [attr.disabled]="schema.readOnly" class="form-control">
+  <select *ngIf="schema.type==='array'" multiple [formControl]="formProperty" [attr.disabled]="schema.readOnly" class="form-control">
     <option *ngFor="let option of schema.items.oneOf" [ngValue]="option.enum[0]" >{{option.description}}</option>
   </select>
 
-  <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="formProperty">
+  <input *ngIf="schema.readOnly" type="hidden" [formControl]="formProperty">
 </div>`
 })
 export class SelectComponent extends SelectWidget {}

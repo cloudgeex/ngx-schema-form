@@ -1,7 +1,7 @@
 import {
-  IntegerWidget,
-  TextAreaWidget,
-  StringWidget
+  IntegerComponent,
+  TextAreaComponent,
+  StringComponent
 } from './';
 
 import { DefaultWidgetRegistry } from './defaultwidgetregistry';
@@ -28,9 +28,9 @@ describe('DefaultWidgetRegistry', () => {
     let integerWidget = registry.getWidgetType(INT_TYPE);
     let textareaWidget = registry.getWidgetType(TEXTAREA_TYPE);
 
-    expect(stringWidget).toBe(StringWidget);
-    expect(integerWidget).toBe(IntegerWidget);
-    expect(textareaWidget).toBe(TextAreaWidget);
+    expect(stringWidget).toBe(StringComponent);
+    expect(integerWidget).toBe(IntegerComponent);
+    expect(textareaWidget).toBe(TextAreaComponent);
   });
 
   it('should return a default widget if there is no matching string in widgets', () => {

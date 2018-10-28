@@ -21,4 +21,11 @@ export class GenericProperty extends ControlProperty(FormControl) {
 
     this.nonEmptyValue = this.value;
   }
+
+  reset(
+    formState: any,
+    options: {onlySelf?: boolean, emitEvent?: boolean} = {}
+  ) {
+    super.reset(formState || '', options);
+  }
 }

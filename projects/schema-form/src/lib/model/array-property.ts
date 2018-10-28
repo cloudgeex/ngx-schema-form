@@ -61,9 +61,12 @@ export class ArrayProperty extends ControlProperty(FormArray) implements GroupPr
     value: any[],
     options: {onlySelf?: boolean, emitEvent?: boolean} = {}
   ) {
+    this.removeSpareProperties(value.length);
     value.forEach((newValue: any, index: number) => {
 
-      this.addPropertyAt(index);
+      if (!this.at(index)) {
+        this.addPropertyAt(index);
+      }
 
       if (this.at(index)) {
         this.at(index).patchValue(
@@ -83,7 +86,7 @@ export class ArrayProperty extends ControlProperty(FormArray) implements GroupPr
 
   addPropertyAt(index: number) {
     const property = this.getPropertyFromSchemaItems();
-    this.insert(index, property);
+    this.setControl(index, property);
     property.bindVisibility();
   }
 
@@ -112,6 +115,10 @@ export class ArrayProperty extends ControlProperty(FormArray) implements GroupPr
     }
   }
 
+  markAllAsTouched() {
+    this.forEach((control) => control.markAsTouched());
+  }
+
   private getPropertyFromSchemaItems(): FormProperty {
     return this.formPropertyFactory.createProperty(
       this.schema.items,
@@ -119,6 +126,11 @@ export class ArrayProperty extends ControlProperty(FormArray) implements GroupPr
     );
   }
 
+  private removeSpareProperties(requires: number) {
+    if(this.length > requires) {
+      this.removeAt(this.length-1);
+      this.removeSpareProperties(requires);
+    }
+  }
+
 }
-
-

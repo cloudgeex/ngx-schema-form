@@ -4,7 +4,8 @@ import {
   OnInit,
   TemplateRef,
   InjectionToken,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
@@ -30,6 +31,7 @@ export abstract class FormElementTemplateRef extends TemplateRef<any> { }
       </div>
     </ng-container>
   </div>`,
+  encapsulation: ViewEncapsulation.None,
   // TODO move to OnPush change detection strategy
   // changeDetection: ChangeDetectionStrategy.OnPush
 })

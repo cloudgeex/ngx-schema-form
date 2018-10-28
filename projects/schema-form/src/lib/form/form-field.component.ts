@@ -1,4 +1,9 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  TemplateRef,
+  ViewEncapsulation
+} from '@angular/core';
 
 import { FormProperty } from '../model/form-property';
 import { FormElementTemplateRef } from './form-element.component';
@@ -10,7 +15,8 @@ import { FormElementTemplateRef } from './form-element.component';
     <ng-container
       *ngTemplateOutlet="templateRef; context: { formProperty: formProperty }">
     </ng-container>
-  `
+  `,
+  encapsulation: ViewEncapsulation.None
 })
 export class FormFieldComponent {
 

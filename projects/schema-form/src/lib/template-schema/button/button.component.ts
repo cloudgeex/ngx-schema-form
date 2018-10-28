@@ -18,7 +18,8 @@ import { ButtonWidgetOptions } from '../../widgets/base/button.widget';
   selector: 'sf-button',
   templateUrl: './button.component.html',
 })
-export class ButtonComponent extends TemplateSchemaElement implements OnChanges, AfterContentInit {
+export class ButtonComponent extends TemplateSchemaElement
+implements OnChanges, AfterContentInit {
 
   @Input()
   id: string;

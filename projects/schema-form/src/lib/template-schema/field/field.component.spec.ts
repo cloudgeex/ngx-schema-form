@@ -8,8 +8,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActionRegistry } from '../../model/actionregistry';
 import { ButtonComponent } from '../button/button.component';
 import { TemplateSchemaService } from '../template-schema.service';
+import {
+  TemplateSchemaElementRegistry
+} from '../template-schema-element-registry';
+
+
 import { FieldComponent } from './field.component';
 import { ItemComponent } from './item/item.component';
+
 
 @Component({
   selector: 'sf-test',
@@ -47,7 +53,8 @@ describe('FieldComponent', () => {
       ],
       providers: [
         ActionRegistry,
-        TemplateSchemaService
+        TemplateSchemaService,
+        TemplateSchemaElementRegistry
       ]
     });
   }));
@@ -171,9 +178,9 @@ describe('FieldComponent', () => {
     const field = getFieldComponent(`
       <sf-field name="delivery" type="string" widget="select" >
         Delivery Service
-        <sf-item value="fedex">Fedex</sf-item>
-        <sf-item value="ups">UPS</sf-item>
-        <sf-item value="other">Other</sf-item>
+        <sf-item value="fedex" label="Fedex"></sf-item>
+        <sf-item value="ups" label="UPS"></sf-item>
+        <sf-item value="other" label="Other"></sf-item>
       </sf-field>
     `);
 
@@ -202,10 +209,10 @@ describe('FieldComponent', () => {
       <sf-field name="colors" type="array" widget="select" >
         Colors
         <sf-field name="color" type="string" >
-          <sf-item value="blue">Blue</sf-item>
-          <sf-item value="green">Green</sf-item>
-          <sf-item value="pink">Pink</sf-item>
-          <sf-item value="orange">Orange</sf-item>
+          <sf-item value="blue" label="Blue"></sf-item>
+          <sf-item value="green" label="Green"></sf-item>
+          <sf-item value="pink" label="Pink"></sf-item>
+          <sf-item value="orange" label="Orange"></sf-item>
         </sf-field>
       </sf-field>
     `);

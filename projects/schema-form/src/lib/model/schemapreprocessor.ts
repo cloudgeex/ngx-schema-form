@@ -19,6 +19,7 @@ export class SchemaPreprocessor {
 
   static preprocess(jsonSchema: any, path = '/'): any {
     jsonSchema = jsonSchema || {};
+
     if (jsonSchema.type === 'object') {
       SchemaPreprocessor.checkProperties(jsonSchema, path);
       SchemaPreprocessor.checkAndCreateFieldsets(jsonSchema, path);
@@ -27,6 +28,7 @@ export class SchemaPreprocessor {
     }
     SchemaPreprocessor.normalizeWidget(jsonSchema);
     SchemaPreprocessor.recursiveCheck(jsonSchema, path);
+
   }
 
   private static checkProperties(jsonSchema, path: string) {
@@ -116,12 +118,14 @@ export class SchemaPreprocessor {
   // TODO test, to make sure removal of recursion checks does not break anything
   private static recursiveCheck(jsonSchema, path: string) {
     if (jsonSchema.type === 'object') {
+      /*
       for (const fieldId in jsonSchema.properties) {
         if (jsonSchema.properties.hasOwnProperty(fieldId)) {
           const fieldSchema = jsonSchema.properties[fieldId];
-          // SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
+          SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
         }
       }
+      */
       if (jsonSchema.hasOwnProperty('definitions')) {
         for (const fieldId in jsonSchema.definitions) {
           if (jsonSchema.definitions.hasOwnProperty(fieldId)) {
@@ -135,10 +139,10 @@ export class SchemaPreprocessor {
           }
         }
       }
-    } else if (jsonSchema.type === 'array') {
+    }// else if (jsonSchema.type === 'array') {
       // formPropertyFactory recursive is used instead
       // SchemaPreprocessor.preprocess(jsonSchema.items, path + '*/');
-    }
+    // }
   }
 
   private static removeRecursiveRefProperties(jsonSchema, definitionPath) {

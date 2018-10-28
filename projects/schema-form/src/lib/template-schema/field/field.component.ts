@@ -39,7 +39,8 @@ import {
   selector: 'sf-field',
   templateUrl: './field.component.html'
 })
-export class FieldComponent extends FieldParent implements Field, OnChanges, AfterContentInit {
+export class FieldComponent extends FieldParent
+implements Field, OnChanges, AfterContentInit {
 
   @ContentChildren(FieldComponent)
   childFields: QueryList<FieldComponent>;
@@ -204,9 +205,29 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
 
   ngOnChanges(changes: SimpleChanges) {
 
-    /*
-    const keys = Object.keys(changes);
     // TODO check for particular properties change (widget.id, validator, etc.)
+    if (changes.type || changes.name || changes.format || changes.validators) {
+      this.templateSchemaService.changed();
+    } else {
+      // changes that dont need to rebuild the schema
+      if (this.childFields) {
+        const schema = this.getSchema();
+        delete schema.name;
+        delete schema.format;
+        if (typeof schema.widget === 'string') {
+          delete schema.widget;
+        } else if (schema.widget && schema.width.id) {
+          delete schema.widget.id;
+        }
+        this.changes.emit(schema);
+      }
+    }
+
+    /*
+    // this is old way to update controls on field input changes,
+    // now we have the to types, changes that need rebuild of schema and the
+    // ones that not rebuilding schema
+    const keys = Object.keys(changes);
     for (const key of keys) {
       if (!changes[key].isFirstChange()) {
         // on any input change, force schema change generation
@@ -216,17 +237,6 @@ export class FieldComponent extends FieldParent implements Field, OnChanges, Aft
     }
      */
 
-    if (this.childFields) {
-      const schema = this.getSchema();
-      delete schema.name;
-      delete schema.format;
-      if (typeof schema.widget === 'string') {
-        delete schema.widget;
-      } else if (schema.widget && schema.width.id) {
-        delete schema.widget.id;
-      }
-      this.changes.emit(schema);
-    }
 
   }
 
