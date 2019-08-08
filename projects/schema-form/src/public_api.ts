@@ -9,6 +9,10 @@ export {
   FormButtonWidgetChooserDirective
 } from './lib/form/form-button-widget-chooser.directive';
 export { FormFieldComponent } from './lib/form/form-field.component';
+export { ValidatorRegistry } from './lib/model/validatorregistry';
+export { ActionRegistry } from './lib/model/actionregistry';
+export { Binding } from './lib/model/binding';
+export { BindingRegistry } from './lib/model/bindingregistry';
 export {
   FormFieldsetWidgetChooserDirective
 } from './lib/form/form-fieldset-widget-chooser.directive';
