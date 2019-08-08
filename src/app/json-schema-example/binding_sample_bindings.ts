@@ -4,29 +4,12 @@ const myFormBindings = {
   '/name': [
     {
       'input': (event, formProperty: FormProperty) => {
-        // const parent: PropertyGroup = formProperty.findRoot();
-        //
-        // /**
-        //  * Set the input value for the children
-        //  */
-        // const child1: FormProperty = parent.getProperty('children/0/name');
-        //
-        // child1.setValue(formProperty.value, false);
-        //
-        // const child2: FormProperty = parent.getProperty('children/1/name');
-        // child2.setValue(event.target.value, false);
-        //
-        // /**
-        //  * Get the input value for all the children
-        //  */
-        // for (const objectProperty of parent.getProperty('children').properties) {
-        //   console.log('Value for child ', objectProperty, objectProperty.properties['name'].value);
-        // }
+        console.log('input event!', event.target, event, formProperty);
       }
     },
     {
       'click': (event, formProperty: FormProperty) => {
-        // console.log('2222 Called event!', event.target, event, formProperty);
+        console.log('Click event!', event.target, event, formProperty);
       }
     }
   ]
