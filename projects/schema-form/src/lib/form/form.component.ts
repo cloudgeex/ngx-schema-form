@@ -1,21 +1,15 @@
 import {
-  Component,
-  OnChanges,
-  Input,
-  SimpleChanges,
-  forwardRef,
   ChangeDetectorRef,
-  ViewChild,
-  ElementRef,
+  Component,
+  forwardRef,
+  Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  ValidatorFn,
-  NgForm
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgForm, ValidatorFn } from '@angular/forms';
 
 import { Action } from '../model/action';
 import { ActionRegistry } from '../model/actionregistry';
@@ -25,9 +19,9 @@ import { SchemaValidatorFactory } from '../schemavalidatorfactory';
 import { WidgetFactory } from '../widgetfactory';
 import { FormPropertyFactory } from '../model/form-property-factory';
 import { GroupProperty } from '../model/group-property';
-import {
-  TemplateSchemaElementRegistry
-} from '../template-schema/template-schema-element-registry';
+import { TemplateSchemaElementRegistry } from '../template-schema/template-schema-element-registry';
+import { Binding } from '../model/binding';
+import { BindingRegistry } from '../model/bindingregistry';
 
 export function useFactory(schemaValidatorFactory, validatorRegistry) {
   return new FormPropertyFactory(schemaValidatorFactory, validatorRegistry);
@@ -53,6 +47,7 @@ export function useFactory(schemaValidatorFactory, validatorRegistry) {
     },
     ActionRegistry,
     ValidatorRegistry,
+    BindingRegistry,
     WidgetFactory,
     {
       provide: FormPropertyFactory,
@@ -75,6 +70,9 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input()
   validators: { [path: string]: ValidatorFn | ValidatorFn[] } = {};
 
+  @Input()
+  bindings: { [path: string]: Binding };
+
   rootFormProperty: GroupProperty | null = null;
 
   @ViewChild(NgForm)
@@ -87,7 +85,9 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
     private formPropertyFactory: FormPropertyFactory,
     private actionRegistry: ActionRegistry,
     private validatorRegistry: ValidatorRegistry,
-  ) {}
+    private bindingRegistry: BindingRegistry,
+  ) {
+  }
 
   writeValue(value: any) {
     // value should be object
@@ -104,7 +104,8 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
   }
 
   // TODO implement
-  registerOnTouched(fn: any) {}
+  registerOnTouched(fn: any) {
+  }
 
   setDisabledState(isDisabled: boolean) {
     if (!this.rootFormProperty) {
@@ -134,6 +135,10 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
 
     if (changes.actions) {
       this.registerActions();
+    }
+
+    if (changes.bindings) {
+      this.setBindings();
     }
 
     if (this.schema && !this.schema.type) {
@@ -202,6 +207,17 @@ export class FormComponent implements OnInit, OnChanges, ControlValueAccessor {
     for (const actionId in this.actions) {
       if (this.actions.hasOwnProperty(actionId)) {
         this.actionRegistry.register(actionId, this.actions[actionId]);
+      }
+    }
+  }
+
+  private setBindings() {
+    this.bindingRegistry.clear();
+    if (this.bindings) {
+      for (const bindingPath in this.bindings) {
+        if (this.bindings.hasOwnProperty(bindingPath)) {
+          this.bindingRegistry.register(bindingPath, this.bindings[bindingPath]);
+        }
       }
     }
   }

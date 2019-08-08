@@ -1,14 +1,18 @@
 export { FormComponent } from './form/form.component';
 export { FormElementComponent } from './form/form-element.component';
+export { WidgetRegistry, WidgetType } from './widgetregistry';
+export { ValidatorRegistry } from './model/validatorregistry';
+export { Action, ActionEvent } from './model/action';
+export { ActionRegistry } from './model/actionregistry';
+export { Binding } from './model/binding';
+export { BindingRegistry } from './model/bindingregistry';
+export { SchemaValidatorFactory, ZSchemaValidatorFactory } from './schemavalidatorfactory';
 export {
   FormButtonWidgetChooserDirective
 } from './form/form-button-widget-chooser.directive';
 export {
   FormPropertyWidgetChooserDirective
 } from './form/form-property-widget-chooser.directive';
-export { WidgetRegistry, WidgetType } from './widgetregistry';
-export { SchemaValidatorFactory } from './schemavalidatorfactory';
-export { ZSchemaValidatorFactory } from './z-schema-validator-factory';
 export { AjvSchemaValidatorFactory } from './ajv-schema-validator-factory';
 export {
   Widget,
@@ -49,6 +53,5 @@ export {
 export { SchemaFormModule } from './schema-form.module';
 export { TemplateSchemaModule } from './template-schema/template-schema.module';
 export { FormPropertyFactory } from './model/form-property-factory';
-export { Action, ActionEvent } from './model/action';
 
 export { SchemaPreprocessor } from './model/schemapreprocessor';
